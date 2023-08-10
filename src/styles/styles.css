@@ -1,0 +1,25 @@
+.navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
+    color: #2FB872 !important;
+}
+
+.nav-link {
+    display: block;
+    padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
+    font-size: var(--bs-nav-link-font-size);
+    font-weight: var(--bs-nav-link-font-weight);
+    color: var(--bs-nav-link-color);
+    text-decoration: none;
+    background: 0 0;
+    border: 0;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
+    font-weight: 500 !important;
+    margin-right: 10px !important;
+}
+
+.card-type:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 10px rgb(111, 111, 111);
+}
+
+
+
