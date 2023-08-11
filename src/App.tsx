@@ -5,6 +5,7 @@ import { TrangChu } from "./pages/TrangChu";
 import { HoaDon } from "./pages/HoaDon";
 import { NhapHang } from "./pages/NhapHang";
 import { NavBar } from "./components/NavBar";
+import { HoaDon_Decal } from "./pages/HoaDon_Decal";
 function App() {
   return (
     <>
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<TrangChu />} />
           <Route path="/hoadon" element={<HoaDon />} />
           <Route path="/nhaphang" element={<NhapHang />} />
+          <Route path="/hoadon/decal" element={<HoaDon_Decal />} />
         </Routes>
       </Container>
     </>

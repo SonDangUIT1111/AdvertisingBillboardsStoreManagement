@@ -9,7 +9,7 @@ export function HoaDon() {
           image={
             "https://mucinthanhdat.com/image/cache/catalog/In%20chuyen%20nhiet/decal-nhiet-pu-mau-xanh-la-500x500.jpg"
           }
-          title={"In decal"}
+          title={"Decal"}
         />
       </Col>
       <Col>
@@ -17,7 +17,7 @@ export function HoaDon() {
           image={
             "https://inanbinhduong.vn/Content/images/products/QC00/QC06/QC04002/bang-ron-hiflex-1st-202205030924.jpg"
           }
-          title={"In băng rôn"}
+          title={"Băng rôn"}
         />
       </Col>
       <Col>
@@ -47,7 +47,7 @@ export function HoaDon() {
           image={
             "https://toanphat.com/media/product/6983_decal_de_trang_a4.jpg"
           }
-          title={"Tân hôn"}
+          title={"Khác"}
         />
       </Col>
     </Row>

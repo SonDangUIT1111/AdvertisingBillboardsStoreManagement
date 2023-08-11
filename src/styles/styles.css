@@ -21,5 +21,72 @@
     box-shadow: 0 0 10px rgb(111, 111, 111);
 }
 
+.a-art-type {
+    color: black !important;
+    text-decoration: none !important;
+}
+
+.submit-custom {
+    margin-left: 10px;
+    font-weight: 400 !important;
+    border: #2FB872 1px solid !important;
+    color: #2FB872 !important;
+}
+
+.add-custom:hover {
+    background-color: #EAD2A8 !important;
+    color: #000 !important;
+}
+
+.add-custom {
+    width: 50% !important;
+    margin-right: 20%;
+    font-weight: 500 !important;
+    border: #e4b769 1px solid !important;
+    color: #e4b769 !important;
+}
+
+.submit-custom:hover {
+    background-color: #2FB872 !important;
+    color: #fff !important;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #007bff !important;
+    border-color: #007bff !important;
+    transition: 0.2s !important;
+}
+
+.btn-success {
+    color: #fff;
+    background-color: #2FB872 !important;
+    border-color: #2FB872 !important;
+    transition: 0.2s !important;
+}
+
+.btn-info {
+    color: #fff !important;
+    transition: 0.2s !important;
+}
+
+.btn-danger {
+    color: #fff;
+    transition: 0.2s !important;
+    background-color: #dc3545 !important;
+}
+
+.btn-primary:hover,.btn-success:hover,.btn-danger:hover,.btn-info:hover {
+    transform: scale(1.03);
+}
+
+.scale-hover {
+    transition: 0.2s;
+}
+
+.scale-hover:hover {
+    transform: scale(1.01);
+    box-shadow: 0 0 10px rgb(198, 198, 198);
+}
 
 
