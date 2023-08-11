@@ -1,10 +1,15 @@
 import "bootstrap";
-
-export function SearchBar() {
+type SearchBarProps = {
+  areaIndex: string;
+};
+export function SearchBar({ areaIndex }: SearchBarProps) {
   return (
     <nav>
       <form className="d-flex flex-row mb-3">
-        <button className="btn btn-outline-secondary mr-10 add-custom">
+        <a
+          href={`/hoadon/decal/themhoadon`}
+          className="btn btn-outline-secondary mr-10 add-custom"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -19,7 +24,7 @@ export function SearchBar() {
             />
           </svg>
           Thêm đơn hàng mới
-        </button>
+        </a>
         <input
           className="form-control mr-sm-2 ml-2"
           type="search"

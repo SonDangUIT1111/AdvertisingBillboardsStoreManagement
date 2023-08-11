@@ -5,7 +5,7 @@ import { SearchBar } from "../components/SearchBar";
 export function HoaDon_Decal() {
   return (
     <>
-      <SearchBar />
+      <SearchBar areaIndex={"1"} />
       <HoaDonTitle />
       <HoaDonItemList />
       <HoaDonItemList />

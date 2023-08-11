@@ -1,6 +1,7 @@
 import { Container, Navbar, Nav } from "react-bootstrap";
 import { Link, NavLink } from "react-router-dom";
 import "../styles/styles.css";
+import imageToAdd from "../styles/images/logo-thaison-art2.png";
 export function NavBar() {
   return (
     <Navbar sticky="top" className="bg-light shadow-sm mb-3 d-flex">
@@ -16,7 +17,11 @@ export function NavBar() {
             Nhập hàng
           </Nav.Link>
         </Nav>
-        <span>Hello</span>
+        <img
+          src={imageToAdd}
+          alt="Image"
+          style={{ width: "50px", height: "50px" }}
+        ></img>
       </Container>
     </Navbar>
   );

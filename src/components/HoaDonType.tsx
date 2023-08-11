@@ -6,29 +6,6 @@ type HoaDonTypeProps = {
 import "../styles/styles.css";
 
 export function HoaDonType({ image, title }: HoaDonTypeProps) {
-  function ForwardPage() {
-    switch (title) {
-      case "Decal":
-        alert("1");
-        break;
-      case "Băng rôn":
-        alert("2");
-        break;
-      case "Bảng hiệu":
-        alert("3");
-        break;
-      case "Hộp đèn":
-        alert("4");
-        break;
-      case "Tân hôn":
-        alert("5");
-        break;
-      case "Khác":
-        alert("6");
-        break;
-    }
-  }
-
   return (
     <>
       <div
