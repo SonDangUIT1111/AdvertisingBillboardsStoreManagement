@@ -91,4 +91,30 @@
     box-shadow: 0 0 10px rgb(198, 198, 198);
 }
 
+.span-of-input-group {
+    width: 120px !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius:  0 !important;
+    border: #dedede 1px solid !important;
+    color: #000 !important;
+    background-color: #dedede !important;
+    font-weight: 500 !important;
+    height: 100% !important;
 
+}
+
+.bolder-border {
+    border: #c6c6c6 1px solid !important;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgb(198, 198, 198);
+}
+
+.btn-grey {
+    background-color: #dedede !important;
+    height: 50px;
+    font-weight: 500 !important;
+} 
+
+.btn-grey:hover {
+    background-color: #bababa !important;
+}

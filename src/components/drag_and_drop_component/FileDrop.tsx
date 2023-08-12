@@ -58,9 +58,11 @@ export function FileDrop() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "350px",
-          width: "350px",
+          height: "500px",
+          width: "500px",
           border: "2px dashed",
+          fontSize: "26px",
+          marginTop: "20px",
           backgroundColor: isOver ? "lightgray" : "white",
         }}
       >
@@ -76,8 +78,8 @@ export function FileDrop() {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              height: "350px",
-              width: "350px",
+              height: "500px",
+              width: "500px",
               border: "2px dashed",
               objectFit: "cover",
             }}
