@@ -7,6 +7,7 @@ import { NhapHang } from "./pages/NhapHang";
 import { NavBar } from "./components/NavBar";
 import { HoaDon_Decal } from "./pages/HoaDon_Decal";
 import { ThemHoaDonMoi_Decal } from "./pages/ThemHoaDonMoi_Decal";
+import { SuaHoaDon_Decal } from "./pages/SuaHoaDon_Decal";
 function App() {
   return (
     <>
@@ -21,6 +22,7 @@ function App() {
             path="/hoadon/decal/themhoadon"
             element={<ThemHoaDonMoi_Decal />}
           />
+          <Route path="/hoadon/decal/suahoadon" element={<SuaHoaDon_Decal />} />
         </Routes>
       </Container>
     </>
