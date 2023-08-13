@@ -118,3 +118,17 @@
 .btn-grey:hover {
     background-color: #bababa !important;
 }
+
+
+
+.checked-custom:checked {
+    background-color: #2FB872 !important;
+    border: #2FB872 1px solid !important;
+    box-shadow: 0 0 5px #82ffbe;
+
+}
+ .checked-custom:active {
+    background-color: #2FB872 !important;
+    border: #2FB872 1px solid !important;
+    box-shadow: 0 0 5px #82ffbe;
+ }

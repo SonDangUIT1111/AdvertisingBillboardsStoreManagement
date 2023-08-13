@@ -39,7 +39,7 @@ export function HoaDonType({ image, title }: HoaDonTypeProps) {
             </div>
           </a>
         ) : title === "Bảng hiệu" ? (
-          <a className="a-art-type">
+          <a href={`/hoadon/banghieu`} className="a-art-type">
             <img
               className="card-img-top"
               style={{ width: 250, height: 200, objectFit: "cover" }}

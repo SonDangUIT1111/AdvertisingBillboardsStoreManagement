@@ -134,7 +134,7 @@ export function SearchBar({ areaIndex }: SearchBarProps) {
           aria-label="Search"
         />
         <button
-          className="btn btn-outline-success my-2 my-sm-0 submit-custom"
+          className="btn btn-outline-success my-2 my-sm-0 submit-custom mr-3"
           type="submit"
         >
           Search

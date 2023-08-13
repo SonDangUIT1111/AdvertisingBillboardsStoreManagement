@@ -11,6 +11,9 @@ import { SuaHoaDon_Decal } from "./pages/SuaHoaDon_Decal";
 import { HoaDon_BangRon } from "./pages/HoaDon_BangRon";
 import { ThemHoaDonMoi_BangRon } from "./pages/ThemHoaDonMoi_BangRon";
 import { SuaHoaDon_BangRon } from "./pages/SuaHoaDon_BangRon";
+import { HoaDon_BangHieu } from "./pages/HoaDon_BangHieu";
+import { ThemHoaDonMoi_BangHieu } from "./pages/ThemHoaDonMoi_BangHieu";
+import { SuaHoaDon_BangHieu } from "./pages/SuaHoaDon_BangHieu";
 function App() {
   return (
     <>
@@ -34,6 +37,15 @@ function App() {
           <Route
             path="/hoadon/bangron/suahoadon"
             element={<SuaHoaDon_BangRon />}
+          />
+          <Route path="/hoadon/banghieu" element={<HoaDon_BangHieu />} />
+          <Route
+            path="/hoadon/banghieu/themhoadon"
+            element={<ThemHoaDonMoi_BangHieu />}
+          />
+          <Route
+            path="/hoadon/banghieu/suahoadon"
+            element={<SuaHoaDon_BangHieu />}
           />
         </Routes>
       </Container>
