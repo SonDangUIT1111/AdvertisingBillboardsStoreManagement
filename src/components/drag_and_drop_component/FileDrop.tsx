@@ -1,6 +1,10 @@
 import { DragEvent, useState } from "react";
+import { BillDecal_BangRonInfo } from "./Information_Decal_BangRon";
+type Props = {
+  setImageData: React.Dispatch<React.SetStateAction<string>>;
+};
 
-export function FileDrop() {
+export function FileDrop({ setImageData }: Props) {
   const [isOver, setIsOver] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [urlImage, setUrlImage] = useState("");
@@ -38,8 +42,10 @@ export function FileDrop() {
         return;
       }
       reader.addEventListener("load", (event) => {
-        if (typeof event.target?.result === "string")
+        if (typeof event.target?.result === "string") {
+          setImageData(event.target.result);
           setUrlImage(event.target.result);
+        }
       });
 
       reader.readAsDataURL(file);
