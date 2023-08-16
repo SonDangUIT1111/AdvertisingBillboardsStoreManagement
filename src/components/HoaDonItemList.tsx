@@ -1,26 +1,26 @@
+import { HoaDonDecal_BangRonProps } from "../pages/ThemHoaDonMoi_Decal";
 import "../styles/styles.css";
-export function HoaDonItemList() {
+export function HoaDonItemList(props: HoaDonDecal_BangRonProps) {
   return (
     <>
       <div className="d-flex flex-row justify-content-between align-content-center card p-3 mb-2 scale-hover">
         <span className="text-left mt-2" style={{ width: "12%" }}>
-          0123456789
+          {props.phoneNumber}
         </span>
         <span className="text-left mt-2" style={{ width: "12%" }}>
-          Ho ten
+          {props.name}
         </span>
         <span className="text-left mt-2" style={{ width: "12%" }}>
-          Noi dung
+          {props.note}
         </span>
         <span className="text-left mt-2" style={{ width: "12%" }}>
-          Ngay dat
+          {props.dateOrder}
         </span>
         <span className="text-left mt-2" style={{ width: "12%" }}>
-          {" "}
-          Don gia
+          {props.price}
         </span>
         <span className="text-left mt-2" style={{ width: "12%" }}>
-          Trang thai
+          {props.state}
         </span>
         <div className="d-flex flex-row" style={{ width: "28%" }}>
           <button type="button" className="btn btn-primary m-1">

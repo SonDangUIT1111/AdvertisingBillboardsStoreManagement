@@ -1,5 +1,4 @@
 import { DragEvent, useState } from "react";
-import { BillDecal_BangRonInfo } from "./Information_Decal_BangRon";
 type Props = {
   setImageData: React.Dispatch<React.SetStateAction<string>>;
 };

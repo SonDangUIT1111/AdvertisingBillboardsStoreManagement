@@ -4,8 +4,10 @@ import {
   BillDecal_BangRonInfoProps,
   Information_Decal_BangRon,
 } from "../components/drag_and_drop_component/Information_Decal_BangRon";
+import { HoaDonDecalData } from "../data/data";
 
 export type HoaDonDecal_BangRonProps = {
+  id: number;
   phoneNumber: string;
   name: string;
   note: string;
@@ -14,6 +16,8 @@ export type HoaDonDecal_BangRonProps = {
   price: number;
   discount: number;
   deposit: number;
+  state: string;
+  dateOrder: string;
 };
 
 export function ThemHoaDonMoi_Decal() {
@@ -29,9 +33,22 @@ export function ThemHoaDonMoi_Decal() {
 
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
+    HoaDonDecalData.push({
+      id: 123,
+      phoneNumber,
+      name,
+      note,
+      height,
+      width,
+      price,
+      discount,
+      deposit,
+      state: "Not completed",
+      dateOrder: "1/1/2023",
+    });
   };
 
-  console.log(phoneNumber);
+  console.log(HoaDonDecalData);
   return (
     <>
       <div className="container">
