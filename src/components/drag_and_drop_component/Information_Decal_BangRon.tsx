@@ -1,8 +1,13 @@
 import { HoaDonDecal_BangRonProps } from "../../pages/ThemHoaDonMoi_Decal";
+import { formatCurrency } from "../../utiities/formatCurrency";
 
 export type BillDecal_BangRonInfoProps = {
   imageData: string;
+  price: number;
+  total: number;
   handleAdd: (e: React.FormEvent) => void;
+  handleCalculate: React.MouseEventHandler<HTMLButtonElement>;
+  handleCalculateWithDiscount: (e: number) => void;
   setPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
   setName: React.Dispatch<React.SetStateAction<string>>;
   setNote: React.Dispatch<React.SetStateAction<string>>;
@@ -15,6 +20,8 @@ export type BillDecal_BangRonInfoProps = {
 
 export function Information_Decal_BangRon({
   imageData,
+  price,
+  total,
   setPhoneNumber,
   setName,
   setNote,
@@ -24,10 +31,12 @@ export function Information_Decal_BangRon({
   setDiscount,
   setDeposit,
   handleAdd,
+  handleCalculate,
+  handleCalculateWithDiscount,
 }: BillDecal_BangRonInfoProps) {
   return (
     <>
-      <form>
+      <form onSubmit={(e) => handleAdd(e)}>
         <div className="input-group mb-3 bolder-border">
           <div className="input-group-prepend">
             <span
@@ -133,8 +142,14 @@ export function Information_Decal_BangRon({
             placeholder=""
             aria-label=""
             aria-describedby="basic-addon1"
-          />
-          <button className="btn btn-light" type="button">
+          >
+            {formatCurrency(price)}
+          </span>
+          <button
+            className="btn btn-light"
+            type="button"
+            onClick={handleCalculate}
+          >
             Tính đơn giá
           </button>
         </div>
@@ -156,6 +171,15 @@ export function Information_Decal_BangRon({
                 placeholder=""
                 aria-label=""
                 aria-describedby="basic-addon1"
+                onChange={(e) => {
+                  if (e.target.value === "") {
+                    setDiscount(0);
+                    handleCalculateWithDiscount(0);
+                    return;
+                  }
+                  setDiscount(e.target.valueAsNumber);
+                  handleCalculateWithDiscount(e.target.valueAsNumber);
+                }}
               />
             </div>
           </div>
@@ -188,7 +212,7 @@ export function Information_Decal_BangRon({
             textAlign: "right",
           }}
         >
-          Thành tiền: 100.000
+          Thành tiền: {formatCurrency(total)}
         </div>
         <hr />
         <input
@@ -196,7 +220,6 @@ export function Information_Decal_BangRon({
           className="btn btn-grey"
           style={{ width: "100%" }}
           value="Xác nhận hóa đơn"
-          onSubmit={handleAdd}
         ></input>
       </form>
     </>

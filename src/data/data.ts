@@ -10,7 +10,8 @@ export const HoaDonDecalData = [
         discount: 0,
         deposit: 0,
         state: 'Hoàn thành',
-        dateOrder: '1/1/2023'
+        dateOrder: '1/1/2023',
+        total: 0
     },
     {
         id: 123457,
@@ -23,7 +24,8 @@ export const HoaDonDecalData = [
         discount: 0,
         deposit: 0,
         state: 'Hoàn thành',
-        dateOrder: '1/1/2023'
+        dateOrder: '1/1/2023',
+        total: 0
     },
     {
         id: 123458,
@@ -36,7 +38,8 @@ export const HoaDonDecalData = [
         discount: 0,
         deposit: 0,
         state: 'Hoàn thành',
-        dateOrder: '1/1/2023'
+        dateOrder: '1/1/2023',
+        total: 0
     },
     {
         id: 123459,
@@ -49,7 +52,8 @@ export const HoaDonDecalData = [
         discount: 0,
         deposit: 0,
         state: 'Hoàn thành',
-        dateOrder: '1/1/2023'
+        dateOrder: '1/1/2023',
+        total: 0
     },
     {
         id: 123450,
@@ -62,7 +66,8 @@ export const HoaDonDecalData = [
         discount: 0,
         deposit: 0,
         state: 'Hoàn thành',
-        dateOrder: '1/1/2023'
+        dateOrder: '1/1/2023',
+        total: 0
     },
     {
         id: 123451,
@@ -75,7 +80,8 @@ export const HoaDonDecalData = [
         discount: 0,
         deposit: 0,
         state: 'Hoàn thành',
-        dateOrder: '1/1/2023'
+        dateOrder: '1/1/2023',
+        total: 0
     },
     {
         id: 123452,
@@ -88,7 +94,8 @@ export const HoaDonDecalData = [
         discount: 0,
         deposit: 0,
         state: 'Hoàn thành',
-        dateOrder: '1/1/2023'
+        dateOrder: '1/1/2023',
+        total: 0
     },
     {
         id: 123453,
@@ -101,5 +108,6 @@ export const HoaDonDecalData = [
         discount: 0,
         deposit: 0,
         state: 'Hoàn thành',
-        dateOrder: '1/1/2023'
+        dateOrder: '1/1/2023',
+        total: 0
 }]

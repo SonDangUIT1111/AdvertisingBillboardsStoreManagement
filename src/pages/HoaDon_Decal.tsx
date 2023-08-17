@@ -22,6 +22,7 @@ export function HoaDon_Decal() {
           state={data.state}
           dateOrder={data.dateOrder}
           id={data.id}
+          total={0}
         />
       ))}
     </>

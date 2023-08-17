@@ -18,6 +18,7 @@ export type HoaDonDecal_BangRonProps = {
   deposit: number;
   state: string;
   dateOrder: string;
+  total: number;
 };
 
 export function ThemHoaDonMoi_Decal() {
@@ -30,6 +31,8 @@ export function ThemHoaDonMoi_Decal() {
   const [price, setPrice] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [deposit, setDeposit] = useState(0);
+  const [copy, setCopy] = useState(0);
+  const [total, setTotal] = useState(0);
 
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,10 +48,19 @@ export function ThemHoaDonMoi_Decal() {
       deposit,
       state: "Not completed",
       dateOrder: "1/1/2023",
+      total: 0,
     });
+    console.log(imageData);
+  };
+  const handleCalculate = () => {
+    setPrice(height * width * 70000);
+    setTotal(height * width * 70000 - discount);
+    setCopy(height * width * 70000);
+  };
+  const handleCalculateWithDiscount = (value: number) => {
+    setTotal(copy - value);
   };
 
-  console.log(HoaDonDecalData);
   return (
     <>
       <div className="container">
@@ -59,6 +71,8 @@ export function ThemHoaDonMoi_Decal() {
           <div className="col" style={{ marginTop: "20px" }}>
             <Information_Decal_BangRon
               imageData={imageData}
+              price={price}
+              total={total}
               setPhoneNumber={setPhoneNumber}
               setName={setName}
               setNote={setNote}
@@ -68,6 +82,8 @@ export function ThemHoaDonMoi_Decal() {
               setDiscount={setDiscount}
               setDeposit={setDeposit}
               handleAdd={handleAdd}
+              handleCalculate={handleCalculate}
+              handleCalculateWithDiscount={handleCalculateWithDiscount}
             />
           </div>
         </div>
