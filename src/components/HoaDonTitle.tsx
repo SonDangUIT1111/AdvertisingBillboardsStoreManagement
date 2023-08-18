@@ -1,5 +1,8 @@
 import "../styles/styles.css";
-export function HoaDonTitle() {
+type Props = {
+  handleSort: React.MouseEventHandler<HTMLButtonElement>;
+};
+export function HoaDonTitle({ handleSort }: Props) {
   return (
     <>
       <div
@@ -70,6 +73,7 @@ export function HoaDonTitle() {
             type="button"
             className="btn btn-secondary m-1"
             style={{ visibility: "visible" }}
+            onClick={handleSort}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

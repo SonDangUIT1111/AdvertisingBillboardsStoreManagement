@@ -1,11 +1,40 @@
 import "bootstrap";
+import { useState } from "react";
 type SearchBarProps = {
   areaIndex: string;
+  listInfo: any[];
+  copyList: {
+    id: number;
+    phoneNumber: string;
+    name: string;
+    note: string;
+    height: number;
+    width: number;
+    price: number;
+    discount: number;
+    deposit: number;
+    state: string;
+    dateOrder: string;
+    total: number;
+  }[];
+  setListInfo: React.Dispatch<React.SetStateAction<any>>;
 };
-export function SearchBar({ areaIndex }: SearchBarProps) {
+export function SearchBar({
+  areaIndex,
+  listInfo,
+  copyList,
+  setListInfo,
+}: SearchBarProps) {
+  const filterList = (e: React.FormEvent) => {
+    e.preventDefault();
+    setListInfo(
+      copyList.filter((info) => info.phoneNumber.includes(searchWord) === true)
+    );
+  };
+  const [searchWord, setSearchWord] = useState("");
   return (
     <nav>
-      <form className="d-flex flex-row mb-3">
+      <form className="d-flex flex-row mb-3" onSubmit={(e) => filterList(e)}>
         {areaIndex === "1" ? (
           <a
             href={`/hoadon/decal/themhoadon`}
@@ -132,10 +161,14 @@ export function SearchBar({ areaIndex }: SearchBarProps) {
           type="search"
           placeholder="Search"
           aria-label="Search"
+          onChange={(e) => {
+            setSearchWord(e.target.value);
+          }}
         />
         <button
           className="btn btn-outline-success my-2 my-sm-0 submit-custom mr-3"
           type="submit"
+          id="btnSearch"
         >
           Search
         </button>
