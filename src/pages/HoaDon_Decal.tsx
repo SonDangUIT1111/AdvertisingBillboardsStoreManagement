@@ -11,14 +11,18 @@ export function HoaDon_Decal() {
 
   const handleSort = () => {
     isDefault = !isDefault;
+    const copyCat = list;
     if (isDefault) {
-      list.sort((a, b) => {
+      copyCat.sort((a, b) => {
         return b.price - a.price;
       });
     } else
-      return list.sort((a, b) => {
+      return copyCat.sort((a, b) => {
         return a.price - b.price;
       });
+  };
+  const setState = (index: number, state: string) => {
+    list.map((item) => (item.id === index ? (item.state = state) : {}));
   };
   return (
     <>
@@ -44,6 +48,7 @@ export function HoaDon_Decal() {
           dateOrder={data.dateOrder}
           id={data.id}
           total={0}
+          setState={setState}
         />
       ))}
     </>

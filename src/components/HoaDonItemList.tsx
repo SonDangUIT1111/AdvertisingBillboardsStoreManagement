@@ -23,12 +23,33 @@ export function HoaDonItemList(props: HoaDonDecal_BangRonProps) {
           {props.state}
         </span>
         <div className="d-flex flex-row" style={{ width: "28%" }}>
-          <button type="button" className="btn btn-primary m-1">
-            Hoàn thành
-          </button>
-          <button type="button" className="btn btn-success m-1">
-            Thanh toán
-          </button>
+          {props.state === "Hoàn thành" || props.state === "Thanh toán" ? (
+            <button type="button" className="btn btn-primary m-1">
+              Hoàn thành
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="btn btn-outline-primary m-1"
+              onClick={(e) => props.setState(props.id, "Hoàn thành")}
+            >
+              Hoàn thành
+            </button>
+          )}
+          {props.state === "Thanh toán" ? (
+            <button type="button" className="btn btn-success m-1">
+              Thanh toán
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="btn btn-outline-success m-1"
+              onClick={(e) => props.setState(props.id, "Thanh toán")}
+            >
+              Thanh toán
+            </button>
+          )}
+
           <button type="button" className="btn btn-info m-1">
             <svg
               xmlns="http://www.w3.org/2000/svg"

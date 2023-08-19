@@ -19,6 +19,7 @@ export type HoaDonDecal_BangRonProps = {
   state: string;
   dateOrder: string;
   total: number;
+  setState: (index: number, state: string) => void;
 };
 
 export function ThemHoaDonMoi_Decal() {
@@ -46,7 +47,7 @@ export function ThemHoaDonMoi_Decal() {
       price,
       discount,
       deposit,
-      state: "Not completed",
+      state: "Chưa hoàn thành",
       dateOrder: "1/1/2023",
       total: 0,
     });

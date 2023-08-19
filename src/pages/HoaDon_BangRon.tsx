@@ -11,18 +11,12 @@ export function HoaDon_BangRon() {
   const handleSort = () => {
     console.log(list);
     if (isDefault) {
-      setList(
-        list.sort((a, b) => {
-          return b.price - a.price;
-        })
-      );
-    } else
-      setList(
-        list.sort((a, b) => {
-          return a.price - b.price;
-        })
-      );
+      setList([]);
+    } else setList(copyList);
     isDefault = !isDefault;
+  };
+  const setState = (index: number, state: string) => {
+    list.map((item) => (item.id === index ? (item.state = state) : {}));
   };
   return (
     <>
@@ -48,6 +42,7 @@ export function HoaDon_BangRon() {
           dateOrder={data.dateOrder}
           id={data.id}
           total={0}
+          setState={setState}
         />
       ))}
     </>
