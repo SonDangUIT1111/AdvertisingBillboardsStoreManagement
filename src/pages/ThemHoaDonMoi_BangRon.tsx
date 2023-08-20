@@ -15,6 +15,7 @@ export function ThemHoaDonMoi_BangRon() {
   const [deposit, setDeposit] = useState(0);
   const [copy, setCopy] = useState(0);
   const [total, setTotal] = useState(0);
+  const [amount, setAmount] = useState(1);
 
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,9 +36,9 @@ export function ThemHoaDonMoi_BangRon() {
     console.log(imageData);
   };
   const handleCalculate = () => {
-    setPrice(height * width * 50000);
-    setTotal(height * width * 50000 - discount);
-    setCopy(height * width * 50000);
+    setPrice(height * width * 50000 * amount);
+    setTotal(height * width * 50000 * amount - discount);
+    setCopy(height * width * amount);
   };
   const handleCalculateWithDiscount = (value: number) => {
     setTotal(copy - value);
@@ -51,9 +52,11 @@ export function ThemHoaDonMoi_BangRon() {
           </div>
           <div className="col" style={{ marginTop: "20px" }}>
             <Information_Decal_BangRon
+              amount={amount}
               imageData={imageData}
               price={price}
               total={total}
+              setAmount={setAmount}
               setPhoneNumber={setPhoneNumber}
               setName={setName}
               setNote={setNote}

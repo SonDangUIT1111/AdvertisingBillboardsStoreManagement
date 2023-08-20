@@ -4,6 +4,8 @@ import {
   BillDecal_BangRonInfoProps,
   Information_Decal_BangRon,
 } from "../components/drag_and_drop_component/Information_Decal_BangRon";
+import { DB } from "../data/backend.mjs";
+
 import { HoaDonDecalData } from "../data/data";
 
 export type HoaDonDecal_BangRonProps = {
@@ -23,6 +25,8 @@ export type HoaDonDecal_BangRonProps = {
 };
 
 export function ThemHoaDonMoi_Decal() {
+  DB();
+  const servicePrice = 0;
   const [imageData, setImageData] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [name, setName] = useState("");
@@ -34,6 +38,7 @@ export function ThemHoaDonMoi_Decal() {
   const [deposit, setDeposit] = useState(0);
   const [copy, setCopy] = useState(0);
   const [total, setTotal] = useState(0);
+  const [amount, setAmount] = useState(1);
 
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,9 +59,9 @@ export function ThemHoaDonMoi_Decal() {
     console.log(imageData);
   };
   const handleCalculate = () => {
-    setPrice(height * width * 70000);
-    setTotal(height * width * 70000 - discount);
-    setCopy(height * width * 70000);
+    setPrice(height * width * servicePrice * amount);
+    setTotal(height * width * servicePrice * amount - discount);
+    setCopy(height * width * servicePrice * amount);
   };
   const handleCalculateWithDiscount = (value: number) => {
     setTotal(copy - value);
@@ -71,9 +76,11 @@ export function ThemHoaDonMoi_Decal() {
           </div>
           <div className="col" style={{ marginTop: "20px" }}>
             <Information_Decal_BangRon
+              amount={amount}
               imageData={imageData}
               price={price}
               total={total}
+              setAmount={setAmount}
               setPhoneNumber={setPhoneNumber}
               setName={setName}
               setNote={setNote}

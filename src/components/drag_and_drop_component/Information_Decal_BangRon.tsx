@@ -5,6 +5,7 @@ export type BillDecal_BangRonInfoProps = {
   imageData: string;
   price: number;
   total: number;
+  amount: number;
   handleAdd: (e: React.FormEvent) => void;
   handleCalculate: React.MouseEventHandler<HTMLButtonElement>;
   handleCalculateWithDiscount: (e: number) => void;
@@ -16,12 +17,15 @@ export type BillDecal_BangRonInfoProps = {
   setPrice: React.Dispatch<React.SetStateAction<number>>;
   setDiscount: React.Dispatch<React.SetStateAction<number>>;
   setDeposit: React.Dispatch<React.SetStateAction<number>>;
+  setAmount: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export function Information_Decal_BangRon({
   imageData,
   price,
   total,
+  amount,
+  setAmount,
   setPhoneNumber,
   setName,
   setNote,
@@ -127,6 +131,25 @@ export function Information_Decal_BangRon({
               />
             </div>
           </div>
+        </div>
+        <div className="input-group mb-3 bolder-border">
+          <div className="input-group-prepend">
+            <span
+              className="input-group-text span-of-input-group"
+              id="basic-addon1"
+            >
+              Số lượng:
+            </span>
+          </div>
+          <input
+            type="number"
+            className="form-control"
+            value={amount}
+            placeholder=""
+            aria-label=""
+            aria-describedby="basic-addon1"
+            onChange={(e) => setAmount(e.target.valueAsNumber)}
+          />
         </div>
         <div className="input-group mb-3 bolder-border">
           <div className="input-group-prepend">
