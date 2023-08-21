@@ -4,7 +4,6 @@ import {
   BillDecal_BangRonInfoProps,
   Information_Decal_BangRon,
 } from "../components/drag_and_drop_component/Information_Decal_BangRon";
-import { DB } from "../data/backend.mjs";
 
 import { HoaDonDecalData } from "../data/data";
 
@@ -25,7 +24,6 @@ export type HoaDonDecal_BangRonProps = {
 };
 
 export function ThemHoaDonMoi_Decal() {
-  DB();
   const servicePrice = 0;
   const [imageData, setImageData] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");

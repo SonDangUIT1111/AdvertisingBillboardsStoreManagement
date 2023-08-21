@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import { TrangChu } from "./pages/TrangChu";
