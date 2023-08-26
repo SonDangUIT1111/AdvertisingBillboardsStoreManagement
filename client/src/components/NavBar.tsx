@@ -4,7 +4,7 @@ import "../styles/styles.css";
 import imageToAdd from "../styles/images/logo-thaison-art2.png";
 export function NavBar() {
   return (
-    <Navbar sticky="top" className="bg-light shadow-sm mb-3 d-flex">
+    <Navbar sticky="top" className="shadow-sm mb-3 d-flex">
       <Container>
         <Nav className="me-auto">
           <Nav.Link as={NavLink} to={"/"}>

@@ -15,6 +15,7 @@ export function HoaDonType({ image, title }: HoaDonTypeProps) {
         {title === "Decal" ? (
           <a href={`/hoadon/decal`} className="a-art-type">
             <img
+              alt=""
               className="card-img-top"
               style={{ width: 250, height: 200, objectFit: "cover" }}
               src={image}
@@ -28,6 +29,7 @@ export function HoaDonType({ image, title }: HoaDonTypeProps) {
         ) : title === "Băng rôn" ? (
           <a href={`/hoadon/bangron`} className="a-art-type">
             <img
+              alt=""
               className="card-img-top"
               style={{ width: 250, height: 200, objectFit: "cover" }}
               src={image}
@@ -41,6 +43,7 @@ export function HoaDonType({ image, title }: HoaDonTypeProps) {
         ) : title === "Bảng hiệu" ? (
           <a href={`/hoadon/banghieu`} className="a-art-type">
             <img
+              alt=""
               className="card-img-top"
               style={{ width: 250, height: 200, objectFit: "cover" }}
               src={image}
@@ -54,6 +57,7 @@ export function HoaDonType({ image, title }: HoaDonTypeProps) {
         ) : title === "Hộp đèn" ? (
           <a className="a-art-type">
             <img
+              alt=""
               className="card-img-top"
               style={{ width: 250, height: 200, objectFit: "cover" }}
               src={image}
@@ -67,6 +71,7 @@ export function HoaDonType({ image, title }: HoaDonTypeProps) {
         ) : title === "Tân hôn" ? (
           <a className="a-art-type">
             <img
+              alt=""
               className="card-img-top"
               style={{ width: 250, height: 200, objectFit: "cover" }}
               src={image}
@@ -80,6 +85,7 @@ export function HoaDonType({ image, title }: HoaDonTypeProps) {
         ) : title === "Khác" ? (
           <a className="a-art-type">
             <img
+              alt=""
               className="card-img-top"
               style={{ width: 250, height: 200, objectFit: "cover" }}
               src={image}

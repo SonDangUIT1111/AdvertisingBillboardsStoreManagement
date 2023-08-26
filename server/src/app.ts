@@ -1,6 +1,8 @@
 import "dotenv/config";
 import express, {NextFunction, Request, Response} from "express";
-import notesRoutes from "./routes/notes"
+import decalBillsRoutes from "./routes/billDecal"
+import servicePriceRoutes from "./routes/priceService"
+import customerRoutes from "./routes/customer"
 import morgan from "morgan"
 import createHttpError, {isHttpError} from "http-errors";
 
@@ -10,7 +12,11 @@ app.use(morgan("dev"))
 
 app.use(express.json())
 
-app.use("/api/notes", notesRoutes);
+app.use("/api/servicePrices", servicePriceRoutes);
+
+app.use("/api/decalBills", decalBillsRoutes);
+
+app.use("/api/customers", customerRoutes);
 
 app.use((req, res, next) => {
     next(createHttpError(404,"Endpoint not found"));

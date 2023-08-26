@@ -164,3 +164,15 @@
     box-shadow: #bababa 1px;
     transform: scale(0.9);
  }
+
+ .bg-green {
+    border:#2FB872 1px solid !important;
+    background-color:#2FB872 !important;
+    color: #FFFFFF !important;
+ }
+
+ .bg-red {
+    border:#dc3545 1px solid !important;
+    background-color:#dc3545 !important;
+    color: #FFFFFF !important;
+ }

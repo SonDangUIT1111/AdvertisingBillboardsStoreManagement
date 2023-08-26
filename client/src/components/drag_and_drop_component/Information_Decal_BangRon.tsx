@@ -5,6 +5,8 @@ export type BillDecal_BangRonInfoProps = {
   price: number;
   total: number;
   amount: number;
+  name: string;
+  handleChangePhone: (e: string) => void;
   handleAdd: (e: React.FormEvent) => void;
   handleCalculate: React.MouseEventHandler<HTMLButtonElement>;
   handleCalculateWithDiscount: (e: number) => void;
@@ -24,6 +26,7 @@ export function Information_Decal_BangRon({
   price,
   total,
   amount,
+  name,
   setAmount,
   setPhoneNumber,
   setName,
@@ -33,6 +36,7 @@ export function Information_Decal_BangRon({
   setPrice,
   setDiscount,
   setDeposit,
+  handleChangePhone,
   handleAdd,
   handleCalculate,
   handleCalculateWithDiscount,
@@ -55,7 +59,11 @@ export function Information_Decal_BangRon({
             placeholder=""
             aria-label=""
             aria-describedby="basic-addon1"
-            onChange={(e) => setPhoneNumber(e.target.value)}
+            required
+            onChange={(e) => {
+              setPhoneNumber(e.target.value);
+              handleChangePhone(e.target.value);
+            }}
           />
         </div>
         <div className="input-group mb-3 bolder-border">
@@ -72,6 +80,7 @@ export function Information_Decal_BangRon({
             className="form-control"
             placeholder=""
             aria-label=""
+            value={name}
             aria-describedby="basic-addon1"
             onChange={(e) => setName(e.target.value)}
           />
@@ -105,6 +114,7 @@ export function Information_Decal_BangRon({
                 placeholder=""
                 aria-label=""
                 aria-describedby="basic-addon1"
+                required
                 onChange={(e) => setWidth(e.target.valueAsNumber)}
               />
             </div>
@@ -125,6 +135,7 @@ export function Information_Decal_BangRon({
                 className="form-control"
                 placeholder=""
                 aria-label=""
+                required
                 aria-describedby="basic-addon1"
                 onChange={(e) => setHeight(e.target.valueAsNumber)}
               />

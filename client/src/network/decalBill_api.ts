@@ -20,7 +20,7 @@ export async function fetchDecalBills(): Promise<DecalBill[]> {
 
 } 
 
-export interface DecalBillInput {
+export type DecalBillInput = {
     idCustomer: string,
     note: string,
     width: number,
@@ -33,13 +33,13 @@ export interface DecalBillInput {
     state: string,
 }
 
-export async function createDecalBill(note: DecalBillInput): Promise<DecalBill> {
+export async function createDecalBill(bill: DecalBillInput): Promise<DecalBill> {
     const response = await fetchData("/api/decalBills", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(note),
+        body: JSON.stringify(bill),
     });
     return response.json();
 }

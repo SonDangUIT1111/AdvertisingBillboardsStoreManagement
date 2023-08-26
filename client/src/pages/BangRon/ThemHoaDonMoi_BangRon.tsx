@@ -51,7 +51,7 @@ export function ThemHoaDonMoi_BangRon() {
             <FileDrop setImageData={setImageData} />
           </div>
           <div className="col" style={{ marginTop: "20px" }}>
-            <Information_Decal_BangRon
+            {/* <Information_Decal_BangRon
               amount={amount}
               imageData={imageData}
               price={price}
@@ -68,7 +68,7 @@ export function ThemHoaDonMoi_BangRon() {
               handleAdd={handleAdd}
               handleCalculate={handleCalculate}
               handleCalculateWithDiscount={handleCalculateWithDiscount}
-            />
+            /> */}
           </div>
         </div>
       </div>
