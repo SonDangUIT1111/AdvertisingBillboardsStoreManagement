@@ -37,6 +37,7 @@ export function ThemHoaDonMoi_Decal() {
   const [customers, setCustomers] = useState<CustomerModel[]>([]);
   const [isExistCustomer, setIsExistCustomer] = useState(false);
   let [idCustomer, setIdCustomer] = useState("");
+  let [nameCustomer, setNameCustomer] = useState("");
   const [imageData, setImageData] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [name, setName] = useState("");
@@ -51,7 +52,6 @@ export function ThemHoaDonMoi_Decal() {
   const [amount, setAmount] = useState(1);
 
   async function loadServicePrice() {
-    console.log("fetch");
     try {
       const results = await ServicePriceApi.fetchServicePrices().then(
         (data) => {
@@ -72,7 +72,6 @@ export function ThemHoaDonMoi_Decal() {
     }
   }
   async function loadCustomer() {
-    console.log("fetch");
     try {
       const results = await CustomerApi.fetchCustomers();
       setCustomers(results);
@@ -125,13 +124,24 @@ export function ThemHoaDonMoi_Decal() {
     }
   }
 
+  async function onEditCustomer(input: CustomerApi.CustomerInput) {
+    try {
+      const result = await CustomerApi.updateCustomer(idCustomer, input);
+    } catch (error) {
+      const toastLiveExample = document.getElementById("liveToastFail");
+      if (toastLiveExample) {
+        const toastBootstrap = Toast.getOrCreateInstance(toastLiveExample);
+        toastBootstrap.show();
+      }
+    }
+  }
+
   function processInfoCustomer() {
     handleCalculate();
     handleCustomer();
   }
 
   function createBill() {
-    console.log("tao ne " + total);
     let input: DecalBillInput = {
       amount: amount,
       idCustomer: idCustomer,
@@ -144,8 +154,7 @@ export function ThemHoaDonMoi_Decal() {
       deposit: deposit,
       state: "Chưa xong",
     };
-    console.log(input);
-    //onSubmit(input);
+    onSubmit(input);
   }
 
   const handleCustomer = () => {
@@ -155,7 +164,7 @@ export function ThemHoaDonMoi_Decal() {
         phoneNumber: phoneNumber,
         total: total,
         payed: 0,
-        debt: 0,
+        debt: total,
       };
       onSubmitCustomer(input).then(() => {
         let index = 0;
@@ -172,6 +181,20 @@ export function ThemHoaDonMoi_Decal() {
       setIsExistCustomer(true);
     } else {
       createBill();
+      if (nameCustomer !== name) {
+        customers.map((customer) => {
+          if (customer._id === idCustomer) {
+            let input: CustomerApi.CustomerInput = {
+              name: name,
+              phoneNumber: customer.phoneNumber,
+              total: customer.total + total,
+              payed: customer.payed,
+              debt: customer.debt + total,
+            };
+            onEditCustomer(input);
+          }
+        });
+      }
     }
   };
 
@@ -200,7 +223,6 @@ export function ThemHoaDonMoi_Decal() {
     } catch (error) {
       console.error(error);
     }
-    console.log("handle calculate ne " + total);
   };
   const handleCalculateWithDiscount = (value: number) => {
     handleCalculate();
@@ -212,6 +234,7 @@ export function ThemHoaDonMoi_Decal() {
     customers.map((customer) => {
       if (customer.phoneNumber === value) {
         setName(customer.name);
+        setNameCustomer(customer.name);
         setIdCustomer(customer._id);
         setIsExistCustomer(true);
         flag = true;
