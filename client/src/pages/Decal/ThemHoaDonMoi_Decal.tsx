@@ -12,7 +12,7 @@ import { ServicePrice } from "../../models/servicePrice";
 import { DecalBill } from "../../models/decalBill";
 import { useForm } from "react-hook-form";
 import { Toast } from "bootstrap";
-import { Customer } from "../../models/customer";
+import { Customer as CustomerModel } from "../../models/customer";
 
 export type HoaDonDecal_BangRonProps = {
   id: number;
@@ -31,28 +31,44 @@ export type HoaDonDecal_BangRonProps = {
 };
 
 export function ThemHoaDonMoi_Decal() {
+  let [cost, setCost] = useState(1);
   const [servicePrices, setServicePrices] = useState<ServicePrice[]>([]);
-  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [customer, setCustomer] = useState<CustomerModel>();
+  const [customers, setCustomers] = useState<CustomerModel[]>([]);
+  const [isExistCustomer, setIsExistCustomer] = useState(false);
+  let [idCustomer, setIdCustomer] = useState("");
   const [imageData, setImageData] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [name, setName] = useState("");
   const [note, setNote] = useState("");
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
-  const [price, setPrice] = useState(0);
+  let [price, setPrice] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [deposit, setDeposit] = useState(0);
-  const [copy, setCopy] = useState(0);
-  const [total, setTotal] = useState(0);
+  let [copy, setCopy] = useState(0);
+  let [total, setTotal] = useState(0);
   const [amount, setAmount] = useState(1);
 
   async function loadServicePrice() {
     console.log("fetch");
     try {
-      const results = await ServicePriceApi.fetchServicePrices();
-      setServicePrices(results);
+      const results = await ServicePriceApi.fetchServicePrices().then(
+        (data) => {
+          data.map((item) => {
+            servicePrices.push({
+              serviceName: item.serviceName,
+              price: item.price,
+              _id: "",
+              createdAt: "",
+              updatedAt: "",
+            });
+          });
+        }
+      );
     } catch (error) {
       console.error(error);
+    } finally {
     }
   }
   async function loadCustomer() {
@@ -64,8 +80,9 @@ export function ThemHoaDonMoi_Decal() {
       console.error(error);
     }
   }
+
   useEffect(() => {
-    loadServicePrice();
+    loadServicePrice().then((data) => {});
     loadCustomer();
   }, []);
 
@@ -87,10 +104,37 @@ export function ThemHoaDonMoi_Decal() {
     }
   }
 
-  async function createBill() {
+  async function onSubmitCustomer(input: CustomerApi.CustomerInput) {
+    try {
+      const result = await CustomerApi.createCustomer(input).then((data) => {
+        customers.push({
+          name: data.name,
+          phoneNumber: data.phoneNumber,
+          _id: data._id,
+          total: data.total,
+          payed: data.payed,
+          debt: data.debt,
+        });
+      });
+    } catch (error) {
+      const toastLiveExample = document.getElementById("liveToastFail");
+      if (toastLiveExample) {
+        const toastBootstrap = Toast.getOrCreateInstance(toastLiveExample);
+        toastBootstrap.show();
+      }
+    }
+  }
+
+  function processInfoCustomer() {
+    handleCalculate();
+    handleCustomer();
+  }
+
+  function createBill() {
+    console.log("tao ne " + total);
     let input: DecalBillInput = {
       amount: amount,
-      idCustomer: "12",
+      idCustomer: idCustomer,
       note: note,
       width: width,
       height: height,
@@ -100,33 +144,66 @@ export function ThemHoaDonMoi_Decal() {
       deposit: deposit,
       state: "Chưa xong",
     };
-    onSubmit(input);
+    console.log(input);
+    //onSubmit(input);
   }
 
-  const handleAdd = async (e: React.FormEvent) => {
-    e.preventDefault();
-    createBill();
-  };
-  const handleCalculate = () => {
-    if (servicePrices) {
-      try {
-        let index = 1;
-        let cost = 1;
-        servicePrices.map((item) => {
-          if (index === 1) {
-            cost = item.price;
+  const handleCustomer = () => {
+    if (!isExistCustomer) {
+      let input: CustomerApi.CustomerInput = {
+        name: name,
+        phoneNumber: phoneNumber,
+        total: total,
+        payed: 0,
+        debt: 0,
+      };
+      onSubmitCustomer(input).then(() => {
+        let index = 0;
+        customers.map((item) => {
+          if (index === customers.length - 1) {
+            idCustomer = item._id;
             index++;
           } else {
             index++;
           }
         });
-        setPrice(height * width * cost * amount);
-        setTotal(height * width * cost * amount - discount);
-        setCopy(height * width * cost * amount);
-      } catch (error) {}
+        createBill();
+      });
+      setIsExistCustomer(true);
+    } else {
+      createBill();
     }
   };
+
+  const handleAdd = async (e: React.FormEvent) => {
+    e.preventDefault();
+    processInfoCustomer();
+  };
+  const handleCalculate = () => {
+    let index = 1;
+    servicePrices.map((item) => {
+      if (index === 1) {
+        cost = item.price;
+        index++;
+      } else {
+        index++;
+      }
+    });
+
+    try {
+      price = height * width * cost * amount;
+      total = height * width * cost * amount - discount;
+      copy = height * width * cost * amount;
+      setPrice(price);
+      setTotal(total);
+      setCopy(copy);
+    } catch (error) {
+      console.error(error);
+    }
+    console.log("handle calculate ne " + total);
+  };
   const handleCalculateWithDiscount = (value: number) => {
+    handleCalculate();
     setTotal(copy - value);
   };
 
@@ -135,11 +212,15 @@ export function ThemHoaDonMoi_Decal() {
     customers.map((customer) => {
       if (customer.phoneNumber === value) {
         setName(customer.name);
+        setIdCustomer(customer._id);
+        setIsExistCustomer(true);
         flag = true;
       }
     });
     if (!flag) {
       setName("");
+      setIdCustomer("");
+      setIsExistCustomer(false);
     }
   };
 
@@ -199,26 +280,28 @@ export function ThemHoaDonMoi_Decal() {
             <FileDrop setImageData={setImageData} />
           </div>
           <div className="col" style={{ marginTop: "20px" }}>
-            <Information_Decal_BangRon
-              amount={amount}
-              imageData={imageData}
-              price={price}
-              total={total}
-              name={name}
-              setAmount={setAmount}
-              setPhoneNumber={setPhoneNumber}
-              setName={setName}
-              setNote={setNote}
-              setHeight={setHeight}
-              setWidth={setWidth}
-              setPrice={setPrice}
-              setDiscount={setDiscount}
-              setDeposit={setDeposit}
-              handleAdd={handleAdd}
-              handleCalculate={handleCalculate}
-              handleCalculateWithDiscount={handleCalculateWithDiscount}
-              handleChangePhone={handleChangePhone}
-            />
+            <>
+              <Information_Decal_BangRon
+                amount={amount}
+                imageData={imageData}
+                price={price}
+                total={total}
+                name={name}
+                setAmount={setAmount}
+                setPhoneNumber={setPhoneNumber}
+                setName={setName}
+                setNote={setNote}
+                setHeight={setHeight}
+                setWidth={setWidth}
+                setPrice={setPrice}
+                setDiscount={setDiscount}
+                setDeposit={setDeposit}
+                handleAdd={handleAdd}
+                handleCalculate={handleCalculate}
+                handleCalculateWithDiscount={handleCalculateWithDiscount}
+                handleChangePhone={handleChangePhone}
+              />
+            </>
           </div>
         </div>
       </div>
