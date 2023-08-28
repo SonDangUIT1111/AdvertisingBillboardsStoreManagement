@@ -11,6 +11,7 @@ const decalBillSchema = new Schema({
     billPrice: {type: Number},
     deposit: {type: Number},
     state: {type: String},
+    image: {type: String}
 }, {timestamps: true});
 
 type DecalBill = InferSchemaType<typeof decalBillSchema>;

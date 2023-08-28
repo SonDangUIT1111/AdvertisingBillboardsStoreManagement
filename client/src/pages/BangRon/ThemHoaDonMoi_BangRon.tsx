@@ -48,7 +48,7 @@ export function ThemHoaDonMoi_BangRon() {
       <div className="container">
         <div className="row">
           <div className="col">
-            <FileDrop setImageData={setImageData} />
+            {/* <FileDrop setImageData={setImageData} /> */}
           </div>
           <div className="col" style={{ marginTop: "20px" }}>
             {/* <Information_Decal_BangRon

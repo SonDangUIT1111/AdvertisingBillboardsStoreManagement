@@ -20,14 +20,14 @@ export function HoaDon_BangRon() {
   };
   return (
     <>
-      <SearchBar
+      {/* <SearchBar
         areaIndex={"2"}
         listInfo={list}
         setListInfo={setList}
         copyList={copyList}
-      />
+      /> */}
       <HoaDonTitle handleSort={handleSort} />
-      {list.map((data) => (
+      {/* {list.map((data) => (
         <HoaDonItemList
           key={data.id}
           phoneNumber={data.phoneNumber}
@@ -44,7 +44,7 @@ export function HoaDon_BangRon() {
           total={0}
           setState={setState}
         />
-      ))}
+      ))} */}
     </>
   );
 }

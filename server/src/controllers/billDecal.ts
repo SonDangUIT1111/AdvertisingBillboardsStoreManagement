@@ -47,7 +47,8 @@ interface CreateDecalBillBody {
     totalPrice: number,
     billPrice: number,
     deposit: number,
-    state: string
+    state: string,
+    image: string
 }
 
 export const createDecalBill: RequestHandler<unknown, unknown, CreateDecalBillBody, unknown> = async (req, res, next ) => {
@@ -61,6 +62,7 @@ export const createDecalBill: RequestHandler<unknown, unknown, CreateDecalBillBo
     const billPrice = req.body.billPrice  ;
     const deposit = req.body.deposit  ;
     const state = req.body.state ;
+    const image = req.body.image;
     try
     {
         const newBill = await DecalBillModel.create({
@@ -74,6 +76,7 @@ export const createDecalBill: RequestHandler<unknown, unknown, CreateDecalBillBo
             billPrice : billPrice,
             deposit : deposit,
             state : state,
+            image: image
         })
         res.status(201).json(newBill);
     }
@@ -98,6 +101,7 @@ interface UpdateBillBody {
     billPrice: number,
     deposit: number,
     state: string
+    image: string
 }
 
 export const updateDecalBill: RequestHandler<UpdateBillParams, unknown, UpdateBillBody, unknown> = async(req, res, next) => {
@@ -112,6 +116,7 @@ export const updateDecalBill: RequestHandler<UpdateBillParams, unknown, UpdateBi
     const billPrice = req.body.billPrice  ;
     const deposit = req.body.deposit  ;
     const state = req.body.state ;
+    const image = req.body.image;
 
     try
     {
@@ -136,6 +141,7 @@ export const updateDecalBill: RequestHandler<UpdateBillParams, unknown, UpdateBi
         bill.billPrice = billPrice;
         bill.deposit = deposit;
         bill.state = state;
+        bill.image = image;
 
         const updateBill = await bill.save();
 

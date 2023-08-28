@@ -42,8 +42,8 @@ export function FileDrop({ setImageData }: Props) {
       }
       reader.addEventListener("load", (event) => {
         if (typeof event.target?.result === "string") {
-          setImageData(event.target.result);
           setUrlImage(event.target.result);
+          setImageData(event.target.result);
         }
       });
 

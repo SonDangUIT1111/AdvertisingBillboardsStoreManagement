@@ -15,9 +15,9 @@ import { Toast } from "bootstrap";
 import { Customer as CustomerModel } from "../../models/customer";
 
 export type HoaDonDecal_BangRonProps = {
-  id: number;
-  phoneNumber: string;
-  name: string;
+  id: string;
+  phoneNumber?: string;
+  name?: string;
   note: string;
   height: number;
   width: number;
@@ -27,7 +27,7 @@ export type HoaDonDecal_BangRonProps = {
   state: string;
   dateOrder: string;
   total: number;
-  setState: (index: number, state: string) => void;
+  setState: (index: string, state: string) => void;
 };
 
 export function ThemHoaDonMoi_Decal() {
@@ -153,6 +153,7 @@ export function ThemHoaDonMoi_Decal() {
       billPrice: price,
       deposit: deposit,
       state: "Chưa xong",
+      image: imageData,
     };
     onSubmit(input);
   }
@@ -306,7 +307,6 @@ export function ThemHoaDonMoi_Decal() {
             <>
               <Information_Decal_BangRon
                 amount={amount}
-                imageData={imageData}
                 price={price}
                 total={total}
                 name={name}

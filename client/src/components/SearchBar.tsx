@@ -1,35 +1,21 @@
 import "bootstrap";
 import { useState } from "react";
+import { DecalBillJoinCustomer } from "../models/decallBillJoinCustomer";
 type SearchBarProps = {
   areaIndex: string;
-  listInfo: any[];
-  copyList: {
-    id: number;
-    phoneNumber: string;
-    name: string;
-    note: string;
-    height: number;
-    width: number;
-    price: number;
-    discount: number;
-    deposit: number;
-    state: string;
-    dateOrder: string;
-    total: number;
-  }[];
-  setListInfo: React.Dispatch<React.SetStateAction<any>>;
+  listInfo: DecalBillJoinCustomer[];
+  copyList: DecalBillJoinCustomer[];
+  setCopyList: React.Dispatch<React.SetStateAction<DecalBillJoinCustomer[]>>;
 };
 export function SearchBar({
   areaIndex,
   listInfo,
   copyList,
-  setListInfo,
+  setCopyList,
 }: SearchBarProps) {
   const filterList = (e: React.FormEvent) => {
     e.preventDefault();
-    setListInfo(
-      copyList.filter((info) => info.phoneNumber.includes(searchWord) === true)
-    );
+    setCopyList(listInfo.filter((info) => info.billPrice > 100000));
   };
   const [searchWord, setSearchWord] = useState("");
   return (

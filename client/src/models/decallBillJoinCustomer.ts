@@ -1,4 +1,4 @@
-export interface DecalBill {
+export interface DecalBillJoinCustomer {
     _id: string,
     idCustomer: string,
     note: string,
@@ -13,4 +13,6 @@ export interface DecalBill {
     image: string,
     createdAt: string,
     updatedAt: string,
+    customerName?: string,
+    phoneNumber?: string
 }

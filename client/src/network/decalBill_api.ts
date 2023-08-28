@@ -31,6 +31,7 @@ export type DecalBillInput = {
     billPrice: number,
     deposit: number,
     state: string,
+    image: string
 }
 
 export async function createDecalBill(bill: DecalBillInput): Promise<DecalBill> {

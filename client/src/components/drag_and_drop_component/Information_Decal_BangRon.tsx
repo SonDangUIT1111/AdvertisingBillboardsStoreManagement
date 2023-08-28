@@ -1,7 +1,6 @@
 import { formatCurrency } from "../../utils/formatCurrency";
 
 export type BillDecal_BangRonInfoProps = {
-  imageData: string;
   price: number;
   total: number;
   amount: number;
@@ -22,7 +21,6 @@ export type BillDecal_BangRonInfoProps = {
 };
 
 export function Information_Decal_BangRon({
-  imageData,
   price,
   total,
   amount,

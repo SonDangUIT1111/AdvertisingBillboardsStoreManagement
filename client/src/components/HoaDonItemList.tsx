@@ -1,5 +1,6 @@
 import { HoaDonDecal_BangRonProps } from "../pages/Decal/ThemHoaDonMoi_Decal";
 import "../styles/styles.css";
+import { formatDate } from "../utils/formatDate";
 export function HoaDonItemList(props: HoaDonDecal_BangRonProps) {
   return (
     <>
@@ -14,10 +15,10 @@ export function HoaDonItemList(props: HoaDonDecal_BangRonProps) {
           {props.note}
         </span>
         <span className="text-left mt-2" style={{ width: "12%" }}>
-          {props.dateOrder}
+          {formatDate(props.dateOrder)}
         </span>
         <span className="text-left mt-2" style={{ width: "12%" }}>
-          {props.price}
+          {props.total}
         </span>
         <span className="text-left mt-2" style={{ width: "12%" }}>
           {props.state}
