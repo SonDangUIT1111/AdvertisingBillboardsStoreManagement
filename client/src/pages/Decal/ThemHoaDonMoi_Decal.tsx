@@ -27,7 +27,11 @@ export type HoaDonDecal_BangRonProps = {
   state: string;
   dateOrder: string;
   total: number;
-  setState: (index: string, state: string) => void;
+  idCustomer: string;
+  amount: number;
+  image: string;
+  setState: (obj: DecalBillInput, index: string, state: string) => void;
+  deleteBill: (id: string) => void;
 };
 
 export function ThemHoaDonMoi_Decal() {

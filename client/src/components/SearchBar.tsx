@@ -5,17 +5,17 @@ type SearchBarProps = {
   areaIndex: string;
   listInfo: DecalBillJoinCustomer[];
   copyList: DecalBillJoinCustomer[];
-  setCopyList: React.Dispatch<React.SetStateAction<DecalBillJoinCustomer[]>>;
+  setList: React.Dispatch<React.SetStateAction<DecalBillJoinCustomer[]>>;
 };
 export function SearchBar({
   areaIndex,
   listInfo,
   copyList,
-  setCopyList,
+  setList,
 }: SearchBarProps) {
   const filterList = (e: React.FormEvent) => {
     e.preventDefault();
-    setCopyList(listInfo.filter((info) => info.billPrice > 100000));
+    setList(copyList.filter((item) => item.phoneNumber?.includes(searchWord)));
   };
   const [searchWord, setSearchWord] = useState("");
   return (

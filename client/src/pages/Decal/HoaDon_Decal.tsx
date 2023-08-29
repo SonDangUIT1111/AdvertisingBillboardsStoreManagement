@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import { HoaDonItemList } from "../../components/HoaDonItemList";
 import { HoaDonTitle } from "../../components/HoaDonTitle";
 import { SearchBar } from "../../components/SearchBar";
@@ -7,35 +7,42 @@ import { DecalBillJoinCustomer } from "../../models/decallBillJoinCustomer";
 import * as DecalBillApi from "../../network/decalBill_api";
 import * as CustomerApi from "../../network/customer_api";
 import "../../styles/styles.css";
+import { Customer } from "../../models/customer";
+
+type PhoneNumberType = {
+  id?: string;
+  nameInfo?: string;
+  phoneInfo?: string;
+};
 
 export function HoaDon_Decal() {
-  let isDefault = true;
+  let [idDeleting, setIdDeleting] = useState("");
+  let [isDefault, setIsDefault] = useState(true);
   let [list, setList] = useState<DecalBillJoinCustomer[]>([]);
   let [copyList, setCopyList] = useState<DecalBillJoinCustomer[]>([]);
+  let [customerList, setCustomerList] = useState<Customer[]>([]);
 
   async function loadCustomer() {
     try {
+      document.getElementById("trigger")?.click();
       await CustomerApi.fetchCustomers().then((data) => {
-        list.map((listItem) => {
-          const findItem = data.find(
-            (itemFind) => itemFind._id === listItem.idCustomer
-          );
-          listItem.customerName = findItem?.name;
-          listItem.phoneNumber = findItem?.phoneNumber;
-        });
-        setCopyList(list);
-        document.getElementById("closeModal")?.click();
+        data.map((item) => customerList.push(item));
+        loadDecalBill();
       });
     } catch (error) {
       console.error(error);
     }
   }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   async function loadDecalBill() {
     try {
-      document.getElementById("trigger")?.click();
       await DecalBillApi.fetchDecalBills().then((data) => {
+        let copyCat: DecalBillJoinCustomer[] = [];
         data.map((item) => {
-          list.push({
+          const findItem = customerList.find(
+            (customer) => customer._id === item.idCustomer
+          );
+          copyCat.push({
             _id: item._id,
             idCustomer: item.idCustomer,
             note: item.note,
@@ -50,11 +57,13 @@ export function HoaDon_Decal() {
             image: item.image,
             createdAt: item.createdAt,
             updatedAt: item.updatedAt,
-            customerName: "",
-            phoneNumber: "",
+            customerName: findItem?.name,
+            phoneNumber: findItem?.phoneNumber,
           });
         });
-        loadCustomer();
+        setList(copyCat);
+        setCopyList(copyCat);
+        document.getElementById("closeModal")?.click();
       });
     } catch (error) {
       console.error(error);
@@ -62,24 +71,74 @@ export function HoaDon_Decal() {
     }
   }
 
+  async function updateState(id: string, input: DecalBillApi.DecalBillInput) {
+    await DecalBillApi.updateDecalBill(id, input);
+  }
+
   useEffect(() => {
-    loadDecalBill();
+    loadCustomer();
   }, []);
 
   const handleSort = () => {
-    isDefault = !isDefault;
     const copyCat = list;
     if (isDefault) {
       copyCat.sort((a, b) => {
-        return b.totalPrice - a.totalPrice;
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
       });
     } else
-      return copyCat.sort((a, b) => {
-        return a.totalPrice - b.totalPrice;
+      copyCat.sort((a, b) => {
+        return (
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
       });
+    setList(copyCat.filter((item) => item));
+    setCopyList(copyCat.filter((item) => item));
+    setIsDefault((prev) => !prev);
   };
-  const setState = (index: string, state: string) => {
-    // list.map((item) => (item._id === index ? (item.state = state) : {}));
+  const setState = (
+    obj: DecalBillApi.DecalBillInput,
+    index: string,
+    stateString: string
+  ) => {
+    console.log(list);
+    setList(
+      list.map((item) =>
+        item._id === index ? { ...item, state: stateString } : item
+      )
+    );
+    setCopyList(
+      copyList.map((item) =>
+        item._id === index ? { ...item, state: stateString } : item
+      )
+    );
+    // let input: DecalBillApi.DecalBillInput = {
+    //   idCustomer: obj.idCustomer,
+    //   note: obj.note,
+    //   width: obj.width,
+    //   height: obj.height,
+    //   amount: obj.amount,
+    //   discount: obj.discount,
+    //   totalPrice: obj.totalPrice,
+    //   billPrice: obj.billPrice,
+    //   deposit: obj.deposit,
+    //   state: stateString,
+    //   image: obj.image,
+    // };
+    // updateState(index, input);
+
+    // bo sung update Revenue
+  };
+
+  const deleteBillAlert = async (id: string) => {
+    setIdDeleting(id);
+    document.getElementById("triggerAlert")?.click();
+  };
+  const deleteBill = async () => {
+    // await DecalBillApi.deleteDecalBill(id);
+    setList(list.filter((item) => item._id !== idDeleting));
+    setCopyList(copyList.filter((item) => item._id !== idDeleting));
   };
 
   return (
@@ -91,6 +150,56 @@ export function HoaDon_Decal() {
         data-bs-toggle="modal"
         data-bs-target="#loadingModal"
       ></button>
+      <button
+        type="button"
+        id="triggerAlert"
+        className="trigger"
+        data-bs-toggle="modal"
+        data-bs-target="#alertModal"
+      ></button>
+      <div
+        className="modal fade"
+        id="alertModal"
+        tabIndex={-1}
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">
+                Modal title
+              </h5>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">...</div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={(e) => deleteBill()}
+              >
+                Save changes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       <div
         className="modal fade"
         id="loadingModal"
@@ -114,13 +223,13 @@ export function HoaDon_Decal() {
       <SearchBar
         areaIndex={"1"}
         listInfo={list}
-        setCopyList={setCopyList}
+        setList={setList}
         copyList={copyList}
       />
       <HoaDonTitle handleSort={handleSort} />
-      {copyList.map((data) => (
+      {list.map((data) => (
         <HoaDonItemList
-          key={data.createdAt}
+          key={data._id}
           phoneNumber={data.phoneNumber}
           name={data.customerName}
           note={data.note}
@@ -133,7 +242,11 @@ export function HoaDon_Decal() {
           dateOrder={data.createdAt}
           id={data._id}
           total={data.totalPrice}
+          idCustomer={data.idCustomer}
+          amount={data.amount}
+          image={data.image}
           setState={setState}
+          deleteBill={deleteBillAlert}
         />
       ))}
     </>
