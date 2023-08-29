@@ -6,8 +6,10 @@ import { DecalBill } from "../../models/decalBill";
 import { DecalBillJoinCustomer } from "../../models/decallBillJoinCustomer";
 import * as DecalBillApi from "../../network/decalBill_api";
 import * as CustomerApi from "../../network/customer_api";
+import * as RevenueApi from "../../network/revenue_api";
 import "../../styles/styles.css";
 import { Customer } from "../../models/customer";
+import { RevenueInput } from "../../network/revenue_api";
 
 type PhoneNumberType = {
   id?: string;
@@ -17,6 +19,7 @@ type PhoneNumberType = {
 
 export function HoaDon_Decal() {
   let [idDeleting, setIdDeleting] = useState("");
+  let [isEmptyList, setIsEmptyList] = useState(true);
   let [isDefault, setIsDefault] = useState(true);
   let [list, setList] = useState<DecalBillJoinCustomer[]>([]);
   let [copyList, setCopyList] = useState<DecalBillJoinCustomer[]>([]);
@@ -37,6 +40,7 @@ export function HoaDon_Decal() {
   async function loadDecalBill() {
     try {
       await DecalBillApi.fetchDecalBills().then((data) => {
+        if (data.length > 0) setIsEmptyList(false);
         let copyCat: DecalBillJoinCustomer[] = [];
         data.map((item) => {
           const findItem = customerList.find(
@@ -71,6 +75,23 @@ export function HoaDon_Decal() {
     }
   }
 
+  async function updateRevenueAndCustomer(
+    customerId: string,
+    inputRevenue: RevenueInput,
+    inputCustomer: CustomerApi.CustomerInput
+  ) {
+    const currentTime = {
+      month: new Date().getMonth(),
+      year: new Date().getFullYear(),
+    };
+    await RevenueApi.updateRevenue(
+      currentTime.month,
+      currentTime.year,
+      inputRevenue
+    );
+    await CustomerApi.updateCustomer(customerId, inputCustomer);
+  }
+
   async function updateState(id: string, input: DecalBillApi.DecalBillInput) {
     await DecalBillApi.updateDecalBill(id, input);
   }
@@ -97,7 +118,8 @@ export function HoaDon_Decal() {
     setCopyList(copyCat.filter((item) => item));
     setIsDefault((prev) => !prev);
   };
-  const setState = (
+
+  const setState = async (
     obj: DecalBillApi.DecalBillInput,
     index: string,
     stateString: string
@@ -113,22 +135,104 @@ export function HoaDon_Decal() {
         item._id === index ? { ...item, state: stateString } : item
       )
     );
-    // let input: DecalBillApi.DecalBillInput = {
-    //   idCustomer: obj.idCustomer,
-    //   note: obj.note,
-    //   width: obj.width,
-    //   height: obj.height,
-    //   amount: obj.amount,
-    //   discount: obj.discount,
-    //   totalPrice: obj.totalPrice,
-    //   billPrice: obj.billPrice,
-    //   deposit: obj.deposit,
-    //   state: stateString,
-    //   image: obj.image,
-    // };
-    // updateState(index, input);
+    let input: DecalBillApi.DecalBillInput = {
+      idCustomer: obj.idCustomer,
+      note: obj.note,
+      width: obj.width,
+      height: obj.height,
+      amount: obj.amount,
+      discount: obj.discount,
+      totalPrice: obj.totalPrice,
+      billPrice: obj.billPrice,
+      deposit: obj.deposit,
+      state: stateString,
+      image: obj.image,
+    };
+    updateState(index, input);
 
-    // bo sung update Revenue
+    // update revenue and customer
+
+    if (stateString === "Thanh toán") {
+      let inputRevenue: RevenueInput = {
+        totalIncome: 0,
+        totalOutcome: 0,
+        month: 0,
+        year: 0,
+        kindRevenue: {
+          incomeDecal: 0,
+          incomeBangRon: 0,
+          incomeBangHieu: 0,
+          incomeHopDen: 0,
+          incomeTanHon: 0,
+          incomeKhac: 0,
+        },
+      };
+      let inputCustomer: CustomerApi.CustomerInput = {
+        name: "",
+        phoneNumber: "",
+        total: 0,
+        payed: 0,
+        debt: 0,
+      };
+
+      const customerFind = customerList.filter(
+        (item) => item._id === obj.idCustomer
+      );
+      customerFind.map((item) => {
+        inputCustomer = {
+          name: item.name,
+          phoneNumber: item.phoneNumber,
+          total: item.total,
+          payed: item.payed + obj.totalPrice,
+          debt: item.debt - obj.totalPrice,
+        };
+      });
+
+      await RevenueApi.fetchRevenues().then((data) => {
+        let currentTime = {
+          month: new Date().getMonth(),
+          year: new Date().getFullYear(),
+        };
+        const findItem = data.filter(
+          (item) =>
+            item.month === currentTime.month && item.year === currentTime.year
+        );
+        if (findItem.length === 0) {
+          inputRevenue = {
+            totalIncome: obj.totalPrice,
+            totalOutcome: obj.billPrice - obj.totalPrice,
+            month: currentTime.month,
+            year: currentTime.year,
+            kindRevenue: {
+              incomeDecal: obj.totalPrice,
+              incomeBangRon: 0,
+              incomeBangHieu: 0,
+              incomeHopDen: 0,
+              incomeTanHon: 0,
+              incomeKhac: 0,
+            },
+          };
+        } else {
+          findItem.map((item) => {
+            inputRevenue = {
+              totalIncome: item.totalIncome + obj.totalPrice,
+              totalOutcome: item.totalOutcome + obj.billPrice - obj.totalPrice,
+              month: currentTime.month,
+              year: currentTime.year,
+              kindRevenue: {
+                incomeDecal: item.kindRevenue.incomeDecal + obj.totalPrice,
+                incomeBangRon: item.kindRevenue.incomeBangRon,
+                incomeBangHieu: item.kindRevenue.incomeBangHieu,
+                incomeHopDen: item.kindRevenue.incomeHopDen,
+                incomeTanHon: item.kindRevenue.incomeTanHon,
+                incomeKhac: item.kindRevenue.incomeKhac,
+              },
+            };
+          });
+        }
+        updateRevenueAndCustomer(obj.idCustomer, inputRevenue, inputCustomer);
+      });
+    }
   };
 
   const deleteBillAlert = async (id: string) => {
@@ -136,9 +240,98 @@ export function HoaDon_Decal() {
     document.getElementById("triggerAlert")?.click();
   };
   const deleteBill = async () => {
-    // await DecalBillApi.deleteDecalBill(id);
+    await DecalBillApi.deleteDecalBill(idDeleting);
     setList(list.filter((item) => item._id !== idDeleting));
     setCopyList(copyList.filter((item) => item._id !== idDeleting));
+
+    // bo sung update revenue
+    let total: number,
+      price: number = 0;
+    let idCus = "";
+    list.map((item) => {
+      if (item._id === idDeleting) {
+        total = item.totalPrice;
+        price = item.billPrice;
+        idCus = item.idCustomer;
+      }
+    });
+    let inputRevenue: RevenueInput = {
+      totalIncome: 0,
+      totalOutcome: 0,
+      month: 0,
+      year: 0,
+      kindRevenue: {
+        incomeDecal: 0,
+        incomeBangRon: 0,
+        incomeBangHieu: 0,
+        incomeHopDen: 0,
+        incomeTanHon: 0,
+        incomeKhac: 0,
+      },
+    };
+    let inputCustomer: CustomerApi.CustomerInput = {
+      name: "",
+      phoneNumber: "",
+      total: 0,
+      payed: 0,
+      debt: 0,
+    };
+
+    const customerFind = customerList.filter((item) => item._id === idCus);
+    customerFind.map((item) => {
+      inputCustomer = {
+        name: item.name,
+        phoneNumber: item.phoneNumber,
+        total: item.total,
+        payed: item.payed + total,
+        debt: item.debt - total,
+      };
+    });
+
+    await RevenueApi.fetchRevenues().then((data) => {
+      let currentTime = {
+        month: new Date().getMonth(),
+        year: new Date().getFullYear(),
+      };
+      const findItem = data.filter(
+        (item) =>
+          item.month === currentTime.month && item.year === currentTime.year
+      );
+      if (findItem.length === 0) {
+        inputRevenue = {
+          totalIncome: total,
+          totalOutcome: price - total,
+          month: currentTime.month,
+          year: currentTime.year,
+          kindRevenue: {
+            incomeDecal: total,
+            incomeBangRon: 0,
+            incomeBangHieu: 0,
+            incomeHopDen: 0,
+            incomeTanHon: 0,
+            incomeKhac: 0,
+          },
+        };
+      } else {
+        findItem.map((item) => {
+          inputRevenue = {
+            totalIncome: item.totalIncome + total,
+            totalOutcome: item.totalOutcome + price - total,
+            month: currentTime.month,
+            year: currentTime.year,
+            kindRevenue: {
+              incomeDecal: item.kindRevenue.incomeDecal + total,
+              incomeBangRon: item.kindRevenue.incomeBangRon,
+              incomeBangHieu: item.kindRevenue.incomeBangHieu,
+              incomeHopDen: item.kindRevenue.incomeHopDen,
+              incomeTanHon: item.kindRevenue.incomeTanHon,
+              incomeKhac: item.kindRevenue.incomeKhac,
+            },
+          };
+        });
+      }
+      updateRevenueAndCustomer(idCus, inputRevenue, inputCustomer);
+    });
   };
 
   return (
@@ -169,32 +362,25 @@ export function HoaDon_Decal() {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="exampleModalLabel">
-                Modal title
+                Xác nhận
               </h5>
-              <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
             </div>
-            <div className="modal-body">...</div>
+            <div className="modal-body">Bạn có chắc chắn xóa hóa đơn này ?</div>
             <div className="modal-footer">
               <button
                 type="button"
                 className="btn btn-secondary"
-                data-dismiss="modal"
+                data-bs-dismiss="modal"
               >
-                Close
+                Hủy
               </button>
               <button
                 type="button"
-                className="btn btn-primary"
+                className="btn btn-success"
                 onClick={(e) => deleteBill()}
+                data-bs-dismiss="modal"
               >
-                Save changes
+                Xác nhận
               </button>
             </div>
           </div>
@@ -204,7 +390,7 @@ export function HoaDon_Decal() {
         className="modal fade"
         id="loadingModal"
         tabIndex={-1}
-        aria-labelledby="exampleModalLabel"
+        aria-labelledby="exampleModalLabel2"
         aria-hidden="false"
       >
         <div className="modal-dialog ">
@@ -227,6 +413,13 @@ export function HoaDon_Decal() {
         copyList={copyList}
       />
       <HoaDonTitle handleSort={handleSort} />
+      {isEmptyList === true ? (
+        <h5 style={{ color: "#2FB872" }} className="ms-3">
+          Danh sách hiện chưa có hóa đơn nào ~
+        </h5>
+      ) : (
+        {}
+      )}
       {list.map((data) => (
         <HoaDonItemList
           key={data._id}

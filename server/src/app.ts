@@ -3,6 +3,7 @@ import express, {NextFunction, Request, Response} from "express";
 import decalBillsRoutes from "./routes/billDecal"
 import servicePriceRoutes from "./routes/priceService"
 import customerRoutes from "./routes/customer"
+import revenueRoutes from "./routes/revenue"
 import morgan from "morgan"
 import createHttpError, {isHttpError} from "http-errors";
 
@@ -17,6 +18,8 @@ app.use("/api/servicePrices", servicePriceRoutes);
 app.use("/api/decalBills", decalBillsRoutes);
 
 app.use("/api/customers", customerRoutes);
+
+app.use("/api/revenues", revenueRoutes);
 
 app.use((req, res, next) => {
     next(createHttpError(404,"Endpoint not found"));
