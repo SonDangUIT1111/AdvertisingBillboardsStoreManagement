@@ -76,6 +76,8 @@ export function HoaDon_Decal() {
   }
 
   async function updateRevenueAndCustomer(
+    isUpdateCustomer: boolean,
+    isUpdateRevenue: boolean,
     customerId: string,
     inputRevenue: RevenueInput,
     inputCustomer: CustomerApi.CustomerInput
@@ -84,12 +86,16 @@ export function HoaDon_Decal() {
       month: new Date().getMonth(),
       year: new Date().getFullYear(),
     };
-    await RevenueApi.updateRevenue(
-      currentTime.month,
-      currentTime.year,
-      inputRevenue
-    );
-    await CustomerApi.updateCustomer(customerId, inputCustomer);
+    if (isUpdateRevenue) {
+      await RevenueApi.updateRevenue(
+        currentTime.month,
+        currentTime.year,
+        inputRevenue
+      );
+    }
+    if (isUpdateCustomer) {
+      await CustomerApi.updateCustomer(customerId, inputCustomer);
+    }
   }
 
   async function updateState(id: string, input: DecalBillApi.DecalBillInput) {
@@ -188,6 +194,18 @@ export function HoaDon_Decal() {
         };
       });
 
+      setCustomerList(
+        customerList.map((customer) =>
+          customer._id === obj.idCustomer
+            ? {
+                ...customer,
+                payed: customer.payed + obj.totalPrice,
+                debt: customer.debt - obj.totalPrice,
+              }
+            : customer
+        )
+      );
+
       await RevenueApi.fetchRevenues().then((data) => {
         let currentTime = {
           month: new Date().getMonth(),
@@ -230,7 +248,13 @@ export function HoaDon_Decal() {
             };
           });
         }
-        updateRevenueAndCustomer(obj.idCustomer, inputRevenue, inputCustomer);
+        updateRevenueAndCustomer(
+          true,
+          true,
+          obj.idCustomer,
+          inputRevenue,
+          inputCustomer
+        );
       });
     }
   };
@@ -248,11 +272,13 @@ export function HoaDon_Decal() {
     let total: number,
       price: number = 0;
     let idCus = "";
+    let status = "";
     list.map((item) => {
       if (item._id === idDeleting) {
         total = item.totalPrice;
         price = item.billPrice;
         idCus = item.idCustomer;
+        status = item.state;
       }
     });
     let inputRevenue: RevenueInput = {
@@ -279,59 +305,72 @@ export function HoaDon_Decal() {
 
     const customerFind = customerList.filter((item) => item._id === idCus);
     customerFind.map((item) => {
-      inputCustomer = {
-        name: item.name,
-        phoneNumber: item.phoneNumber,
-        total: item.total,
-        payed: item.payed + total,
-        debt: item.debt - total,
-      };
-    });
-
-    await RevenueApi.fetchRevenues().then((data) => {
-      let currentTime = {
-        month: new Date().getMonth(),
-        year: new Date().getFullYear(),
-      };
-      const findItem = data.filter(
-        (item) =>
-          item.month === currentTime.month && item.year === currentTime.year
-      );
-      if (findItem.length === 0) {
-        inputRevenue = {
-          totalIncome: total,
-          totalOutcome: price - total,
-          month: currentTime.month,
-          year: currentTime.year,
-          kindRevenue: {
-            incomeDecal: total,
-            incomeBangRon: 0,
-            incomeBangHieu: 0,
-            incomeHopDen: 0,
-            incomeTanHon: 0,
-            incomeKhac: 0,
-          },
+      if (status === "Thanh toán") {
+        inputCustomer = {
+          name: item.name,
+          phoneNumber: item.phoneNumber,
+          total: item.total - total,
+          payed: item.payed - total,
+          debt: item.debt,
         };
       } else {
-        findItem.map((item) => {
-          inputRevenue = {
-            totalIncome: item.totalIncome + total,
-            totalOutcome: item.totalOutcome + price - total,
-            month: currentTime.month,
-            year: currentTime.year,
-            kindRevenue: {
-              incomeDecal: item.kindRevenue.incomeDecal + total,
-              incomeBangRon: item.kindRevenue.incomeBangRon,
-              incomeBangHieu: item.kindRevenue.incomeBangHieu,
-              incomeHopDen: item.kindRevenue.incomeHopDen,
-              incomeTanHon: item.kindRevenue.incomeTanHon,
-              incomeKhac: item.kindRevenue.incomeKhac,
-            },
-          };
-        });
+        inputCustomer = {
+          name: item.name,
+          phoneNumber: item.phoneNumber,
+          total: item.total - total,
+          payed: item.payed,
+          debt: item.debt - total,
+        };
       }
-      updateRevenueAndCustomer(idCus, inputRevenue, inputCustomer);
     });
+
+    if (status === "Thanh toán") {
+      await RevenueApi.fetchRevenues().then((data) => {
+        let currentTime = {
+          month: new Date().getMonth(),
+          year: new Date().getFullYear(),
+        };
+        const findItem = data.filter(
+          (item) =>
+            item.month === currentTime.month && item.year === currentTime.year
+        );
+        if (findItem.length > 0) {
+          // eslint-disable-next-line array-callback-return
+          findItem.map((item) => {
+            inputRevenue = {
+              totalIncome: item.totalIncome - total,
+              totalOutcome: item.totalOutcome - price + total,
+              month: currentTime.month,
+              year: currentTime.year,
+              kindRevenue: {
+                incomeDecal: item.kindRevenue.incomeDecal - total,
+                incomeBangRon: item.kindRevenue.incomeBangRon,
+                incomeBangHieu: item.kindRevenue.incomeBangHieu,
+                incomeHopDen: item.kindRevenue.incomeHopDen,
+                incomeTanHon: item.kindRevenue.incomeTanHon,
+                incomeKhac: item.kindRevenue.incomeKhac,
+              },
+            };
+          });
+          updateRevenueAndCustomer(
+            true,
+            true,
+            idCus,
+            inputRevenue,
+            inputCustomer
+          );
+        } else
+          updateRevenueAndCustomer(
+            true,
+            false,
+            idCus,
+            inputRevenue,
+            inputCustomer
+          );
+      });
+    } else {
+      updateRevenueAndCustomer(true, false, idCus, inputRevenue, inputCustomer);
+    }
   };
 
   return (
@@ -418,7 +457,7 @@ export function HoaDon_Decal() {
           Danh sách hiện chưa có hóa đơn nào ~
         </h5>
       ) : (
-        {}
+        <></>
       )}
       {list.map((data) => (
         <HoaDonItemList

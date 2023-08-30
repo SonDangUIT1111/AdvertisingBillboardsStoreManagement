@@ -199,6 +199,19 @@ export function ThemHoaDonMoi_Decal() {
             onEditCustomer(input);
           }
         });
+      } else {
+        customers.map((customer) => {
+          if (customer._id === idCustomer) {
+            let input: CustomerApi.CustomerInput = {
+              name: nameCustomer,
+              phoneNumber: customer.phoneNumber,
+              total: customer.total + total,
+              payed: customer.payed,
+              debt: customer.debt + total,
+            };
+            onEditCustomer(input);
+          }
+        });
       }
     }
   };
