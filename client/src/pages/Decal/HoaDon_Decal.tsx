@@ -11,12 +11,6 @@ import "../../styles/styles.css";
 import { Customer } from "../../models/customer";
 import { RevenueInput } from "../../network/revenue_api";
 
-type PhoneNumberType = {
-  id?: string;
-  nameInfo?: string;
-  phoneInfo?: string;
-};
-
 export function HoaDon_Decal() {
   let [idDeleting, setIdDeleting] = useState("");
   let [isEmptyList, setIsEmptyList] = useState(true);

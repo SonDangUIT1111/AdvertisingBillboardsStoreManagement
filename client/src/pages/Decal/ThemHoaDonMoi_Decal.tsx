@@ -260,6 +260,7 @@ export function ThemHoaDonMoi_Decal() {
     });
     if (!flag) {
       setName("");
+      setNameCustomer("");
       setIdCustomer("");
       setIsExistCustomer(false);
     }
@@ -318,7 +319,7 @@ export function ThemHoaDonMoi_Decal() {
       <div className="container position-relative">
         <div className="row">
           <div className="col">
-            <FileDrop setImageData={setImageData} />
+            <FileDrop setImageData={setImageData} imageData={""} />
           </div>
           <div className="col" style={{ marginTop: "20px" }}>
             <>

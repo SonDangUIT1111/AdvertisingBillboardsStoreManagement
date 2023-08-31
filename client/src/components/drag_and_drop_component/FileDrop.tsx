@@ -1,13 +1,15 @@
 import { DragEvent, useState } from "react";
 type Props = {
   setImageData: React.Dispatch<React.SetStateAction<string>>;
+  imageData: string;
 };
 
-export function FileDrop({ setImageData }: Props) {
+export function FileDrop({ setImageData, imageData }: Props) {
   const [isOver, setIsOver] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
-  const [urlImage, setUrlImage] = useState("");
+  let [urlImage, setUrlImage] = useState("");
   const [errorText, setErrorText] = useState("");
+  urlImage = imageData;
 
   // Define the event handlers
   const handleDragOver = (event: DragEvent<HTMLDivElement>) => {

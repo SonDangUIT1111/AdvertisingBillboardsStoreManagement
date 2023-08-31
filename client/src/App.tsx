@@ -16,17 +16,6 @@ import { ThemHoaDonMoi_BangHieu } from "./pages/BangHieu/ThemHoaDonMoi_BangHieu"
 import { SuaHoaDon_BangHieu } from "./pages/BangHieu/SuaHoaDon_BangHieu";
 
 function App() {
-  // useEffect(() => {
-  //   async function loadNotes() {
-  //     try {
-  //       setNotes(notes);
-  //     } catch (error) {
-  //       console.error(error);
-  //       alert(error);
-  //     }
-  //   }
-  //   loadNotes();
-  // }, []);
   return (
     <>
       <NavBar />
@@ -40,7 +29,10 @@ function App() {
             path="/hoadon/decal/themhoadon"
             element={<ThemHoaDonMoi_Decal />}
           />
-          <Route path="/hoadon/decal/suahoadon" element={<SuaHoaDon_Decal />} />
+          <Route
+            path="/hoadon/decal/suahoadon/:idBill"
+            element={<SuaHoaDon_Decal />}
+          />
           <Route path="/hoadon/bangron" element={<HoaDon_BangRon />} />
           <Route
             path="/hoadon/bangron/themhoadon"

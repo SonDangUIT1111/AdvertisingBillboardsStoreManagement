@@ -231,6 +231,7 @@ export function Information_Decal_BangRon({
                 placeholder=""
                 aria-label=""
                 aria-describedby="basic-addon1"
+                onChange={(e) => setDeposit(e.target.valueAsNumber)}
               />
             </div>
           </div>
