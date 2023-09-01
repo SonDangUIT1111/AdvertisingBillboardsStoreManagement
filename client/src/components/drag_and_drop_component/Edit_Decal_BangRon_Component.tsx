@@ -11,9 +11,12 @@ export type BillDecal_BangRonEditProps = {
   height: number;
   deposit: number;
   discount: number;
+  state: string;
   handleEdit: (e: React.FormEvent) => void;
   handleCalculate: React.MouseEventHandler<HTMLButtonElement>;
   handleCalculateWithDiscount: (e: number) => void;
+  setChoseWhat: React.Dispatch<React.SetStateAction<string>>;
+  setState: React.Dispatch<React.SetStateAction<string>>;
   setPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
   setName: React.Dispatch<React.SetStateAction<string>>;
   setNote: React.Dispatch<React.SetStateAction<string>>;
@@ -36,6 +39,9 @@ export function Edit_Decal_BangRon_Component({
   height,
   deposit,
   discount,
+  state,
+  setChoseWhat,
+  setState,
   setAmount,
   setPhoneNumber,
   setName,
@@ -62,7 +68,7 @@ export function Edit_Decal_BangRon_Component({
             </span>
           </div>
           <span
-            className="form-control"
+            className="form-control bg-light"
             placeholder=""
             aria-label=""
             aria-describedby="basic-addon1"
@@ -87,6 +93,7 @@ export function Edit_Decal_BangRon_Component({
             value={name}
             aria-describedby="basic-addon1"
             onChange={(e) => setName(e.target.value)}
+            disabled={state === "Thanh toán" ? true : false}
           />
         </div>
         <div className="input-group mb-3 bolder-border">
@@ -100,6 +107,7 @@ export function Edit_Decal_BangRon_Component({
             aria-label="With textarea"
             value={note}
             onChange={(e) => setNote(e.target.value)}
+            disabled={state === "Thanh toán" ? true : false}
           ></textarea>
         </div>
         <div className="row" style={{ color: "#000", fontWeight: 500 }}>
@@ -121,6 +129,7 @@ export function Edit_Decal_BangRon_Component({
                 value={width}
                 aria-describedby="basic-addon1"
                 required
+                disabled={state === "Thanh toán" ? true : false}
                 onChange={(e) => setWidth(e.target.valueAsNumber)}
               />
             </div>
@@ -144,6 +153,7 @@ export function Edit_Decal_BangRon_Component({
                 value={height}
                 required
                 aria-describedby="basic-addon1"
+                disabled={state === "Thanh toán" ? true : false}
                 onChange={(e) => setHeight(e.target.valueAsNumber)}
               />
             </div>
@@ -165,6 +175,7 @@ export function Edit_Decal_BangRon_Component({
             placeholder=""
             aria-label=""
             aria-describedby="basic-addon1"
+            disabled={state === "Thanh toán" ? true : false}
             onChange={(e) => setAmount(e.target.valueAsNumber)}
           />
         </div>
@@ -212,6 +223,7 @@ export function Edit_Decal_BangRon_Component({
                 aria-label=""
                 value={discount}
                 aria-describedby="basic-addon1"
+                disabled={state === "Thanh toán" ? true : false}
                 onChange={(e) => {
                   if (e.target.value === "") {
                     setDiscount(0);
@@ -242,6 +254,7 @@ export function Edit_Decal_BangRon_Component({
                 placeholder=""
                 aria-label=""
                 aria-describedby="basic-addon1"
+                disabled={state === "Thanh toán" ? true : false}
                 onChange={(e) => setDeposit(e.target.valueAsNumber)}
               />
             </div>
@@ -260,23 +273,51 @@ export function Edit_Decal_BangRon_Component({
         <hr />
         <div className="row" style={{ color: "#2FB872", fontWeight: 500 }}>
           <div className="col">
-            <button
-              type="button"
-              className="btn btn-primary"
-              style={{ width: "100%" }}
-            >
-              Đã hoàn thành
-            </button>
+            {state === "Hoàn thành" || state === "Thanh toán" ? (
+              <button
+                type="button"
+                className="btn btn-primary m-1"
+                style={{ width: "100%" }}
+              >
+                Đã hoàn thành
+              </button>
+            ) : (
+              <button
+                type="button"
+                style={{ width: "100%" }}
+                className="btn btn-outline-primary m-1"
+                onClick={(e) => {
+                  setState("Hoàn thành");
+                  setChoseWhat("Hoàn thành");
+                }}
+              >
+                Đã hoàn thành
+              </button>
+            )}
           </div>
 
           <div className="col">
-            <button
-              type="button"
-              className="btn btn-success"
-              style={{ width: "100%" }}
-            >
-              Đã thanh toán
-            </button>
+            {state === "Thanh toán" ? (
+              <button
+                type="button"
+                className="btn btn-success m-1"
+                style={{ width: "100%" }}
+              >
+                Đã thanh toán
+              </button>
+            ) : (
+              <button
+                type="button"
+                style={{ width: "100%" }}
+                className="btn btn-outline-success m-1"
+                onClick={(e) => {
+                  setState("Thanh toán");
+                  setChoseWhat("Thanh toán");
+                }}
+              >
+                Đã thanh toán
+              </button>
+            )}
           </div>
         </div>
         <hr />

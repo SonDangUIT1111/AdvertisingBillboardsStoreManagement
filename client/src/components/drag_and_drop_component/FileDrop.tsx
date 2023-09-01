@@ -93,6 +93,9 @@ export function FileDrop({ setImageData, imageData }: Props) {
           ></img>
         )}
       </div>
+      <h6 className="mt-2">
+        Lưu ý: Nếu gặp lỗi xử lý, vui lòng thử ảnh có kích thước nhỏ hơn !
+      </h6>
     </div>
   );
 }

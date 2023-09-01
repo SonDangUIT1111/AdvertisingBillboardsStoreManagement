@@ -4,16 +4,16 @@ import { useEffect, useState } from "react";
 import * as ServicePriceApi from "../../network/servicePrice_api";
 import * as DecalBillApi from "../../network/decalBill_api";
 import * as CustomerApi from "../../network/customer_api";
+import * as RevenueApi from "../../network/revenue_api";
 import { DecalBillInput } from "../../network/decalBill_api";
-import { HoaDonDecalData } from "../../data/data";
 import { ServicePrice } from "../../models/servicePrice";
-import { DecalBill } from "../../models/decalBill";
-import { useForm } from "react-hook-form";
 import { Toast } from "bootstrap";
 import "../../styles/styles.css";
 import { Customer, Customer as CustomerModel } from "../../models/customer";
 import { DecalBillJoinCustomer } from "../../models/decallBillJoinCustomer";
 import { useParams } from "react-router-dom";
+import { RevenueInput } from "../../network/revenue_api";
+import { toContainElement } from "@testing-library/jest-dom/matchers";
 
 export type BillDecal_BangRonEditProps = {
   idBill: string;
@@ -50,8 +50,10 @@ export function SuaHoaDon_Decal() {
   const [deposit, setDeposit] = useState(0);
   let [copy, setCopy] = useState(0);
   let [total, setTotal] = useState(0);
+  let [oldTotal, setOldTotal] = useState(0);
   const [amount, setAmount] = useState(1);
   const [state, setState] = useState("");
+  const [choseWhat, setChoseWhat] = useState("");
 
   async function loadCustomer() {
     try {
@@ -111,6 +113,7 @@ export function SuaHoaDon_Decal() {
             setDeposit(item.deposit);
             setCopy(item.billPrice);
             setTotal(item.totalPrice);
+            setOldTotal(item.totalPrice);
             setAmount(item.amount);
             setState(item.state);
           }
@@ -168,7 +171,10 @@ export function SuaHoaDon_Decal() {
 
   async function onEditCustomer(input: CustomerApi.CustomerInput) {
     try {
-      await CustomerApi.updateCustomer(idCustomer, input);
+      await CustomerApi.updateCustomer(idCustomer, input).then((data) => {
+        console.log("edit xong cusomer");
+        handleRevenueAndCustomer();
+      });
     } catch (error) {
       const toastLiveExample = document.getElementById("liveToastFail");
       if (toastLiveExample) {
@@ -181,6 +187,29 @@ export function SuaHoaDon_Decal() {
   function processInfo() {
     handleCalculate();
     handleBill();
+  }
+
+  async function updateRevenueAndCustomer(
+    isUpdateCustomer: boolean,
+    isUpdateRevenue: boolean,
+    customerId: string,
+    inputRevenue: RevenueInput,
+    inputCustomer: CustomerApi.CustomerInput
+  ) {
+    const currentTime = {
+      month: new Date().getMonth(),
+      year: new Date().getFullYear(),
+    };
+    if (isUpdateRevenue) {
+      await RevenueApi.updateRevenue(
+        currentTime.month,
+        currentTime.year,
+        inputRevenue
+      );
+    }
+    if (isUpdateCustomer) {
+      await CustomerApi.updateCustomer(customerId, inputCustomer);
+    }
   }
 
   function editBill() {
@@ -198,35 +227,115 @@ export function SuaHoaDon_Decal() {
       image: imageData,
     };
     onSubmit(input);
-  }
 
-  const handleBill = () => {
-    editBill();
-    if (nameCustomer !== name) {
+    if (nameCustomer !== name || oldTotal !== total) {
+      console.log(oldTotal + " voi moi la :" + total);
       customers.map((customer) => {
         if (customer._id === idCustomer) {
           let input: CustomerApi.CustomerInput = {
             name: name,
             phoneNumber: customer.phoneNumber,
-            total: customer.total + total,
+            total: customer.total + total - oldTotal,
             payed: customer.payed,
-            debt: customer.debt + total,
+            debt: customer.debt + total - oldTotal,
           };
           onEditCustomer(input);
         }
       });
     } else {
-      customers.map((customer) => {
-        if (customer._id === idCustomer) {
-          let input: CustomerApi.CustomerInput = {
-            name: nameCustomer,
-            phoneNumber: customer.phoneNumber,
-            total: customer.total + total,
-            payed: customer.payed,
-            debt: customer.debt + total,
+      handleRevenueAndCustomer();
+    }
+  }
+
+  const handleBill = async () => {
+    editBill();
+  };
+
+  const handleRevenueAndCustomer = async () => {
+    if (choseWhat === "Thanh toán") {
+      let inputRevenue: RevenueInput = {
+        totalIncome: 0,
+        totalOutcome: 0,
+        month: 0,
+        year: 0,
+        kindRevenue: {
+          incomeDecal: 0,
+          incomeBangRon: 0,
+          incomeBangHieu: 0,
+          incomeHopDen: 0,
+          incomeTanHon: 0,
+          incomeKhac: 0,
+        },
+      };
+      let inputCustomer: CustomerApi.CustomerInput = {
+        name: "",
+        phoneNumber: "",
+        total: 0,
+        payed: 0,
+        debt: 0,
+      };
+
+      const customerFind = customers.filter((item) => item._id === idCustomer);
+      console.log(customerFind);
+      customerFind.map((item) => {
+        inputCustomer = {
+          name: item.name,
+          phoneNumber: item.phoneNumber,
+          total: item.total - oldTotal + total,
+          payed: item.payed + total,
+          debt: item.debt - oldTotal,
+        };
+      });
+
+      await RevenueApi.fetchRevenues().then((data) => {
+        let currentTime = {
+          month: new Date().getMonth(),
+          year: new Date().getFullYear(),
+        };
+        const findItem = data.filter(
+          (item) =>
+            item.month === currentTime.month && item.year === currentTime.year
+        );
+        if (findItem.length === 0) {
+          inputRevenue = {
+            totalIncome: total,
+            totalOutcome: price - total,
+            month: currentTime.month,
+            year: currentTime.year,
+            kindRevenue: {
+              incomeDecal: total,
+              incomeBangRon: 0,
+              incomeBangHieu: 0,
+              incomeHopDen: 0,
+              incomeTanHon: 0,
+              incomeKhac: 0,
+            },
           };
-          onEditCustomer(input);
+        } else {
+          findItem.map((item) => {
+            inputRevenue = {
+              totalIncome: item.totalIncome + total,
+              totalOutcome: item.totalOutcome + price - total,
+              month: currentTime.month,
+              year: currentTime.year,
+              kindRevenue: {
+                incomeDecal: item.kindRevenue.incomeDecal + total,
+                incomeBangRon: item.kindRevenue.incomeBangRon,
+                incomeBangHieu: item.kindRevenue.incomeBangHieu,
+                incomeHopDen: item.kindRevenue.incomeHopDen,
+                incomeTanHon: item.kindRevenue.incomeTanHon,
+                incomeKhac: item.kindRevenue.incomeKhac,
+              },
+            };
+          });
         }
+        updateRevenueAndCustomer(
+          true,
+          true,
+          idCustomer,
+          inputRevenue,
+          inputCustomer
+        );
       });
     }
   };
@@ -357,6 +466,9 @@ export function SuaHoaDon_Decal() {
                 height={height}
                 deposit={deposit}
                 discount={discount}
+                state={state}
+                setChoseWhat={setChoseWhat}
+                setState={setState}
                 setAmount={setAmount}
                 setPhoneNumber={setPhoneNumber}
                 setName={setName}
