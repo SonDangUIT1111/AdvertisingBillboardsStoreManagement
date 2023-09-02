@@ -9,7 +9,9 @@ export function FileDrop({ setImageData, imageData }: Props) {
   const [files, setFiles] = useState<File[]>([]);
   let [urlImage, setUrlImage] = useState("");
   const [errorText, setErrorText] = useState("");
-  urlImage = imageData;
+  if (imageData !== "") {
+    urlImage = imageData;
+  }
 
   // Define the event handlers
   const handleDragOver = (event: DragEvent<HTMLDivElement>) => {

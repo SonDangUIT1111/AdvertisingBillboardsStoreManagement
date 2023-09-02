@@ -1,6 +1,7 @@
 import { DecalBillInput } from "../network/decalBill_api";
 import { HoaDonDecal_BangRonProps } from "../pages/Decal/ThemHoaDonMoi_Decal";
 import "../styles/styles.css";
+import { formatCurrency } from "../utils/formatCurrency";
 import { formatDate } from "../utils/formatDate";
 export function HoaDonItemList(props: HoaDonDecal_BangRonProps) {
   const bill: DecalBillInput = {
@@ -32,7 +33,7 @@ export function HoaDonItemList(props: HoaDonDecal_BangRonProps) {
           {formatDate(props.dateOrder)}
         </span>
         <span className="text-left mt-2" style={{ width: "12%" }}>
-          {props.total}
+          {formatCurrency(props.total)}
         </span>
         <span className="text-left mt-2" style={{ width: "12%" }}>
           {props.state}
@@ -67,7 +68,9 @@ export function HoaDonItemList(props: HoaDonDecal_BangRonProps) {
 
           <a
             className="btn btn-info m-1"
-            href={`/hoadon/decal/suahoadon/${props.id}`}
+            href={`/hoadon/${
+              props.typeBill === 1 ? "decal" : "bangron"
+            }/suahoadon/${props.id}`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

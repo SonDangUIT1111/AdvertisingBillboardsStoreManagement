@@ -178,5 +178,5 @@
  }
 
  .trigger {
-    visibility: hidden;
+    visibility:collapse;
  }

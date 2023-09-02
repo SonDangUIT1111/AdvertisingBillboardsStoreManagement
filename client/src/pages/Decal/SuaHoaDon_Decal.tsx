@@ -69,31 +69,31 @@ export function SuaHoaDon_Decal() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   async function loadDecalBill() {
     try {
-      await DecalBillApi.fetchDecalBills().then((data) => {
+      if (typeof idBill === "undefined") idBill = "";
+      await DecalBillApi.fetchDecalBill(idBill).then((data) => {
         let copyCat: DecalBillJoinCustomer[] = [];
-        data.map((item) => {
-          customers.map((customer) => {
-            if (customer._id === item.idCustomer) {
-              copyCat.push({
-                _id: item._id,
-                idCustomer: item.idCustomer,
-                note: item.note,
-                width: item.width,
-                height: item.height,
-                amount: item.amount,
-                discount: item.discount,
-                totalPrice: item.totalPrice,
-                billPrice: item.billPrice,
-                deposit: item.deposit,
-                state: item.state,
-                image: item.image,
-                createdAt: item.createdAt,
-                updatedAt: item.updatedAt,
-                customerName: customer.name,
-                phoneNumber: customer.phoneNumber,
-              });
-            }
-          });
+
+        customers.map((customer) => {
+          if (customer._id === data.idCustomer) {
+            copyCat.push({
+              _id: data._id,
+              idCustomer: data.idCustomer,
+              note: data.note,
+              width: data.width,
+              height: data.height,
+              amount: data.amount,
+              discount: data.discount,
+              totalPrice: data.totalPrice,
+              billPrice: data.billPrice,
+              deposit: data.deposit,
+              state: data.state,
+              image: data.image,
+              createdAt: data.createdAt,
+              updatedAt: data.updatedAt,
+              customerName: customer.name,
+              phoneNumber: customer.phoneNumber,
+            });
+          }
         });
         copyCat.map((item) => {
           if (item._id === idBill) {
@@ -342,6 +342,16 @@ export function SuaHoaDon_Decal() {
 
   const handleEdit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (width === 0 || height === 0) {
+      const toastLiveExample = document.getElementById(
+        "liveToastFailDimension"
+      );
+      if (toastLiveExample) {
+        const toastBootstrap = Toast.getOrCreateInstance(toastLiveExample);
+        toastBootstrap.show();
+      }
+      return;
+    }
     processInfo();
   };
   const handleCalculate = () => {
@@ -439,6 +449,29 @@ export function SuaHoaDon_Decal() {
             <div className="toast-body">
               Chỉnh sửa hóa đơn thất bại, thông tin lỗi.
             </div>
+            <button
+              type="button"
+              className="btn-close btn-close-white me-2 m-auto"
+              data-bs-dismiss="toast"
+              aria-label="Close"
+            ></button>
+          </div>
+        </div>
+      </div>
+      <div
+        aria-live="polite"
+        aria-atomic="true"
+        className="position-relative mt-1 me-2"
+      >
+        <div
+          className="bg-red toast align-items-center toast-container top-0 end-0"
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+          id="liveToastFailDimension"
+        >
+          <div className="d-flex">
+            <div className="toast-body">Giá trị kích thước không hợp lệ.</div>
             <button
               type="button"
               className="btn-close btn-close-white me-2 m-auto"

@@ -1,4 +1,4 @@
-import { MouseEventHandler, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { HoaDonItemList } from "../../components/HoaDonItemList";
 import { HoaDonTitle } from "../../components/HoaDonTitle";
 import { SearchBar } from "../../components/SearchBar";
@@ -386,7 +386,6 @@ export function HoaDon_Decal() {
       <div
         className="modal fade"
         id="alertModal"
-        tabIndex={-1}
         role="dialog"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
@@ -422,7 +421,6 @@ export function HoaDon_Decal() {
       <div
         className="modal fade"
         id="loadingModal"
-        tabIndex={-1}
         aria-labelledby="exampleModalLabel2"
         aria-hidden="false"
       >
@@ -455,6 +453,7 @@ export function HoaDon_Decal() {
       )}
       {list.map((data) => (
         <HoaDonItemList
+          typeBill={1}
           key={data._id}
           phoneNumber={data.phoneNumber}
           name={data.customerName}

@@ -19,8 +19,9 @@ function App() {
   return (
     <>
       <NavBar />
-      <Container className="mb-4">
+      <Container className="mb-4" style={{ zIndex: "0" }}>
         <Routes>
+          {/* //complete */}
           <Route path="/" element={<TrangChu />} />
           <Route path="/hoadon" element={<HoaDon />} />
           <Route path="/nhaphang" element={<NhapHang />} />
@@ -39,9 +40,11 @@ function App() {
             element={<ThemHoaDonMoi_BangRon />}
           />
           <Route
-            path="/hoadon/bangron/suahoadon"
+            path="/hoadon/bangron/suahoadon/:idBill"
             element={<SuaHoaDon_BangRon />}
           />
+
+          {/* /////// */}
           <Route path="/hoadon/banghieu" element={<HoaDon_BangHieu />} />
           <Route
             path="/hoadon/banghieu/themhoadon"

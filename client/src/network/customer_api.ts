@@ -20,6 +20,14 @@ export async function fetchCustomers(): Promise<Customer[]> {
 
 } 
 
+export async function fetchCustomer(customerId: string): Promise<Customer[]> {
+    const response = await fetch("/api/customers/"+customerId, {
+        method: "GET",
+      });
+      return response.json();
+
+} 
+
 export type CustomerInput = {
     name: string,
     phoneNumber: string,

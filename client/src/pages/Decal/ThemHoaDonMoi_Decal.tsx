@@ -7,7 +7,6 @@ import * as ServicePriceApi from "../../network/servicePrice_api";
 import * as DecalBillApi from "../../network/decalBill_api";
 import * as CustomerApi from "../../network/customer_api";
 import { DecalBillInput } from "../../network/decalBill_api";
-import { HoaDonDecalData } from "../../data/data";
 import { ServicePrice } from "../../models/servicePrice";
 import { DecalBill } from "../../models/decalBill";
 import { useForm } from "react-hook-form";
@@ -32,6 +31,7 @@ export type HoaDonDecal_BangRonProps = {
   image: string;
   setState: (obj: DecalBillInput, index: string, state: string) => void;
   deleteBill: (id: string) => void;
+  typeBill: number;
 };
 
 export function ThemHoaDonMoi_Decal() {
@@ -218,6 +218,16 @@ export function ThemHoaDonMoi_Decal() {
 
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (width === 0 || height === 0) {
+      const toastLiveExample = document.getElementById(
+        "liveToastFailDimension"
+      );
+      if (toastLiveExample) {
+        const toastBootstrap = Toast.getOrCreateInstance(toastLiveExample);
+        toastBootstrap.show();
+      }
+      return;
+    }
     processInfoCustomer();
   };
   const handleCalculate = () => {
@@ -307,6 +317,29 @@ export function ThemHoaDonMoi_Decal() {
             <div className="toast-body">
               Thêm hóa đơn thất bại, thông tin lỗi.
             </div>
+            <button
+              type="button"
+              className="btn-close btn-close-white me-2 m-auto"
+              data-bs-dismiss="toast"
+              aria-label="Close"
+            ></button>
+          </div>
+        </div>
+      </div>
+      <div
+        aria-live="polite"
+        aria-atomic="true"
+        className="position-relative mt-1 me-2"
+      >
+        <div
+          className="bg-red toast align-items-center toast-container top-0 end-0"
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+          id="liveToastFailDimension"
+        >
+          <div className="d-flex">
+            <div className="toast-body">Giá trị kích thước không hợp lệ.</div>
             <button
               type="button"
               className="btn-close btn-close-white me-2 m-auto"

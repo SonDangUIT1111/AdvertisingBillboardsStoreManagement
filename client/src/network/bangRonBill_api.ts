@@ -1,4 +1,4 @@
-import { DecalBill } from "../models/decalBill";
+import { BangRonBill } from "../models/bangRonBill";
 
 async function fetchData( input: RequestInfo, init?: RequestInit) {
     const response = await fetch(input, init);
@@ -12,23 +12,23 @@ async function fetchData( input: RequestInfo, init?: RequestInit) {
     }
 }
 
-export async function fetchDecalBills(): Promise<DecalBill[]> {
-    const response = await fetch("/api/decalBills", {
+export async function fetchBangRonBills(): Promise<BangRonBill[]> {
+    const response = await fetch("/api/bangRonBills", {
         method: "GET",
       });
       return response.json();
 
 } 
 
-export async function fetchDecalBill(billId: string): Promise<DecalBill> {
-    const response = await fetch("/api/decalBills/"+billId, {
+export async function fetchBangRonBill(billId: string): Promise<BangRonBill> {
+    const response = await fetch("/api/bangRonBills/"+billId, {
         method: "GET",
       });
       return response.json();
 
 } 
 
-export type DecalBillInput = {
+export type BangRonBillInput = {
     idCustomer: string,
     note: string,
     width: number,
@@ -42,8 +42,8 @@ export type DecalBillInput = {
     image: string
 }
 
-export async function createDecalBill(bill: DecalBillInput): Promise<DecalBill> {
-    const response = await fetchData("/api/decalBills", {
+export async function createBangRonBill(bill: BangRonBillInput): Promise<BangRonBill> {
+    const response = await fetchData("/api/bangRonBills", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -53,8 +53,8 @@ export async function createDecalBill(bill: DecalBillInput): Promise<DecalBill> 
     return response.json();
 }
 
-export async function updateDecalBill(billId: string, bill: DecalBillInput): Promise<DecalBill> {
-    const response = await fetchData("/api/decalBills/" + billId,
+export async function updateBangRonBill(billId: string, bill: BangRonBillInput): Promise<BangRonBill> {
+    const response = await fetchData("/api/bangRonBills/" + billId,
         {
             method: "PATCH",
             headers: {
@@ -65,6 +65,6 @@ export async function updateDecalBill(billId: string, bill: DecalBillInput): Pro
     return response.json();
 }
 
-export async function deleteDecalBill(billId: string) {
-    await fetchData("/api/decalBills/" + billId, { method: "DELETE" });
+export async function deleteBangRonBill(billId: string) {
+    await fetchData("/api/bangRonBills/" + billId, { method: "DELETE" });
 }
