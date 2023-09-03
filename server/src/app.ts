@@ -2,6 +2,7 @@ import "dotenv/config";
 import express, {NextFunction, Request, Response} from "express";
 import decalBillsRoutes from "./routes/billDecal"
 import bangRonBillsRoutes from "./routes/billBangRon"
+import bangHieuBillsRoutes from "./routes/billBangHieu"
 import servicePriceRoutes from "./routes/priceService"
 import customerRoutes from "./routes/customer"
 import revenueRoutes from "./routes/revenue"
@@ -19,6 +20,8 @@ app.use("/api/servicePrices", servicePriceRoutes);
 app.use("/api/decalBills", decalBillsRoutes);
 
 app.use("/api/bangRonBills", bangRonBillsRoutes);
+
+app.use("/api/bangHieuBills", bangHieuBillsRoutes);
 
 app.use("/api/customers", customerRoutes);
 
