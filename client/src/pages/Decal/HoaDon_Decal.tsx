@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { HoaDonItemList } from "../../components/HoaDonItemList";
 import { HoaDonTitle } from "../../components/HoaDonTitle";
 import { SearchBar } from "../../components/SearchBar";
@@ -10,6 +10,8 @@ import * as RevenueApi from "../../network/revenue_api";
 import "../../styles/styles.css";
 import { Customer } from "../../models/customer";
 import { RevenueInput } from "../../network/revenue_api";
+import { OtherBillJoinCustomer } from "../../models/otherBillJoinCustomer";
+import { OtherBillInput } from "../../network/otherBill_api";
 
 export function HoaDon_Decal() {
   let [idDeleting, setIdDeleting] = useState("");
@@ -445,6 +447,9 @@ export function HoaDon_Decal() {
         copyList={copyList}
         listInfoBangHieu={[]}
         copyListBangHieu={[]}
+        listInfoOther={[]}
+        copyListOther={[]}
+        setListOther={() => {}}
       />
       <HoaDonTitle handleSort={handleSort} />
       {isEmptyList === true ? (
@@ -482,6 +487,7 @@ export function HoaDon_Decal() {
           hasFooter={false}
           isDelivery={false}
           costIncurred={0}
+          setStateOther={() => {}}
         />
       ))}
     </>

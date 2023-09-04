@@ -19,14 +19,14 @@ export function HoaDon() {
         <HoaDonType image={imageToAdd3} title={"Bảng hiệu"} />
       </Col>
       <Col>
+        <HoaDonType image={imageToAdd6} title={"Khác"} />
+      </Col>
+      {/* <Col>
         <HoaDonType image={imageToAdd4} title={"Hộp đèn"} />
       </Col>
       <Col>
         <HoaDonType image={imageToAdd5} title={"Tân hôn"} />
-      </Col>
-      <Col>
-        <HoaDonType image={imageToAdd6} title={"Khác"} />
-      </Col>
+      </Col> */}
     </Row>
   );
 }

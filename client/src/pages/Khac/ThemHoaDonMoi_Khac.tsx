@@ -2,53 +2,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react";
 import { FileDrop } from "../../components/drag_and_drop_component/FileDrop";
-import { Information_Decal_BangRon } from "../../components/drag_and_drop_component/Information_Decal_BangRon";
 import * as ServicePriceApi from "../../network/servicePrice_api";
-import * as DecalBillApi from "../../network/decalBill_api";
+import * as OtherBillApi from "../../network/otherBill_api";
 import * as CustomerApi from "../../network/customer_api";
-import { DecalBillInput } from "../../network/decalBill_api";
 import { ServicePrice } from "../../models/servicePrice";
-import { DecalBill } from "../../models/decalBill";
-import { useForm } from "react-hook-form";
 import { Toast } from "bootstrap";
 import { Customer as CustomerModel } from "../../models/customer";
-import { BangHieuBillInput } from "../../network/bangHieuBill_api";
 import { OtherBillInput } from "../../network/otherBill_api";
+import { Information_Khac } from "../../components/drag_and_drop_component/Information_Other";
 
-export type HoaDonDecal_BangRonProps = {
-  id: string;
-  phoneNumber?: string;
-  name?: string;
-  note: string;
-  height: number;
-  width: number;
-  price: number;
-  discount: number;
-  deposit: number;
-  state: string;
-  dateOrder: string;
-  total: number;
-  idCustomer: string;
-  amount: number;
-  image: string;
-  materialType: string;
-  isTwoFace: boolean;
-  toleNumber: number;
-  hasFooter: boolean;
-  isDelivery: boolean;
-  costIncurred: number;
-  setState: (obj: DecalBillInput, index: string, state: string) => void;
-  setStateBangHieu: (
-    obj: BangHieuBillInput,
-    index: string,
-    state: string
-  ) => void;
-  setStateOther: (obj: OtherBillInput, index: string, state: string) => void;
-  deleteBill: (id: string) => void;
-  typeBill: number;
-};
-
-export function ThemHoaDonMoi_Decal() {
+export function ThemHoaDonMoi_Khac() {
   let [cost, setCost] = useState(1);
   const [servicePrices, setServicePrices] = useState<ServicePrice[]>([]);
   const [customer, setCustomer] = useState<CustomerModel>();
@@ -60,30 +23,23 @@ export function ThemHoaDonMoi_Decal() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [name, setName] = useState("");
   const [note, setNote] = useState("");
-  const [height, setHeight] = useState(0);
-  const [width, setWidth] = useState(0);
   let [price, setPrice] = useState(0);
-  const [discount, setDiscount] = useState(0);
-  const [deposit, setDeposit] = useState(0);
-  let [copy, setCopy] = useState(0);
   let [total, setTotal] = useState(0);
   const [amount, setAmount] = useState(1);
 
   async function loadServicePrice() {
     try {
-      const results = await ServicePriceApi.fetchServicePrices().then(
-        (data) => {
-          data.map((item) => {
-            servicePrices.push({
-              serviceName: item.serviceName,
-              price: item.price,
-              _id: "",
-              createdAt: "",
-              updatedAt: "",
-            });
+      await ServicePriceApi.fetchServicePrices().then((data) => {
+        data.map((item) => {
+          servicePrices.push({
+            serviceName: item.serviceName,
+            price: item.price,
+            _id: "",
+            createdAt: "",
+            updatedAt: "",
           });
-        }
-      );
+        });
+      });
     } catch (error) {
       console.error(error);
     } finally {
@@ -99,13 +55,13 @@ export function ThemHoaDonMoi_Decal() {
   }
 
   useEffect(() => {
-    loadServicePrice().then((data) => {});
+    loadServicePrice();
     loadCustomer();
   }, []);
 
-  async function onSubmit(input: DecalBillInput) {
+  async function onSubmit(input: OtherBillInput) {
     try {
-      await DecalBillApi.createDecalBill(input);
+      await OtherBillApi.createOtherBill(input);
 
       const toastLiveExample = document.getElementById("liveToastSuccess");
       if (toastLiveExample) {
@@ -123,7 +79,7 @@ export function ThemHoaDonMoi_Decal() {
 
   async function onSubmitCustomer(input: CustomerApi.CustomerInput) {
     try {
-      const result = await CustomerApi.createCustomer(input).then((data) => {
+      await CustomerApi.createCustomer(input).then((data) => {
         customers.push({
           name: data.name,
           phoneNumber: data.phoneNumber,
@@ -144,7 +100,7 @@ export function ThemHoaDonMoi_Decal() {
 
   async function onEditCustomer(input: CustomerApi.CustomerInput) {
     try {
-      const result = await CustomerApi.updateCustomer(idCustomer, input);
+      await CustomerApi.updateCustomer(idCustomer, input);
     } catch (error) {
       const toastLiveExample = document.getElementById("liveToastFail");
       if (toastLiveExample) {
@@ -160,16 +116,12 @@ export function ThemHoaDonMoi_Decal() {
   }
 
   function createBill() {
-    let input: DecalBillInput = {
+    let input: OtherBillInput = {
       amount: amount,
       idCustomer: idCustomer,
       note: note,
-      width: width,
-      height: height,
-      discount: discount,
-      totalPrice: total,
-      billPrice: price,
-      deposit: deposit,
+      billPrice: total,
+      price: price,
       state: "Chưa xong",
       image: imageData,
     };
@@ -232,43 +184,15 @@ export function ThemHoaDonMoi_Decal() {
 
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (width === 0 || height === 0) {
-      const toastLiveExample = document.getElementById(
-        "liveToastFailDimension"
-      );
-      if (toastLiveExample) {
-        const toastBootstrap = Toast.getOrCreateInstance(toastLiveExample);
-        toastBootstrap.show();
-      }
-      return;
-    }
     processInfoCustomer();
   };
   const handleCalculate = () => {
-    let index = 1;
-    servicePrices.map((item) => {
-      if (index === 1) {
-        cost = item.price;
-        index++;
-      } else {
-        index++;
-      }
-    });
-
     try {
-      price = height * width * cost * amount;
-      total = height * width * cost * amount - discount;
-      copy = height * width * cost * amount;
-      setPrice(price);
+      total = price * amount;
       setTotal(total);
-      setCopy(copy);
     } catch (error) {
       console.error(error);
     }
-  };
-  const handleCalculateWithDiscount = (value: number) => {
-    handleCalculate();
-    setTotal(copy - value);
   };
 
   const handleChangePhone = async (value: string) => {
@@ -373,7 +297,7 @@ export function ThemHoaDonMoi_Decal() {
           </div>
           <div className="col" style={{ marginTop: "20px" }}>
             <>
-              <Information_Decal_BangRon
+              <Information_Khac
                 amount={amount}
                 price={price}
                 total={total}
@@ -382,14 +306,9 @@ export function ThemHoaDonMoi_Decal() {
                 setPhoneNumber={setPhoneNumber}
                 setName={setName}
                 setNote={setNote}
-                setHeight={setHeight}
-                setWidth={setWidth}
                 setPrice={setPrice}
-                setDiscount={setDiscount}
-                setDeposit={setDeposit}
                 handleAdd={handleAdd}
                 handleCalculate={handleCalculate}
-                handleCalculateWithDiscount={handleCalculateWithDiscount}
                 handleChangePhone={handleChangePhone}
               />
             </>

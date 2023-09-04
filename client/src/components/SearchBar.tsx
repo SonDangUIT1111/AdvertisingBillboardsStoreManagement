@@ -2,6 +2,7 @@ import "bootstrap";
 import { useState } from "react";
 import { DecalBillJoinCustomer } from "../models/decallBillJoinCustomer";
 import { BangHieuBillJoinCustomer } from "../models/bangHieuBillJoinCustomer";
+import { OtherBillJoinCustomer } from "../models/otherBillJoinCustomer";
 type SearchBarProps = {
   areaIndex: string;
   listInfo: DecalBillJoinCustomer[];
@@ -12,6 +13,9 @@ type SearchBarProps = {
   setListBangHieu: React.Dispatch<
     React.SetStateAction<BangHieuBillJoinCustomer[]>
   >;
+  listInfoOther: OtherBillJoinCustomer[];
+  copyListOther: OtherBillJoinCustomer[];
+  setListOther: React.Dispatch<React.SetStateAction<OtherBillJoinCustomer[]>>;
 };
 export function SearchBar({
   areaIndex,
@@ -21,6 +25,9 @@ export function SearchBar({
   listInfoBangHieu,
   copyListBangHieu,
   setListBangHieu,
+  listInfoOther,
+  copyListOther,
+  setListOther,
 }: SearchBarProps) {
   const filterList = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,6 +41,10 @@ export function SearchBar({
         copyListBangHieu.filter((item) =>
           item.phoneNumber?.includes(searchWord)
         )
+      );
+    } else {
+      setListOther(
+        copyListOther.filter((item) => item.phoneNumber?.includes(searchWord))
       );
     }
   };
@@ -84,46 +95,6 @@ export function SearchBar({
         ) : areaIndex === "3" ? (
           <a
             href={`/hoadon/banghieu/themhoadon`}
-            className="btn btn-outline-secondary mr-10 add-custom"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              className="bi bi-plus-lg"
-              viewBox="0 0 16 16"
-            >
-              <path
-                fillRule="evenodd"
-                d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"
-              />
-            </svg>
-            Thêm đơn hàng mới
-          </a>
-        ) : areaIndex === "4" ? (
-          <a
-            href={`/hoadon/hopden/themhoadon`}
-            className="btn btn-outline-secondary mr-10 add-custom"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              className="bi bi-plus-lg"
-              viewBox="0 0 16 16"
-            >
-              <path
-                fillRule="evenodd"
-                d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"
-              />
-            </svg>
-            Thêm đơn hàng mới
-          </a>
-        ) : areaIndex === "5" ? (
-          <a
-            href={`/hoadon/tanhon/themhoadon`}
             className="btn btn-outline-secondary mr-10 add-custom"
           >
             <svg

@@ -83,7 +83,7 @@ export function HoaDonType({ image, title }: HoaDonTypeProps) {
             </div>
           </a>
         ) : title === "Khác" ? (
-          <a className="a-art-type">
+          <a href={`/hoadon/khac`} className="a-art-type">
             <img
               alt=""
               className="card-img-top"

@@ -1,5 +1,6 @@
 import { BangHieuBillInput } from "../network/bangHieuBill_api";
 import { DecalBillInput } from "../network/decalBill_api";
+import { OtherBillInput } from "../network/otherBill_api";
 import { HoaDonDecal_BangRonProps } from "../pages/Decal/ThemHoaDonMoi_Decal";
 import "../styles/styles.css";
 import { formatCurrency } from "../utils/formatCurrency";
@@ -37,6 +38,15 @@ export function HoaDonItemList(props: HoaDonDecal_BangRonProps) {
     isDelivery: props.isDelivery,
     costIncurred: props.costIncurred,
   };
+  const billOther: OtherBillInput = {
+    idCustomer: props.idCustomer,
+    note: props.note,
+    amount: props.amount,
+    price: props.price,
+    billPrice: props.total,
+    state: props.state,
+    image: props.image,
+  };
   return (
     <>
       <div className="d-flex flex-row justify-content-between align-content-center card p-3 mb-2 scale-hover">
@@ -70,8 +80,10 @@ export function HoaDonItemList(props: HoaDonDecal_BangRonProps) {
               onClick={(e) => {
                 if (props.typeBill === 1 || props.typeBill === 2) {
                   props.setState(bill, props.id, "Hoàn thành");
-                } else {
+                } else if (props.typeBill === 3) {
                   props.setStateBangHieu(billBangHieu, props.id, "Hoàn thành");
+                } else {
+                  props.setStateOther(billOther, props.id, "Hoàn thành");
                 }
               }}
             >
@@ -89,8 +101,10 @@ export function HoaDonItemList(props: HoaDonDecal_BangRonProps) {
               onClick={(e) => {
                 if (props.typeBill === 1 || props.typeBill === 2) {
                   props.setState(bill, props.id, "Thanh toán");
-                } else {
+                } else if (props.typeBill === 3) {
                   props.setStateBangHieu(billBangHieu, props.id, "Thanh toán");
+                } else {
+                  props.setStateOther(billOther, props.id, "Thanh toán");
                 }
               }}
             >

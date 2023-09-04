@@ -14,6 +14,9 @@ import { SuaHoaDon_BangRon } from "./pages/BangRon/SuaHoaDon_BangRon";
 import { HoaDon_BangHieu } from "./pages/BangHieu/HoaDon_BangHieu";
 import { ThemHoaDonMoi_BangHieu } from "./pages/BangHieu/ThemHoaDonMoi_BangHieu";
 import { SuaHoaDon_BangHieu } from "./pages/BangHieu/SuaHoaDon_BangHieu";
+import { HoaDon_Khac } from "./pages/Khac/HoaDon_Khac";
+import { ThemHoaDonMoi_Khac } from "./pages/Khac/ThemHoaDonMoi_Khac";
+import { SuaHoaDon_Khac } from "./pages/Khac/SuaHoaDon_Khac";
 
 function App() {
   return (
@@ -51,6 +54,15 @@ function App() {
           <Route
             path="/hoadon/banghieu/suahoadon/:idBill"
             element={<SuaHoaDon_BangHieu />}
+          />
+          <Route path="/hoadon/khac" element={<HoaDon_Khac />} />
+          <Route
+            path="/hoadon/khac/themhoadon"
+            element={<ThemHoaDonMoi_Khac />}
+          />
+          <Route
+            path="/hoadon/khac/suahoadon/:idBill"
+            element={<SuaHoaDon_Khac />}
           />
         </Routes>
         {/* /////// */}

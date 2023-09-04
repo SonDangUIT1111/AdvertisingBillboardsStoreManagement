@@ -10,6 +10,8 @@ import "../../styles/styles.css";
 import { Customer } from "../../models/customer";
 import { RevenueInput } from "../../network/revenue_api";
 import { BangHieuBillJoinCustomer } from "../../models/bangHieuBillJoinCustomer";
+import { OtherBillJoinCustomer } from "../../models/otherBillJoinCustomer";
+import { OtherBillInput } from "../../network/otherBill_api";
 
 export function HoaDon_BangRon() {
   let [idDeleting, setIdDeleting] = useState("");
@@ -448,6 +450,9 @@ export function HoaDon_BangRon() {
         setListBangHieu={() => {}}
         listInfoBangHieu={[]}
         copyListBangHieu={[]}
+        listInfoOther={[]}
+        copyListOther={[]}
+        setListOther={() => {}}
       />
       <HoaDonTitle handleSort={handleSort} />
       {isEmptyList === true ? (
@@ -485,6 +490,7 @@ export function HoaDon_BangRon() {
           hasFooter={false}
           isDelivery={false}
           costIncurred={0}
+          setStateOther={() => {}}
         />
       ))}
     </>

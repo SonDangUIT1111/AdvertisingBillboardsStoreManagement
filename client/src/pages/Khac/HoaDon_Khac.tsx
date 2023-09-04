@@ -2,22 +2,21 @@ import { SetStateAction, useEffect, useState } from "react";
 import { HoaDonItemList } from "../../components/HoaDonItemList";
 import { HoaDonTitle } from "../../components/HoaDonTitle";
 import { SearchBar } from "../../components/SearchBar";
-import { BangHieuBillJoinCustomer } from "../../models/bangHieuBillJoinCustomer";
-import * as BangHieuBillApi from "../../network/bangHieuBill_api";
+import { OtherBill } from "../../models/otherBill";
+import { OtherBillJoinCustomer } from "../../models/otherBillJoinCustomer";
+import * as OtherBillApi from "../../network/otherBill_api";
 import * as CustomerApi from "../../network/customer_api";
 import * as RevenueApi from "../../network/revenue_api";
 import "../../styles/styles.css";
 import { Customer } from "../../models/customer";
 import { RevenueInput } from "../../network/revenue_api";
-import { OtherBillJoinCustomer } from "../../models/otherBillJoinCustomer";
-import { OtherBillInput } from "../../network/otherBill_api";
 
-export function HoaDon_BangHieu() {
+export function HoaDon_Khac() {
   let [idDeleting, setIdDeleting] = useState("");
   let [isEmptyList, setIsEmptyList] = useState(true);
   let [isDefault, setIsDefault] = useState(true);
-  let [list, setList] = useState<BangHieuBillJoinCustomer[]>([]);
-  let [copyList, setCopyList] = useState<BangHieuBillJoinCustomer[]>([]);
+  let [list, setList] = useState<OtherBillJoinCustomer[]>([]);
+  let [copyList, setCopyList] = useState<OtherBillJoinCustomer[]>([]);
   let [customerList, setCustomerList] = useState<Customer[]>([]);
 
   async function loadCustomer() {
@@ -25,18 +24,18 @@ export function HoaDon_BangHieu() {
       document.getElementById("trigger")?.click();
       await CustomerApi.fetchCustomers().then((data) => {
         data.map((item) => customerList.push(item));
-        loadBangHieuBill();
+        loadOtherBill();
       });
     } catch (error) {
       console.error(error);
     }
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  async function loadBangHieuBill() {
+  async function loadOtherBill() {
     try {
-      await BangHieuBillApi.fetchBangHieuBills().then((data) => {
+      await OtherBillApi.fetchOtherBills().then((data) => {
         if (data.length > 0) setIsEmptyList(false);
-        let copyCat: BangHieuBillJoinCustomer[] = [];
+        let copyCat: OtherBillJoinCustomer[] = [];
         data.map((item) => {
           const findItem = customerList.find(
             (customer) => customer._id === item.idCustomer
@@ -45,25 +44,15 @@ export function HoaDon_BangHieu() {
             _id: item._id,
             idCustomer: item.idCustomer,
             note: item.note,
-            width: item.width,
-            height: item.height,
             amount: item.amount,
-            discount: item.discount,
-            totalPrice: item.totalPrice,
+            price: item.price,
             billPrice: item.billPrice,
-            deposit: item.deposit,
             state: item.state,
             image: item.image,
             createdAt: item.createdAt,
             updatedAt: item.updatedAt,
             customerName: findItem?.name,
             phoneNumber: findItem?.phoneNumber,
-            materialType: item.materialType,
-            isTwoFace: item.isTwoFace,
-            toleNumber: item.toleNumber,
-            hasFooter: item.hasFooter,
-            isDelivery: item.isDelivery,
-            costIncurred: item.costIncurred,
           });
         });
         setList(copyCat);
@@ -99,11 +88,8 @@ export function HoaDon_BangHieu() {
     }
   }
 
-  async function updateState(
-    id: string,
-    input: BangHieuBillApi.BangHieuBillInput
-  ) {
-    await BangHieuBillApi.updateBangHieuBill(id, input);
+  async function updateState(id: string, input: OtherBillApi.OtherBillInput) {
+    await OtherBillApi.updateOtherBill(id, input);
   }
 
   useEffect(() => {
@@ -130,7 +116,7 @@ export function HoaDon_BangHieu() {
   };
 
   const setState = async (
-    obj: BangHieuBillApi.BangHieuBillInput,
+    obj: OtherBillApi.OtherBillInput,
     index: string,
     stateString: string
   ) => {
@@ -145,24 +131,14 @@ export function HoaDon_BangHieu() {
         item._id === index ? { ...item, state: stateString } : item
       )
     );
-    let input: BangHieuBillApi.BangHieuBillInput = {
+    let input: OtherBillApi.OtherBillInput = {
       idCustomer: obj.idCustomer,
       note: obj.note,
-      width: obj.width,
-      height: obj.height,
       amount: obj.amount,
-      discount: obj.discount,
-      totalPrice: obj.totalPrice,
+      price: obj.price,
       billPrice: obj.billPrice,
-      deposit: obj.deposit,
       state: stateString,
       image: obj.image,
-      materialType: obj.materialType,
-      isTwoFace: obj.isTwoFace,
-      toleNumber: obj.toleNumber,
-      hasFooter: obj.hasFooter,
-      isDelivery: obj.isDelivery,
-      costIncurred: obj.costIncurred,
     };
     updateState(index, input);
 
@@ -199,8 +175,8 @@ export function HoaDon_BangHieu() {
           name: item.name,
           phoneNumber: item.phoneNumber,
           total: item.total,
-          payed: item.payed + obj.totalPrice,
-          debt: item.debt - obj.totalPrice,
+          payed: item.payed + obj.billPrice,
+          debt: item.debt - obj.billPrice,
         };
       });
 
@@ -209,8 +185,8 @@ export function HoaDon_BangHieu() {
           customer._id === obj.idCustomer
             ? {
                 ...customer,
-                payed: customer.payed + obj.totalPrice,
-                debt: customer.debt - obj.totalPrice,
+                payed: customer.payed + obj.billPrice,
+                debt: customer.debt - obj.billPrice,
               }
             : customer
         )
@@ -227,34 +203,33 @@ export function HoaDon_BangHieu() {
         );
         if (findItem.length === 0) {
           inputRevenue = {
-            totalIncome: obj.totalPrice,
-            totalOutcome: obj.billPrice - obj.totalPrice,
+            totalIncome: obj.billPrice,
+            totalOutcome: obj.billPrice,
             month: currentTime.month,
             year: currentTime.year,
             kindRevenue: {
               incomeDecal: 0,
               incomeBangRon: 0,
-              incomeBangHieu: obj.totalPrice,
+              incomeBangHieu: 0,
               incomeHopDen: 0,
               incomeTanHon: 0,
-              incomeKhac: 0,
+              incomeKhac: obj.billPrice,
             },
           };
         } else {
           findItem.map((item) => {
             inputRevenue = {
-              totalIncome: item.totalIncome + obj.totalPrice,
-              totalOutcome: item.totalOutcome + obj.billPrice - obj.totalPrice,
+              totalIncome: item.totalIncome + obj.billPrice,
+              totalOutcome: item.totalOutcome,
               month: currentTime.month,
               year: currentTime.year,
               kindRevenue: {
                 incomeDecal: item.kindRevenue.incomeDecal,
                 incomeBangRon: item.kindRevenue.incomeBangRon,
-                incomeBangHieu:
-                  item.kindRevenue.incomeBangHieu + obj.totalPrice,
+                incomeBangHieu: item.kindRevenue.incomeBangHieu,
                 incomeHopDen: item.kindRevenue.incomeHopDen,
                 incomeTanHon: item.kindRevenue.incomeTanHon,
-                incomeKhac: item.kindRevenue.incomeKhac,
+                incomeKhac: item.kindRevenue.incomeKhac + obj.billPrice,
               },
             };
           });
@@ -275,18 +250,16 @@ export function HoaDon_BangHieu() {
     document.getElementById("triggerAlert")?.click();
   };
   const deleteBill = async () => {
-    await BangHieuBillApi.deleteBangHieuBill(idDeleting);
+    await OtherBillApi.deleteOtherBill(idDeleting);
     setList(list.filter((item) => item._id !== idDeleting));
     setCopyList(copyList.filter((item) => item._id !== idDeleting));
 
     // bo sung update revenue
-    let total: number,
-      price: number = 0;
+    let price: number = 0;
     let idCus = "";
     let status = "";
     list.map((item) => {
       if (item._id === idDeleting) {
-        total = item.totalPrice;
         price = item.billPrice;
         idCus = item.idCustomer;
         status = item.state;
@@ -320,17 +293,17 @@ export function HoaDon_BangHieu() {
         inputCustomer = {
           name: item.name,
           phoneNumber: item.phoneNumber,
-          total: item.total - total,
-          payed: item.payed - total,
+          total: item.total - price,
+          payed: item.payed - price,
           debt: item.debt,
         };
       } else {
         inputCustomer = {
           name: item.name,
           phoneNumber: item.phoneNumber,
-          total: item.total - total,
+          total: item.total - price,
           payed: item.payed,
-          debt: item.debt - total,
+          debt: item.debt - price,
         };
       }
     });
@@ -349,17 +322,17 @@ export function HoaDon_BangHieu() {
           // eslint-disable-next-line array-callback-return
           findItem.map((item) => {
             inputRevenue = {
-              totalIncome: item.totalIncome - total,
-              totalOutcome: item.totalOutcome - price + total,
+              totalIncome: item.totalIncome - price,
+              totalOutcome: item.totalOutcome,
               month: currentTime.month,
               year: currentTime.year,
               kindRevenue: {
                 incomeDecal: item.kindRevenue.incomeDecal,
                 incomeBangRon: item.kindRevenue.incomeBangRon,
-                incomeBangHieu: item.kindRevenue.incomeBangHieu - total,
+                incomeBangHieu: item.kindRevenue.incomeBangHieu,
                 incomeHopDen: item.kindRevenue.incomeHopDen,
                 incomeTanHon: item.kindRevenue.incomeTanHon,
-                incomeKhac: item.kindRevenue.incomeKhac,
+                incomeKhac: item.kindRevenue.incomeKhac - price,
               },
             };
           });
@@ -455,16 +428,16 @@ export function HoaDon_BangHieu() {
         </div>
       </div>
       <SearchBar
-        areaIndex={"3"}
+        areaIndex={"4"}
         listInfo={[]}
-        setListBangHieu={setList}
-        copyList={[]}
         setList={() => {}}
-        listInfoBangHieu={list}
-        copyListBangHieu={copyList}
-        listInfoOther={[]}
-        copyListOther={[]}
-        setListOther={() => {}}
+        setListBangHieu={() => {}}
+        copyList={[]}
+        listInfoBangHieu={[]}
+        copyListBangHieu={[]}
+        listInfoOther={list}
+        copyListOther={copyList}
+        setListOther={setList}
       />
       <HoaDonTitle handleSort={handleSort} />
       {isEmptyList === true ? (
@@ -476,33 +449,33 @@ export function HoaDon_BangHieu() {
       )}
       {list.map((data) => (
         <HoaDonItemList
-          typeBill={3}
+          typeBill={4}
           key={data._id}
           phoneNumber={data.phoneNumber}
           name={data.customerName}
           note={data.note}
-          height={data.height}
-          width={data.width}
-          price={data.billPrice}
-          discount={data.discount}
-          deposit={data.deposit}
+          price={data.price}
           state={data.state}
           dateOrder={data.createdAt}
           id={data._id}
-          total={data.totalPrice}
+          total={data.billPrice}
           idCustomer={data.idCustomer}
           amount={data.amount}
           image={data.image}
-          setStateBangHieu={setState}
-          setState={function () {}}
+          setState={() => {}}
+          setStateBangHieu={() => {}}
           deleteBill={deleteBillAlert}
-          materialType={data.materialType}
-          isTwoFace={data.isTwoFace}
-          toleNumber={data.toleNumber}
-          hasFooter={data.hasFooter}
-          isDelivery={data.isDelivery}
-          costIncurred={data.costIncurred}
-          setStateOther={() => {}}
+          materialType={""}
+          isTwoFace={false}
+          toleNumber={0}
+          hasFooter={false}
+          isDelivery={false}
+          costIncurred={0}
+          height={0}
+          width={0}
+          discount={0}
+          deposit={0}
+          setStateOther={setState}
         />
       ))}
     </>
