@@ -1,21 +1,41 @@
 import "bootstrap";
 import { useState } from "react";
 import { DecalBillJoinCustomer } from "../models/decallBillJoinCustomer";
+import { BangHieuBillJoinCustomer } from "../models/bangHieuBillJoinCustomer";
 type SearchBarProps = {
   areaIndex: string;
   listInfo: DecalBillJoinCustomer[];
   copyList: DecalBillJoinCustomer[];
   setList: React.Dispatch<React.SetStateAction<DecalBillJoinCustomer[]>>;
+  listInfoBangHieu: BangHieuBillJoinCustomer[];
+  copyListBangHieu: BangHieuBillJoinCustomer[];
+  setListBangHieu: React.Dispatch<
+    React.SetStateAction<BangHieuBillJoinCustomer[]>
+  >;
 };
 export function SearchBar({
   areaIndex,
   listInfo,
   copyList,
   setList,
+  listInfoBangHieu,
+  copyListBangHieu,
+  setListBangHieu,
 }: SearchBarProps) {
   const filterList = (e: React.FormEvent) => {
     e.preventDefault();
-    setList(copyList.filter((item) => item.phoneNumber?.includes(searchWord)));
+    if (areaIndex === "1" || areaIndex === "2") {
+      setList(
+        copyList.filter((item) => item.phoneNumber?.includes(searchWord))
+      );
+    }
+    if (areaIndex === "3") {
+      setListBangHieu(
+        copyListBangHieu.filter((item) =>
+          item.phoneNumber?.includes(searchWord)
+        )
+      );
+    }
   };
   const [searchWord, setSearchWord] = useState("");
   return (

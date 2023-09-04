@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { HoaDonItemList } from "../../components/HoaDonItemList";
 import { HoaDonTitle } from "../../components/HoaDonTitle";
 import { SearchBar } from "../../components/SearchBar";
@@ -9,6 +9,7 @@ import * as RevenueApi from "../../network/revenue_api";
 import "../../styles/styles.css";
 import { Customer } from "../../models/customer";
 import { RevenueInput } from "../../network/revenue_api";
+import { BangHieuBillJoinCustomer } from "../../models/bangHieuBillJoinCustomer";
 
 export function HoaDon_BangRon() {
   let [idDeleting, setIdDeleting] = useState("");
@@ -444,6 +445,9 @@ export function HoaDon_BangRon() {
         listInfo={list}
         setList={setList}
         copyList={copyList}
+        setListBangHieu={() => {}}
+        listInfoBangHieu={[]}
+        copyListBangHieu={[]}
       />
       <HoaDonTitle handleSort={handleSort} />
       {isEmptyList === true ? (
@@ -473,7 +477,14 @@ export function HoaDon_BangRon() {
           amount={data.amount}
           image={data.image}
           setState={setState}
+          setStateBangHieu={() => {}}
           deleteBill={deleteBillAlert}
+          materialType={""}
+          isTwoFace={false}
+          toleNumber={0}
+          hasFooter={false}
+          isDelivery={false}
+          costIncurred={0}
         />
       ))}
     </>

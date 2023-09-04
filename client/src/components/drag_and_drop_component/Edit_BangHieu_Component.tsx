@@ -1,6 +1,6 @@
 import { formatCurrency } from "../../utils/formatCurrency";
 
-export type BillDecal_BangRonEditProps = {
+export type BillBangHieu_Props = {
   price: number;
   total: number;
   amount: number;
@@ -12,6 +12,18 @@ export type BillDecal_BangRonEditProps = {
   deposit: number;
   discount: number;
   state: string;
+  materialType: string;
+  isTwoFace: boolean;
+  hasFooter: boolean;
+  isDelivery: boolean;
+  costIncurred: number;
+  toleNumber: number;
+  setMaterialType: React.Dispatch<React.SetStateAction<string>>;
+  setIsTwoFace: React.Dispatch<React.SetStateAction<boolean>>;
+  setToleNumber: React.Dispatch<React.SetStateAction<number>>;
+  setHasFooter: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsDelivery: React.Dispatch<React.SetStateAction<boolean>>;
+  setCostIncurred: React.Dispatch<React.SetStateAction<number>>;
   handleEdit: (e: React.FormEvent) => void;
   handleCalculate: React.MouseEventHandler<HTMLButtonElement>;
   handleCalculateWithDiscount: (e: number) => void;
@@ -28,7 +40,7 @@ export type BillDecal_BangRonEditProps = {
   setAmount: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export function Edit_Decal_BangRon_Component({
+export function EditBangHieu_Component({
   price,
   total,
   amount,
@@ -40,6 +52,18 @@ export function Edit_Decal_BangRon_Component({
   deposit,
   discount,
   state,
+  materialType,
+  isTwoFace,
+  hasFooter,
+  isDelivery,
+  costIncurred,
+  toleNumber,
+  setMaterialType,
+  setIsTwoFace,
+  setToleNumber,
+  setHasFooter,
+  setIsDelivery,
+  setCostIncurred,
   setChoseWhat,
   setState,
   setAmount,
@@ -54,7 +78,7 @@ export function Edit_Decal_BangRon_Component({
   handleEdit,
   handleCalculate,
   handleCalculateWithDiscount,
-}: BillDecal_BangRonEditProps) {
+}: BillBangHieu_Props) {
   return (
     <>
       <form onSubmit={(e) => handleEdit(e)}>
@@ -159,6 +183,139 @@ export function Edit_Decal_BangRon_Component({
             </div>
           </div>
         </div>
+        <div className="d-flex justify-content-between flex-row mb-3">
+          <h6 style={{ marginLeft: "12px" }}>Chất liệu in: </h6>
+          <div className="form-check">
+            <input
+              className="form-check-input checked-custom"
+              type="radio"
+              name="exampleRadios"
+              id="decalRadio"
+              value="Decal"
+              disabled={state !== "Chưa xong" ? true : false}
+              checked={materialType === "Decal" ? true : false}
+              required={materialType === "" ? true : false}
+              onChange={(e) => {
+                setMaterialType(e.target.value);
+                setToleNumber(1);
+              }}
+            />
+            <label className="form-check-label" htmlFor="decalRadio">
+              Chất liệu decal
+            </label>
+          </div>
+
+          <div className="form-check">
+            <input
+              className="form-check-input checked-custom"
+              type="radio"
+              name="exampleRadios"
+              id="batRadio"
+              disabled={state !== "Chưa xong" ? true : false}
+              checked={materialType === "Bạt" ? true : false}
+              value="Bạt"
+              required={materialType === "" ? true : false}
+              onChange={(e) => {
+                setMaterialType(e.target.value);
+                setToleNumber(0);
+              }}
+            />
+            <label className="form-check-label" htmlFor="batRadio">
+              Chất liệu bạt
+            </label>
+          </div>
+        </div>
+        {materialType === "Decal" ? (
+          <div className="d-flex justify-content-between flex-row mb-3 mt-1">
+            <h6 style={{ marginLeft: "12px" }}>Mặt tôn: </h6>
+            <div className="form-check">
+              <input
+                className="form-check-input checked-custom"
+                type="radio"
+                name="exampleRadios2"
+                id="oneToleRadio"
+                value="1"
+                disabled={state !== "Chưa xong" ? true : false}
+                checked={toleNumber === 1 ? true : false}
+                onChange={(e) => {
+                  setToleNumber(1);
+                  setIsTwoFace(false);
+                }}
+              />
+              <label className="form-check-label" htmlFor="oneToleRadio">
+                1 mặt tôn
+              </label>
+            </div>
+
+            <div className="form-check">
+              <input
+                className="form-check-input checked-custom"
+                type="radio"
+                name="exampleRadios2"
+                id="twoToleRadio"
+                value="2"
+                disabled={state !== "Chưa xong" ? true : false}
+                checked={toleNumber === 2 ? true : false}
+                onChange={(e) => {
+                  setToleNumber(2);
+                  setIsTwoFace(true);
+                }}
+              />
+              <label className="form-check-label" htmlFor="twoToleRadio">
+                2 mặt tôn
+              </label>
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
+        <div className="d-flex flex-row justify-content-between">
+          <div className="form-check form-switch mb-3 d-flex flex-row p-0">
+            <h6 style={{ marginLeft: "12px" }}>Bảng 2 mặt: </h6>
+            <input
+              style={{ marginLeft: "10px" }}
+              className="form-check-input"
+              type="checkbox"
+              role="switch"
+              id="twoFaceSwitch"
+              checked={isTwoFace}
+              disabled={
+                state !== "Chưa xong" ? true : toleNumber === 2 ? true : false
+              }
+              onChange={(e) => {
+                setIsTwoFace(!isTwoFace);
+              }}
+            />
+          </div>
+          <div className="form-check form-switch mb-3 d-flex flex-row p-0">
+            <h6 style={{ marginLeft: "12px" }}>Bảng có chân: </h6>
+            <input
+              style={{ marginLeft: "10px" }}
+              className="form-check-input"
+              type="checkbox"
+              role="switch"
+              disabled={state !== "Chưa xong" ? true : false}
+              checked={hasFooter}
+              onChange={(e) => {
+                setHasFooter(!hasFooter);
+              }}
+            />
+          </div>
+          <div className="form-check form-switch d-flex flex-row-reverse p-0">
+            <input
+              style={{ marginLeft: "10px" }}
+              className="form-check-input"
+              type="checkbox"
+              role="switch"
+              disabled={state !== "Chưa xong" ? true : false}
+              checked={isDelivery}
+              onChange={(e) => {
+                setIsDelivery(!isDelivery);
+              }}
+            />
+            <h6 style={{ marginLeft: "12px" }}>Vận chuyển xa: </h6>
+          </div>
+        </div>
         <div className="input-group mb-3 bolder-border">
           <div className="input-group-prepend">
             <span
@@ -177,6 +334,26 @@ export function Edit_Decal_BangRon_Component({
             aria-describedby="basic-addon1"
             disabled={state !== "Chưa xong" ? true : false}
             onChange={(e) => setAmount(e.target.valueAsNumber)}
+          />
+        </div>
+        <div className="input-group mb-3 bolder-border">
+          <div className="input-group-prepend">
+            <span
+              className="input-group-text span-of-input-group"
+              id="basic-addon1"
+            >
+              Phí phát sinh:
+            </span>
+          </div>
+          <input
+            type="number"
+            className="form-control"
+            placeholder=""
+            aria-label=""
+            disabled={state !== "Chưa xong" ? true : false}
+            aria-describedby="basic-addon1"
+            value={costIncurred}
+            onChange={(e) => setCostIncurred(e.target.valueAsNumber)}
           />
         </div>
         <div className="input-group mb-3 bolder-border">

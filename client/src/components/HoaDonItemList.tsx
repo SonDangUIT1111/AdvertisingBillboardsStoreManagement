@@ -1,3 +1,4 @@
+import { BangHieuBillInput } from "../network/bangHieuBill_api";
 import { DecalBillInput } from "../network/decalBill_api";
 import { HoaDonDecal_BangRonProps } from "../pages/Decal/ThemHoaDonMoi_Decal";
 import "../styles/styles.css";
@@ -16,6 +17,25 @@ export function HoaDonItemList(props: HoaDonDecal_BangRonProps) {
     deposit: props.deposit,
     state: props.state,
     image: props.image,
+  };
+  const billBangHieu: BangHieuBillInput = {
+    idCustomer: props.idCustomer,
+    note: props.note,
+    width: props.width,
+    height: props.height,
+    amount: props.amount,
+    discount: props.discount,
+    totalPrice: props.total,
+    billPrice: props.price,
+    deposit: props.deposit,
+    state: props.state,
+    image: props.image,
+    materialType: props.materialType,
+    isTwoFace: props.isTwoFace,
+    toleNumber: props.toleNumber,
+    hasFooter: props.hasFooter,
+    isDelivery: props.isDelivery,
+    costIncurred: props.costIncurred,
   };
   return (
     <>
@@ -47,7 +67,13 @@ export function HoaDonItemList(props: HoaDonDecal_BangRonProps) {
             <button
               type="button"
               className="btn btn-outline-primary m-1"
-              onClick={(e) => props.setState(bill, props.id, "Hoàn thành")}
+              onClick={(e) => {
+                if (props.typeBill === 1 || props.typeBill === 2) {
+                  props.setState(bill, props.id, "Hoàn thành");
+                } else {
+                  props.setStateBangHieu(billBangHieu, props.id, "Hoàn thành");
+                }
+              }}
             >
               Hoàn thành
             </button>
@@ -60,7 +86,13 @@ export function HoaDonItemList(props: HoaDonDecal_BangRonProps) {
             <button
               type="button"
               className="btn btn-outline-success m-1"
-              onClick={(e) => props.setState(bill, props.id, "Thanh toán")}
+              onClick={(e) => {
+                if (props.typeBill === 1 || props.typeBill === 2) {
+                  props.setState(bill, props.id, "Thanh toán");
+                } else {
+                  props.setStateBangHieu(billBangHieu, props.id, "Thanh toán");
+                }
+              }}
             >
               Thanh toán
             </button>
@@ -69,7 +101,11 @@ export function HoaDonItemList(props: HoaDonDecal_BangRonProps) {
           <a
             className="btn btn-info m-1"
             href={`/hoadon/${
-              props.typeBill === 1 ? "decal" : "bangron"
+              props.typeBill === 1
+                ? "decal"
+                : props.typeBill === 2
+                ? "bangron"
+                : "banghieu"
             }/suahoadon/${props.id}`}
           >
             <svg

@@ -296,7 +296,8 @@ export function ThemHoaDonMoi_BangHieu() {
       <div
         aria-live="polite"
         aria-atomic="true"
-        className="position-relative mt-1 me-2"
+        className="mt-1 me-2 fixed-top"
+        style={{ top: "60px", right: "110px" }}
       >
         <div
           className="bg-green toast align-items-center toast-container top-0 end-0"
@@ -319,7 +320,8 @@ export function ThemHoaDonMoi_BangHieu() {
       <div
         aria-live="polite"
         aria-atomic="true"
-        className="position-relative mt-1 me-2"
+        className="mt-1 me-2 fixed-top"
+        style={{ top: "60px", right: "110px" }}
       >
         <div
           className="bg-red toast align-items-center toast-container top-0 end-0"
@@ -344,7 +346,8 @@ export function ThemHoaDonMoi_BangHieu() {
       <div
         aria-live="polite"
         aria-atomic="true"
-        className="position-relative mt-1 me-2"
+        className="mt-1 me-2 fixed-top"
+        style={{ top: "60px", right: "110px" }}
       >
         <div
           className="bg-red toast align-items-center toast-container top-0 end-0"

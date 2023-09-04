@@ -43,18 +43,17 @@ function App() {
             path="/hoadon/bangron/suahoadon/:idBill"
             element={<SuaHoaDon_BangRon />}
           />
-
-          {/* /////// */}
           <Route path="/hoadon/banghieu" element={<HoaDon_BangHieu />} />
           <Route
             path="/hoadon/banghieu/themhoadon"
             element={<ThemHoaDonMoi_BangHieu />}
           />
           <Route
-            path="/hoadon/banghieu/suahoadon"
+            path="/hoadon/banghieu/suahoadon/:idBill"
             element={<SuaHoaDon_BangHieu />}
           />
         </Routes>
+        {/* /////// */}
       </Container>
     </>
   );

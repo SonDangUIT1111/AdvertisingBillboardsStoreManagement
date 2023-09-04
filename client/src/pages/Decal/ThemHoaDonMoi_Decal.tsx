@@ -12,6 +12,7 @@ import { DecalBill } from "../../models/decalBill";
 import { useForm } from "react-hook-form";
 import { Toast } from "bootstrap";
 import { Customer as CustomerModel } from "../../models/customer";
+import { BangHieuBillInput } from "../../network/bangHieuBill_api";
 
 export type HoaDonDecal_BangRonProps = {
   id: string;
@@ -29,7 +30,18 @@ export type HoaDonDecal_BangRonProps = {
   idCustomer: string;
   amount: number;
   image: string;
+  materialType: string;
+  isTwoFace: boolean;
+  toleNumber: number;
+  hasFooter: boolean;
+  isDelivery: boolean;
+  costIncurred: number;
   setState: (obj: DecalBillInput, index: string, state: string) => void;
+  setStateBangHieu: (
+    obj: BangHieuBillInput,
+    index: string,
+    state: string
+  ) => void;
   deleteBill: (id: string) => void;
   typeBill: number;
 };
@@ -281,7 +293,8 @@ export function ThemHoaDonMoi_Decal() {
       <div
         aria-live="polite"
         aria-atomic="true"
-        className="position-relative mt-1 me-2"
+        className="mt-1 me-2 fixed-top"
+        style={{ top: "60px", right: "110px" }}
       >
         <div
           className="bg-green toast align-items-center toast-container top-0 end-0"
@@ -304,7 +317,8 @@ export function ThemHoaDonMoi_Decal() {
       <div
         aria-live="polite"
         aria-atomic="true"
-        className="position-relative mt-1 me-2"
+        className="mt-1 me-2 fixed-top"
+        style={{ top: "60px", right: "110px" }}
       >
         <div
           className="bg-red toast align-items-center toast-container top-0 end-0"
@@ -329,7 +343,8 @@ export function ThemHoaDonMoi_Decal() {
       <div
         aria-live="polite"
         aria-atomic="true"
-        className="position-relative mt-1 me-2"
+        className="mt-1 me-2 fixed-top"
+        style={{ top: "60px", right: "110px" }}
       >
         <div
           className="bg-red toast align-items-center toast-container top-0 end-0"

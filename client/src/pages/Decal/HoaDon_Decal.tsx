@@ -441,7 +441,10 @@ export function HoaDon_Decal() {
         areaIndex={"1"}
         listInfo={list}
         setList={setList}
+        setListBangHieu={() => {}}
         copyList={copyList}
+        listInfoBangHieu={[]}
+        copyListBangHieu={[]}
       />
       <HoaDonTitle handleSort={handleSort} />
       {isEmptyList === true ? (
@@ -471,7 +474,14 @@ export function HoaDon_Decal() {
           amount={data.amount}
           image={data.image}
           setState={setState}
+          setStateBangHieu={() => {}}
           deleteBill={deleteBillAlert}
+          materialType={""}
+          isTwoFace={false}
+          toleNumber={0}
+          hasFooter={false}
+          isDelivery={false}
+          costIncurred={0}
         />
       ))}
     </>
