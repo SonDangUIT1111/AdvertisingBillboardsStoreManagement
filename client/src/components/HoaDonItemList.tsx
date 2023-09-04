@@ -119,7 +119,9 @@ export function HoaDonItemList(props: HoaDonDecal_BangRonProps) {
                 ? "decal"
                 : props.typeBill === 2
                 ? "bangron"
-                : "banghieu"
+                : props.typeBill === 3
+                ? "banghieu"
+                : "khac"
             }/suahoadon/${props.id}`}
           >
             <svg

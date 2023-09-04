@@ -1,36 +1,18 @@
-import { Edit_Decal_BangRon_Component } from "../../components/drag_and_drop_component/Edit_Decal_BangRon_Component";
+import { Edit_Khac_Component } from "../../components/drag_and_drop_component/Edit_Khac_Component";
 import { FileDrop } from "../../components/drag_and_drop_component/FileDrop";
 import { useEffect, useState } from "react";
 import * as ServicePriceApi from "../../network/servicePrice_api";
-import * as DecalBillApi from "../../network/decalBill_api";
+import * as OtherBillApi from "../../network/otherBill_api";
 import * as CustomerApi from "../../network/customer_api";
 import * as RevenueApi from "../../network/revenue_api";
-import { DecalBillInput } from "../../network/decalBill_api";
+import { OtherBillInput } from "../../network/otherBill_api";
 import { ServicePrice } from "../../models/servicePrice";
 import { Toast } from "bootstrap";
 import "../../styles/styles.css";
-import { Customer, Customer as CustomerModel } from "../../models/customer";
-import { DecalBillJoinCustomer } from "../../models/decallBillJoinCustomer";
+import { Customer as CustomerModel } from "../../models/customer";
+import { OtherBillJoinCustomer } from "../../models/otherBillJoinCustomer";
 import { useParams } from "react-router-dom";
 import { RevenueInput } from "../../network/revenue_api";
-import { toContainElement } from "@testing-library/jest-dom/matchers";
-
-export type BillDecal_BangRonEditProps = {
-  idBill: string;
-  phoneNumberBill: string;
-  customerNameBill: string;
-  idCustomerBill: string;
-  noteBill: string;
-  widthBill: number;
-  heightBill: number;
-  amountBill: number;
-  totalPriceBill: number;
-  billPriceBill: number;
-  discountBill: number;
-  depositBill: number;
-  stateBill: string;
-  imageBill: string;
-};
 
 export function SuaHoaDon_Khac() {
   let { idBill } = useParams();
@@ -43,12 +25,7 @@ export function SuaHoaDon_Khac() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [name, setName] = useState("");
   const [note, setNote] = useState("");
-  const [height, setHeight] = useState(0);
-  const [width, setWidth] = useState(0);
   let [price, setPrice] = useState(0);
-  const [discount, setDiscount] = useState(0);
-  const [deposit, setDeposit] = useState(0);
-  let [copy, setCopy] = useState(0);
   let [total, setTotal] = useState(0);
   let [oldTotal, setOldTotal] = useState(0);
   const [amount, setAmount] = useState(1);
@@ -60,18 +37,18 @@ export function SuaHoaDon_Khac() {
       document.getElementById("trigger")?.click();
       await CustomerApi.fetchCustomers().then((data) => {
         data.map((item) => customers.push(item));
-        loadDecalBill();
+        loadOtherBill();
       });
     } catch (error) {
       console.error(error);
     }
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  async function loadDecalBill() {
+  async function loadOtherBill() {
     try {
       if (typeof idBill === "undefined") idBill = "";
-      await DecalBillApi.fetchDecalBill(idBill).then((data) => {
-        let copyCat: DecalBillJoinCustomer[] = [];
+      await OtherBillApi.fetchOtherBill(idBill).then((data) => {
+        let copyCat: OtherBillJoinCustomer[] = [];
 
         customers.map((customer) => {
           if (customer._id === data.idCustomer) {
@@ -79,13 +56,9 @@ export function SuaHoaDon_Khac() {
               _id: data._id,
               idCustomer: data.idCustomer,
               note: data.note,
-              width: data.width,
-              height: data.height,
               amount: data.amount,
-              discount: data.discount,
-              totalPrice: data.totalPrice,
+              price: data.price,
               billPrice: data.billPrice,
-              deposit: data.deposit,
               state: data.state,
               image: data.image,
               createdAt: data.createdAt,
@@ -106,14 +79,9 @@ export function SuaHoaDon_Khac() {
             setPhoneNumber(item.phoneNumber);
             setName(item.customerName);
             setNote(item.note);
-            setHeight(item.height);
-            setWidth(item.width);
-            setPrice(item.billPrice);
-            setDiscount(item.discount);
-            setDeposit(item.deposit);
-            setCopy(item.billPrice);
-            setTotal(item.totalPrice);
-            setOldTotal(item.totalPrice);
+            setPrice(item.price);
+            setTotal(item.billPrice);
+            setOldTotal(item.billPrice);
             setAmount(item.amount);
             setState(item.state);
           }
@@ -150,10 +118,10 @@ export function SuaHoaDon_Khac() {
     loadCustomer();
   }, []);
 
-  async function onSubmit(input: DecalBillInput) {
+  async function onSubmit(input: OtherBillInput) {
     try {
       if (typeof idBill === "undefined") idBill = "";
-      await DecalBillApi.updateDecalBill(idBill, input);
+      await OtherBillApi.updateOtherBill(idBill, input);
 
       const toastLiveExample = document.getElementById("liveToastSuccess");
       if (toastLiveExample) {
@@ -172,7 +140,6 @@ export function SuaHoaDon_Khac() {
   async function onEditCustomer(input: CustomerApi.CustomerInput) {
     try {
       await CustomerApi.updateCustomer(idCustomer, input).then((data) => {
-        console.log("edit xong cusomer");
         handleRevenueAndCustomer();
       });
     } catch (error) {
@@ -213,23 +180,18 @@ export function SuaHoaDon_Khac() {
   }
 
   function editBill() {
-    let input: DecalBillInput = {
+    let input: OtherBillInput = {
       amount: amount,
       idCustomer: idCustomer,
       note: note,
-      width: width,
-      height: height,
-      discount: discount,
-      totalPrice: total,
-      billPrice: price,
-      deposit: deposit,
+      billPrice: total,
+      price: price,
       state: state,
       image: imageData,
     };
     onSubmit(input);
 
     if (nameCustomer !== name || oldTotal !== total) {
-      console.log(oldTotal + " voi moi la :" + total);
       customers.map((customer) => {
         if (customer._id === idCustomer) {
           let input: CustomerApi.CustomerInput = {
@@ -299,32 +261,32 @@ export function SuaHoaDon_Khac() {
         if (findItem.length === 0) {
           inputRevenue = {
             totalIncome: total,
-            totalOutcome: price - total,
+            totalOutcome: 0,
             month: currentTime.month,
             year: currentTime.year,
             kindRevenue: {
-              incomeDecal: total,
+              incomeDecal: 0,
               incomeBangRon: 0,
               incomeBangHieu: 0,
               incomeHopDen: 0,
               incomeTanHon: 0,
-              incomeKhac: 0,
+              incomeKhac: total,
             },
           };
         } else {
           findItem.map((item) => {
             inputRevenue = {
               totalIncome: item.totalIncome + total,
-              totalOutcome: item.totalOutcome + price - total,
+              totalOutcome: item.totalOutcome,
               month: currentTime.month,
               year: currentTime.year,
               kindRevenue: {
-                incomeDecal: item.kindRevenue.incomeDecal + total,
+                incomeDecal: item.kindRevenue.incomeDecal,
                 incomeBangRon: item.kindRevenue.incomeBangRon,
                 incomeBangHieu: item.kindRevenue.incomeBangHieu,
                 incomeHopDen: item.kindRevenue.incomeHopDen,
                 incomeTanHon: item.kindRevenue.incomeTanHon,
-                incomeKhac: item.kindRevenue.incomeKhac,
+                incomeKhac: item.kindRevenue.incomeKhac + total,
               },
             };
           });
@@ -342,7 +304,7 @@ export function SuaHoaDon_Khac() {
 
   const handleEdit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (width === 0 || height === 0) {
+    if (amount <= 0) {
       const toastLiveExample = document.getElementById(
         "liveToastFailDimension"
       );
@@ -355,30 +317,12 @@ export function SuaHoaDon_Khac() {
     processInfo();
   };
   const handleCalculate = () => {
-    let index = 1;
-    servicePrices.map((item) => {
-      if (index === 1) {
-        cost = item.price;
-        index++;
-      } else {
-        index++;
-      }
-    });
-
     try {
-      price = height * width * cost * amount;
-      total = height * width * cost * amount - discount;
-      copy = height * width * cost * amount;
-      setPrice(price);
+      total = price * amount;
       setTotal(total);
-      setCopy(copy);
     } catch (error) {
       console.error(error);
     }
-  };
-  const handleCalculateWithDiscount = (value: number) => {
-    handleCalculate();
-    setTotal(copy - value);
   };
 
   return (
@@ -474,7 +418,9 @@ export function SuaHoaDon_Khac() {
           id="liveToastFailDimension"
         >
           <div className="d-flex">
-            <div className="toast-body">Giá trị kích thước không hợp lệ.</div>
+            <div className="toast-body">
+              Giá trị kích thước hoặc số lượng không hợp lệ.
+            </div>
             <button
               type="button"
               className="btn-close btn-close-white me-2 m-auto"
@@ -491,17 +437,13 @@ export function SuaHoaDon_Khac() {
           </div>
           <div className="col" style={{ marginTop: "20px" }}>
             <>
-              <Edit_Decal_BangRon_Component
+              <Edit_Khac_Component
                 phoneNumber={phoneNumber}
                 amount={amount}
                 price={price}
                 total={total}
                 name={name}
                 note={note}
-                width={width}
-                height={height}
-                deposit={deposit}
-                discount={discount}
                 state={state}
                 setChoseWhat={setChoseWhat}
                 setState={setState}
@@ -509,14 +451,9 @@ export function SuaHoaDon_Khac() {
                 setPhoneNumber={setPhoneNumber}
                 setName={setName}
                 setNote={setNote}
-                setHeight={setHeight}
-                setWidth={setWidth}
                 setPrice={setPrice}
-                setDiscount={setDiscount}
-                setDeposit={setDeposit}
                 handleEdit={handleEdit}
                 handleCalculate={handleCalculate}
-                handleCalculateWithDiscount={handleCalculateWithDiscount}
               />
             </>
           </div>
