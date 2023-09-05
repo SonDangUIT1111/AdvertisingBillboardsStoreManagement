@@ -180,3 +180,74 @@
  .trigger {
     visibility:collapse;
  }
+
+ /* Password input */
+ .modal-css {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-css-container {
+    background-color: #fff;
+    border-radius: 20px;
+    width: 600px;
+    min-height: 200px;
+    max-width: calc(100% -32px);
+    position: relative;
+}
+
+.modal-css[closing] {
+    display: flex;
+    animation: slideInLeft 500ms forwards
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+.modal-css-header {
+    background: #007bff;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: 600;
+    color: #fff;
+    border-radius:  20px 20px 0 0;
+}
+
+.modal-css-body {
+    margin-left: 30px;
+}
+
+.input-password-css {
+    width: 80px;
+    height: 80px;
+    padding-bottom: 30px;
+    border-radius: 10px;
+    margin: 10px;
+    border: #000 3px solid !important;
+    font-size: 180px;
+    line-height: 40px;
+    color: #2FB872;
+}
+
+.close-modal {
+    display: none;
+}
+
+
