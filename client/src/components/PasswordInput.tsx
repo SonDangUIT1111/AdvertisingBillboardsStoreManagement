@@ -10,38 +10,103 @@ export const PasswordInput = () => {
     });
   };
 
-  const [letter1, setLetter1] = useState("");
-  const [letter2, setLetter2] = useState("");
-  const [letter3, setLetter3] = useState("");
-  const [letter4, setLetter4] = useState("");
-  const [letter5, setLetter5] = useState("");
-  const [letter6, setLetter6] = useState("");
-  const [letter7, setLetter7] = useState("");
-  const [letter8, setLetter8] = useState("");
-  const [letter9, setLetter9] = useState("");
-  const [letter10, setLetter10] = useState("");
-  let [focusNumber, setFocusNumber] = useState(1);
+  const hidePasswordInputWithNoAnimation = () => {
+    const modal = document.querySelector(".js-modal-css");
+    modal?.classList.add("close-modal");
+  };
+
+  let letter1 = "";
+  let letter2 = "";
+  let letter3 = "";
+  let letter4 = "";
+  let letter5 = "";
+  let letter6 = "";
+  let letter7 = "";
+  let letter8 = "";
+  let letter9 = "";
+  let letter10 = "";
+  let focusNumber = 1;
+  let trig = false;
   useEffect(() => {
     document.getElementById("ip1")?.focus();
+    const key = "isLog";
+    const value = localStorage.getItem(key);
+    if (typeof value === "string") {
+      const data = JSON.parse(value);
+      if (data && data.expiration && new Date().getTime() < data.expiration) {
+        // Data is still valid
+        const value = data.value;
+        // Do something with the value
+        if (value === "true") {
+          hidePasswordInputWithNoAnimation();
+        }
+      } else {
+        // Data has expired or is not found
+        localStorage.removeItem(key);
+      }
+    }
   }, []);
 
   const checkPassword = () => {
     //huy keydown event
+    // hidePasswordInput();
+    // deleteAll();
+    let passwordString =
+      letter1 +
+      letter2 +
+      letter3 +
+      letter4 +
+      letter5 +
+      letter6 +
+      letter7 +
+      letter8 +
+      letter9 +
+      letter10;
+    if (passwordString === "thaisonart") {
+      hidePasswordInput();
+      const key = "isLog";
+      const value = "true";
+      localStorage.setItem(key, value);
+      const expiration = new Date().getTime() + 6000; // Expires in 1 hour
+      const data = { value, expiration };
+      localStorage.setItem(key, JSON.stringify(data));
+    } else {
+      deleteAll();
+      document.getElementById("wrong-txt")?.classList.remove("trigger");
+      document.getElementById("ip1")?.focus();
+      trig = true;
+      focusNumber = 1;
+    }
+  };
+  const deleteAll = () => {
+    for (let i = 1; i <= 10; i++) {
+      let index = "ip" + i.toString();
+      const input = document.getElementById(index) as HTMLInputElement;
+      input.value = "";
+    }
   };
   const toTheNext = (value: number) => {
+    focusNumber = value;
     const findId = "ip" + value.toString();
     document.getElementById(findId)?.focus();
+    if (value === 11) {
+      checkPassword();
+    }
   };
   document.addEventListener("keydown", (event) => {
+    if (trig) {
+      document.getElementById("wrong-txt")?.classList.add("trigger");
+      trig = false;
+    }
     if (event.code === "Backspace") {
       if (focusNumber !== 1) {
-        setFocusNumber(focusNumber - 1);
-        const findId = "ip" + focusNumber.toString();
-        document.getElementById(findId)?.focus();
+        let index = "ip" + (focusNumber - 1).toString();
+        const input = document.getElementById(index) as HTMLInputElement;
+        input.value = "";
+        toTheNext(focusNumber - 1);
       }
     }
   });
-  console.log(focusNumber);
   return (
     <>
       <div className="modal-css js-modal-css">
@@ -54,11 +119,13 @@ export const PasswordInput = () => {
               id="ip1"
               className="input-password-css"
               maxLength={1}
+              onClick={() => {
+                toTheNext(focusNumber);
+              }}
               onChange={(e) => {
-                setLetter1(e.target.value);
+                letter1 = e.target.value;
                 if (e.target.value !== "") {
-                  toTheNext(2);
-                  setFocusNumber(2);
+                  toTheNext(focusNumber + 1);
                 }
               }}
             />
@@ -67,13 +134,13 @@ export const PasswordInput = () => {
               id="ip2"
               className="input-password-css"
               maxLength={1}
+              onClick={() => {
+                toTheNext(focusNumber);
+              }}
               onChange={(e) => {
-                setLetter2(e.target.value);
-                if (e.target.value === "") {
-                  toTheNext(1);
-                } else {
-                  toTheNext(3);
-                  setFocusNumber(3);
+                letter2 = e.target.value;
+                if (e.target.value !== "") {
+                  toTheNext(focusNumber + 1);
                 }
               }}
             />
@@ -82,13 +149,13 @@ export const PasswordInput = () => {
               id="ip3"
               className="input-password-css"
               maxLength={1}
+              onClick={() => {
+                toTheNext(focusNumber);
+              }}
               onChange={(e) => {
-                setLetter3(e.target.value);
-                if (e.target.value === "") {
-                  toTheNext(2);
-                } else {
-                  toTheNext(4);
-                  setFocusNumber(4);
+                letter3 = e.target.value;
+                if (e.target.value !== "") {
+                  toTheNext(focusNumber + 1);
                 }
               }}
             />
@@ -97,13 +164,13 @@ export const PasswordInput = () => {
               id="ip4"
               className="input-password-css"
               maxLength={1}
+              onClick={() => {
+                toTheNext(focusNumber);
+              }}
               onChange={(e) => {
-                setLetter4(e.target.value);
-                if (e.target.value === "") {
-                  toTheNext(3);
-                } else {
-                  toTheNext(5);
-                  setFocusNumber(5);
+                letter4 = e.target.value;
+                if (e.target.value !== "") {
+                  toTheNext(focusNumber + 1);
                 }
               }}
             />
@@ -112,13 +179,13 @@ export const PasswordInput = () => {
               id="ip5"
               className="input-password-css"
               maxLength={1}
+              onClick={() => {
+                toTheNext(focusNumber);
+              }}
               onChange={(e) => {
-                setLetter5(e.target.value);
-                if (e.target.value === "") {
-                  toTheNext(4);
-                } else {
-                  toTheNext(6);
-                  setFocusNumber(6);
+                letter5 = e.target.value;
+                if (e.target.value !== "") {
+                  toTheNext(focusNumber + 1);
                 }
               }}
             />
@@ -127,13 +194,13 @@ export const PasswordInput = () => {
               id="ip6"
               className="input-password-css"
               maxLength={1}
+              onClick={() => {
+                toTheNext(focusNumber);
+              }}
               onChange={(e) => {
-                setLetter6(e.target.value);
-                if (e.target.value === "") {
-                  toTheNext(5);
-                } else {
-                  toTheNext(7);
-                  setFocusNumber(7);
+                letter6 = e.target.value;
+                if (e.target.value !== "") {
+                  toTheNext(focusNumber + 1);
                 }
               }}
             />
@@ -142,13 +209,13 @@ export const PasswordInput = () => {
               id="ip7"
               className="input-password-css"
               maxLength={1}
+              onClick={() => {
+                toTheNext(focusNumber);
+              }}
               onChange={(e) => {
-                setLetter7(e.target.value);
-                if (e.target.value === "") {
-                  toTheNext(6);
-                } else {
-                  toTheNext(8);
-                  setFocusNumber(8);
+                letter7 = e.target.value;
+                if (e.target.value !== "") {
+                  toTheNext(focusNumber + 1);
                 }
               }}
             />
@@ -157,13 +224,13 @@ export const PasswordInput = () => {
               id="ip8"
               className="input-password-css"
               maxLength={1}
+              onClick={() => {
+                toTheNext(focusNumber);
+              }}
               onChange={(e) => {
-                setLetter8(e.target.value);
-                if (e.target.value === "") {
-                  toTheNext(7);
-                } else {
-                  toTheNext(9);
-                  setFocusNumber(9);
+                letter8 = e.target.value;
+                if (e.target.value !== "") {
+                  toTheNext(focusNumber + 1);
                 }
               }}
             />
@@ -172,13 +239,13 @@ export const PasswordInput = () => {
               id="ip9"
               className="input-password-css"
               maxLength={1}
+              onClick={() => {
+                toTheNext(focusNumber);
+              }}
               onChange={(e) => {
-                setLetter9(e.target.value);
-                if (e.target.value === "") {
-                  toTheNext(8);
-                } else {
-                  toTheNext(10);
-                  setFocusNumber(10);
+                letter9 = e.target.value;
+                if (e.target.value !== "") {
+                  toTheNext(focusNumber + 1);
                 }
               }}
             />
@@ -187,11 +254,25 @@ export const PasswordInput = () => {
               id="ip10"
               className="input-password-css"
               maxLength={1}
+              onClick={() => {
+                toTheNext(focusNumber);
+              }}
               onChange={(e) => {
-                setLetter10(e.target.value);
-                checkPassword();
+                letter10 = e.target.value;
+                if (e.target.value !== "") {
+                  toTheNext(11);
+                }
               }}
             />
+            <input
+              type="password"
+              id="ip11"
+              maxLength={0}
+              className="trigger"
+            />
+          </div>
+          <div className="wrong-password-text trigger" id="wrong-txt">
+            Sai mật khẩu
           </div>
         </div>
       </div>

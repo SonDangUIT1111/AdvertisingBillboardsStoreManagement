@@ -209,6 +209,11 @@
     animation: slideInLeft 500ms forwards
 }
 
+.modal-css[closing-with-no-animation] {
+    display: flex;
+    animation: slideInLeft 500ms forwards
+}
+
 @keyframes slideInLeft {
     from {
         transform: translateX(0);
@@ -244,6 +249,15 @@
     font-size: 180px;
     line-height: 40px;
     color: #2FB872;
+}
+
+.wrong-password-text {
+    color: #dc3545;
+    font-weight: 500;
+    font-size: 20px;
+    margin-top: -50px;
+    padding-bottom: 20px;
+    text-align: center;
 }
 
 .close-modal {
