@@ -60,6 +60,14 @@
     transition: 0.2s !important;
 }
 
+.btn-warning {
+    color: #000 !important;
+    background-color: #ffe0af !important;
+    border-color: #ffe0af !important;
+    transition: 0.2s !important;
+    font-weight: 500 !important;
+}
+
 .btn-success {
     color: #fff;
     background-color: #2FB872 !important;
@@ -78,7 +86,7 @@
     background-color: #dc3545 !important;
 }
 
-.btn-primary:hover,.btn-success:hover,.btn-danger:hover,.btn-info:hover {
+.btn-primary:hover,.btn-success:hover,.btn-danger:hover,.btn-info:hover,.btn-warning:hover {
     transform: scale(1.03);
 }
 
@@ -211,7 +219,7 @@
 
 .modal-css[closing-with-no-animation] {
     display: flex;
-    animation: slideInLeft 500ms forwards
+    animation: slideInLeft 1000ms forwards
 }
 
 @keyframes slideInLeft {
@@ -263,5 +271,44 @@
 .close-modal {
     display: none;
 }
+
+.importMaterialList {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 500px;
+    padding: 10px;
+
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 20px
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #e4e4e4; 
+    border-radius: 20px
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #b6b6b6; 
+    border-radius: 20px
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
+
+  .selected-item-mark {
+    border: #2FB872 3px solid;
+    border-radius: 10px;
+    width: 0px !important;
+    height: 50px;
+    margin-right: 5px;
+    margin-top: 8px;
+  }
 
 

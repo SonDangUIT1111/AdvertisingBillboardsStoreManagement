@@ -1,39 +1,41 @@
 import { SetStateAction, useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { RecordItemList } from "../components/NhapHangRecordItemList";
-import { ImportMaterialRecord } from "../models/importMaterialRecord";
+import { KhachHangRecordItemList } from "../components/KhachHangRecordItemList";
+import { Customer } from "../models/customer";
 import { formatDate } from "../utils/formatDate";
-import * as ImportMaterialRecordApi from "../network/importMaterialRecord";
+import * as CustomerApi from "../network/customer_api";
 import { Toast } from "bootstrap";
+import { formatCurrency } from "../utils/formatCurrency";
 
 // this page function is not separate into many file
-export function NhapHang() {
+export function KhachHang() {
   const [isEditting, setIsEditing] = useState(false);
-  const [listRecord, setListRecord] = useState<ImportMaterialRecord[]>([]);
-  const [note, setNote] = useState("");
-  const [price, setPrice] = useState(0);
-  const [date, setDate] = useState("");
+  const [listRecord, setListRecord] = useState<Customer[]>([]);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [name, setName] = useState("");
+  const [total, setTotal] = useState(0);
+  const [payed, setPayed] = useState(0);
+  const [debt, setDebt] = useState(0);
   const [selectedId, setSelectedId] = useState("");
 
   const loadRecord = async () => {
     try {
       document.getElementById("trigger")?.click();
-      await ImportMaterialRecordApi.fetchImportMaterialRecords().then(
-        (data) => {
-          let copyCat: ImportMaterialRecord[] = [];
-          data.map((item) =>
-            copyCat.push({
-              _id: item._id,
-              note: item.note,
-              price: item.price,
-              createdAt: item.createdAt,
-              updatedAt: item.updatedAt,
-            })
-          );
-          setListRecord(copyCat);
-          document.getElementById("closeModal")?.click();
-        }
-      );
+      await CustomerApi.fetchCustomers().then((data) => {
+        let copyCat: Customer[] = [];
+        data.map((item) =>
+          copyCat.push({
+            _id: item._id,
+            name: item.name,
+            phoneNumber: item.phoneNumber,
+            total: item.total,
+            payed: item.payed,
+            debt: item.debt,
+          })
+        );
+        setListRecord(copyCat);
+        document.getElementById("closeModal")?.click();
+      });
     } catch (error) {
       console.error(error);
     }
@@ -43,35 +45,29 @@ export function NhapHang() {
     loadRecord();
   }, []);
 
-  const saveRecord = async (
-    input: ImportMaterialRecordApi.ImportMaterialRecordInput
-  ) => {
+  const saveRecord = async (input: CustomerApi.CustomerInput) => {
     try {
       if (!isEditting) {
-        await ImportMaterialRecordApi.createImportMaterialRecord(input).then(
-          (data) => {
-            setListRecord([
-              ...listRecord,
-              {
-                _id: data._id,
-                note: data.note,
-                price: data.price,
-                createdAt: data.createdAt,
-                updatedAt: data.updatedAt,
-              },
-            ]);
-          }
-        );
+        await CustomerApi.createCustomer(input).then((data) => {
+          setListRecord([
+            ...listRecord,
+            {
+              _id: data._id,
+              name: data.name,
+              phoneNumber: data.phoneNumber,
+              total: data.total,
+              payed: data.payed,
+              debt: data.debt,
+            },
+          ]);
+        });
         unSelect();
       } else {
-        await ImportMaterialRecordApi.updateImportMaterialRecord(
-          selectedId,
-          input
-        );
+        await CustomerApi.updateCustomer(selectedId, input);
         setListRecord(
           listRecord.map((item) =>
             item._id === selectedId
-              ? { ...item, note: note, price: price }
+              ? { ...item, phoneNumber: phoneNumber, name: name }
               : item
           )
         );
@@ -94,55 +90,36 @@ export function NhapHang() {
 
   const submitInfo = (event: React.FormEvent) => {
     event.preventDefault();
-    if (price <= 0) {
-      const toastLiveExample = document.getElementById("liveToastFail");
-      if (toastLiveExample) {
-        const toastBootstrap = Toast.getOrCreateInstance(toastLiveExample);
-        toastBootstrap.show();
-      }
-      return;
-    }
-    let input: ImportMaterialRecordApi.ImportMaterialRecordInput = {
-      note: note,
-      price: price,
+    let input: CustomerApi.CustomerInput = {
+      name: name,
+      phoneNumber: phoneNumber,
+      total: total,
+      payed: payed,
+      debt: debt,
     };
     saveRecord(input);
   };
 
-  const select = (item: ImportMaterialRecord) => {
+  const select = (item: Customer) => {
     setIsEditing(true);
-    setNote(item.note);
-    setPrice(item.price);
-    setDate(item.createdAt);
+    setName(item.name);
+    setPhoneNumber(item.phoneNumber);
+    setTotal(item.total);
+    setPayed(item.payed);
+    setDebt(item.debt);
     setSelectedId(item._id);
   };
 
   const unSelect = () => {
     setIsEditing(false);
-    setNote("");
-    setPrice(0);
-    setDate("");
+    setName("");
+    setPhoneNumber("");
+    setTotal(0);
+    setPayed(0);
+    setDebt(0);
     setSelectedId("");
   };
-  const deleteRecord = async () => {
-    try {
-      await ImportMaterialRecordApi.deleteImportMaterialRecord(selectedId);
-      setListRecord(listRecord.filter((item) => item._id !== selectedId));
-      unSelect();
-      const toastLiveExample = document.getElementById("liveToastSuccess");
-      if (toastLiveExample) {
-        const toastBootstrap = Toast.getOrCreateInstance(toastLiveExample);
-        toastBootstrap.show();
-      }
-    } catch (error) {
-      const toastLiveExample = document.getElementById("liveToastFail");
-      if (toastLiveExample) {
-        const toastBootstrap = Toast.getOrCreateInstance(toastLiveExample);
-        toastBootstrap.show();
-      }
-      console.error(error);
-    }
-  };
+
   return (
     <>
       <button
@@ -236,7 +213,7 @@ export function NhapHang() {
                   paddingBottom: "24px",
                 }}
               >
-                Thông tin nhập hàng
+                Thông tin khách hàng
               </div>
               <div
                 className="input-group mb-3 bolder-border"
@@ -247,41 +224,41 @@ export function NhapHang() {
                     className="input-group-text span-of-input-group"
                     id="basic-addon1"
                   >
-                    Thông tin:
-                  </span>
-                </div>
-                <textarea
-                  rows={10}
-                  required
-                  id="note-txt"
-                  value={note}
-                  className="form-control"
-                  aria-label="With textarea"
-                  onChange={(e) => setNote(e.target.value)}
-                ></textarea>
-              </div>
-              <div
-                className="input-group mb-3 bolder-border"
-                style={{ width: "80%" }}
-              >
-                <div className="input-group-prepend">
-                  <span
-                    className="input-group-text span-of-input-group"
-                    id="basic-addon1"
-                  >
-                    Giá nhập:
+                    Điện thoại:
                   </span>
                 </div>
                 <input
                   type="number"
+                  required
+                  id="phone-txt"
+                  value={phoneNumber}
+                  className="form-control"
+                  aria-label="With textarea"
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                ></input>
+              </div>
+              <div
+                className="input-group mb-3 bolder-border"
+                style={{ width: "80%" }}
+              >
+                <div className="input-group-prepend">
+                  <span
+                    className="input-group-text span-of-input-group"
+                    id="basic-addon1"
+                  >
+                    Họ tên:
+                  </span>
+                </div>
+                <input
+                  type="text"
                   className="form-control"
                   placeholder=""
                   aria-label=""
-                  value={price}
+                  value={name}
                   required
-                  id="price-txt"
+                  id="name-txt"
                   aria-describedby="basic-addon1"
-                  onChange={(e) => setPrice(e.target.valueAsNumber)}
+                  onChange={(e) => setName(e.target.value)}
                 />
               </div>
               <div
@@ -293,7 +270,7 @@ export function NhapHang() {
                     className="input-group-text span-of-input-group"
                     id="basic-addon1"
                   >
-                    Ngày nhập:
+                    Tổng cộng:
                   </span>
                 </div>
                 <span
@@ -302,7 +279,49 @@ export function NhapHang() {
                   aria-label=""
                   aria-describedby="basic-addon1"
                 >
-                  {isEditting ? formatDate(date) : ""}
+                  {isEditting ? formatCurrency(total) : ""}
+                </span>
+              </div>
+              <div
+                className="input-group mb-3 bolder-border"
+                style={{ width: "80%" }}
+              >
+                <div className="input-group-prepend">
+                  <span
+                    className="input-group-text span-of-input-group"
+                    id="basic-addon1"
+                  >
+                    Đã trả:
+                  </span>
+                </div>
+                <span
+                  className="form-control bg-light"
+                  placeholder=""
+                  aria-label=""
+                  aria-describedby="basic-addon1"
+                >
+                  {isEditting ? formatCurrency(payed) : ""}
+                </span>
+              </div>
+              <div
+                className="input-group mb-3 bolder-border"
+                style={{ width: "80%" }}
+              >
+                <div className="input-group-prepend">
+                  <span
+                    className="input-group-text span-of-input-group"
+                    id="basic-addon1"
+                  >
+                    Số nợ:
+                  </span>
+                </div>
+                <span
+                  className="form-control bg-light"
+                  placeholder=""
+                  aria-label=""
+                  aria-describedby="basic-addon1"
+                >
+                  {isEditting ? formatCurrency(debt) : ""}
                 </span>
               </div>
               {!isEditting ? (
@@ -310,7 +329,7 @@ export function NhapHang() {
                   type="submit"
                   className="btn btn-grey"
                   style={{ width: "80%" }}
-                  value="Thêm thông tin nhập hàng"
+                  value="Thêm thông tin khách hàng"
                 ></input>
               ) : (
                 <>
@@ -320,28 +339,14 @@ export function NhapHang() {
                     style={{ width: "80%" }}
                     value="Chỉnh sửa thông tin"
                   ></input>
-                  <div className="row">
-                    <div style={{ width: "40%" }}>
-                      <button
-                        type="button"
-                        className="btn btn-primary mt-2"
-                        style={{ width: "100%" }}
-                        onClick={deleteRecord}
-                      >
-                        Xóa thông tin
-                      </button>
-                    </div>
-                    <div style={{ width: "40%" }}>
-                      <button
-                        type="button"
-                        className="btn btn-warning mt-2"
-                        style={{ width: "100%" }}
-                        onClick={unSelect}
-                      >
-                        Hủy chỉnh sửa
-                      </button>
-                    </div>
-                  </div>
+                  <button
+                    type="button"
+                    className="btn btn-primary mt-2"
+                    style={{ width: "80%" }}
+                    onClick={unSelect}
+                  >
+                    Hủy chỉnh sửa
+                  </button>
                 </>
               )}
             </form>
@@ -356,19 +361,19 @@ export function NhapHang() {
                 className="mt-2 text-left"
                 style={{ width: "50%", fontWeight: 500 }}
               >
-                Thông tin
+                Điện thoại
               </span>
               <span
                 className="mt-2 text-left"
                 style={{ width: "25%", fontWeight: 500 }}
               >
-                Giá nhập
+                Họ tên
               </span>
               <span
                 className="mt-2 text-left"
                 style={{ width: "25%", fontWeight: 500 }}
               >
-                Ngày nhập
+                Số nợ
               </span>
             </div>
             <hr />
@@ -385,13 +390,14 @@ export function NhapHang() {
                     <></>
                   )}
                   <div style={{ width: "98%" }}>
-                    <RecordItemList
+                    <KhachHangRecordItemList
                       _id={item._id}
-                      note={item.note}
-                      price={item.price}
-                      date={item.createdAt}
-                      updateAt={item.updatedAt}
                       select={select}
+                      name={item.name}
+                      phoneNumber={item.phoneNumber}
+                      total={item.total}
+                      payed={item.payed}
+                      debt={item.debt}
                     />
                   </div>
                 </div>

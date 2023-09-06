@@ -42,7 +42,6 @@ export const PasswordInput = () => {
         }
       } else {
         // Data has expired or is not found
-        localStorage.removeItem(key);
       }
     }
   }, []);
@@ -63,6 +62,7 @@ export const PasswordInput = () => {
       letter9 +
       letter10;
     if (passwordString === "thaisonart") {
+      document.removeEventListener("keydown", downPress);
       hidePasswordInput();
       const key = "isLog";
       const value = "true";
@@ -94,6 +94,10 @@ export const PasswordInput = () => {
     }
   };
   document.addEventListener("keydown", (event) => {
+    downPress(event);
+  });
+
+  const downPress = (event: KeyboardEvent) => {
     if (trig) {
       document.getElementById("wrong-txt")?.classList.add("trigger");
       trig = false;
@@ -106,7 +110,7 @@ export const PasswordInput = () => {
         toTheNext(focusNumber - 1);
       }
     }
-  });
+  };
   return (
     <>
       <div className="modal-css js-modal-css">

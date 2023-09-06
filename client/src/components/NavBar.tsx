@@ -20,6 +20,9 @@ export function NavBar() {
           <Nav.Link as={NavLink} to={"/nhaphang"}>
             Nhập hàng
           </Nav.Link>
+          <Nav.Link as={NavLink} to={"/khachhang"}>
+            Khách hàng
+          </Nav.Link>
         </Nav>
         <img
           src={imageToAdd}
