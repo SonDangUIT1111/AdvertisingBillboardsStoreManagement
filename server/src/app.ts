@@ -7,6 +7,7 @@ import otherBillsRoutes from "./routes/billOther"
 import servicePriceRoutes from "./routes/priceService"
 import customerRoutes from "./routes/customer"
 import revenueRoutes from "./routes/revenue"
+import importMaterialRecordRoutes from "./routes/importMaterialRecord";
 import morgan from "morgan"
 import createHttpError, {isHttpError} from "http-errors";
 
@@ -25,6 +26,8 @@ app.use("/api/bangRonBills", bangRonBillsRoutes);
 app.use("/api/bangHieuBills", bangHieuBillsRoutes);
 
 app.use("/api/otherBills", otherBillsRoutes);
+
+app.use("/api/importMaterialRecords",importMaterialRecordRoutes)
 
 app.use("/api/customers", customerRoutes);
 
