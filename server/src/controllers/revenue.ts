@@ -43,9 +43,11 @@ interface CreateRevenueBody {
         incomeDecal: number,
         incomeBangRon: number,
         incomeBangHieu: number,
-        incomeHopDen: number,
-        incomeTanHon: number,
-        incomeKhac: number
+        incomeKhac: number,
+        decalOrder: number,
+        bangRonOrder: number,
+        bangHieuOrder: number,
+        khacOrder: number
     }
 }
 
@@ -86,9 +88,11 @@ interface UpdateRevenueBody {
         incomeDecal: number,
         incomeBangRon: number,
         incomeBangHieu: number,
-        incomeHopDen: number,
-        incomeTanHon: number,
-        incomeKhac: number
+        incomeKhac: number,
+        decalOrder: number,
+        bangRonOrder: number,
+        bangHieuOrder: number,
+        khacOrder: number
     }
 }
 

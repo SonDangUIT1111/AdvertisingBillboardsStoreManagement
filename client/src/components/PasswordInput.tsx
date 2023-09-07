@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "../styles/styles.css";
 export const PasswordInput = () => {
   const hidePasswordInput = () => {
+    document.removeEventListener("keydown", downPress);
     const modal = document.querySelector(".js-modal-css");
     modal?.setAttribute("closing", "");
     modal?.addEventListener("animationemd", () => {
@@ -11,6 +12,7 @@ export const PasswordInput = () => {
   };
 
   const hidePasswordInputWithNoAnimation = () => {
+    document.removeEventListener("keydown", downPress);
     const modal = document.querySelector(".js-modal-css");
     modal?.classList.add("close-modal");
   };
@@ -28,6 +30,7 @@ export const PasswordInput = () => {
   let focusNumber = 1;
   let trig = false;
   useEffect(() => {
+    document.addEventListener("keydown", downPress);
     document.getElementById("ip1")?.focus();
     const key = "isLog";
     const value = localStorage.getItem(key);
@@ -46,6 +49,21 @@ export const PasswordInput = () => {
     }
   }, []);
 
+  const downPress = (event: KeyboardEvent) => {
+    if (trig) {
+      document.getElementById("wrong-txt")?.classList.add("trigger");
+      trig = false;
+    }
+    if (event.code === "Backspace") {
+      if (focusNumber !== 1) {
+        let index = "ip" + (focusNumber - 1).toString();
+        const input = document.getElementById(index) as HTMLInputElement;
+        input.value = "";
+        toTheNext(focusNumber - 1);
+      }
+    }
+  };
+
   const checkPassword = () => {
     //huy keydown event
     // hidePasswordInput();
@@ -62,7 +80,6 @@ export const PasswordInput = () => {
       letter9 +
       letter10;
     if (passwordString === "thaisonart") {
-      document.removeEventListener("keydown", downPress);
       hidePasswordInput();
       const key = "isLog";
       const value = "true";
@@ -93,24 +110,7 @@ export const PasswordInput = () => {
       checkPassword();
     }
   };
-  document.addEventListener("keydown", (event) => {
-    downPress(event);
-  });
 
-  const downPress = (event: KeyboardEvent) => {
-    if (trig) {
-      document.getElementById("wrong-txt")?.classList.add("trigger");
-      trig = false;
-    }
-    if (event.code === "Backspace") {
-      if (focusNumber !== 1) {
-        let index = "ip" + (focusNumber - 1).toString();
-        const input = document.getElementById(index) as HTMLInputElement;
-        input.value = "";
-        toTheNext(focusNumber - 1);
-      }
-    }
-  };
   return (
     <>
       <div className="modal-css js-modal-css">

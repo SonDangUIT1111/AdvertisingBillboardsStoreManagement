@@ -9,9 +9,11 @@ const revenueSchema = new Schema({
         incomeDecal: Number,
         incomeBangRon: Number,
         incomeBangHieu: Number,
-        incomeHopDen: Number,
-        incomeTanHon: Number,
-        incomeKhac: Number
+        incomeKhac: Number,
+        decalOrder: Number,
+        bangRonOrder: Number,
+        bangHieuOrder: Number,
+        khacOrder: Number
     }
 });
 

@@ -78,14 +78,10 @@ export function HoaDon_Decal() {
     inputRevenue: RevenueInput,
     inputCustomer: CustomerApi.CustomerInput
   ) {
-    const currentTime = {
-      month: new Date().getMonth(),
-      year: new Date().getFullYear(),
-    };
     if (isUpdateRevenue) {
       await RevenueApi.updateRevenue(
-        currentTime.month,
-        currentTime.year,
+        inputRevenue.month,
+        inputRevenue.year,
         inputRevenue
       );
     }
@@ -126,7 +122,6 @@ export function HoaDon_Decal() {
     index: string,
     stateString: string
   ) => {
-    console.log(list);
     setList(
       list.map((item) =>
         item._id === index ? { ...item, state: stateString } : item
@@ -164,9 +159,11 @@ export function HoaDon_Decal() {
           incomeDecal: 0,
           incomeBangRon: 0,
           incomeBangHieu: 0,
-          incomeHopDen: 0,
-          incomeTanHon: 0,
           incomeKhac: 0,
+          decalOrder: 0,
+          bangRonOrder: 0,
+          bangHieuOrder: 0,
+          khacOrder: 0,
         },
       };
       let inputCustomer: CustomerApi.CustomerInput = {
@@ -204,26 +201,35 @@ export function HoaDon_Decal() {
 
       await RevenueApi.fetchRevenues().then((data) => {
         let currentTime = {
-          month: new Date().getMonth(),
-          year: new Date().getFullYear(),
+          month: "",
+          year: "",
         };
+        list.map((listItem) => {
+          if (listItem._id === index) {
+            currentTime.month = listItem.createdAt.split("-")[1];
+            currentTime.year = listItem.createdAt.split("-")[0];
+          }
+        });
         const findItem = data.filter(
           (item) =>
-            item.month === currentTime.month && item.year === currentTime.year
+            item.month === parseInt(currentTime.month) &&
+            item.year === parseInt(currentTime.year)
         );
         if (findItem.length === 0) {
           inputRevenue = {
             totalIncome: obj.totalPrice,
             totalOutcome: obj.billPrice - obj.totalPrice,
-            month: currentTime.month,
-            year: currentTime.year,
+            month: parseInt(currentTime.month),
+            year: parseInt(currentTime.year),
             kindRevenue: {
               incomeDecal: obj.totalPrice,
               incomeBangRon: 0,
               incomeBangHieu: 0,
-              incomeHopDen: 0,
-              incomeTanHon: 0,
               incomeKhac: 0,
+              decalOrder: 1,
+              bangRonOrder: 0,
+              bangHieuOrder: 0,
+              khacOrder: 0,
             },
           };
         } else {
@@ -231,15 +237,17 @@ export function HoaDon_Decal() {
             inputRevenue = {
               totalIncome: item.totalIncome + obj.totalPrice,
               totalOutcome: item.totalOutcome + obj.billPrice - obj.totalPrice,
-              month: currentTime.month,
-              year: currentTime.year,
+              month: item.month,
+              year: item.year,
               kindRevenue: {
                 incomeDecal: item.kindRevenue.incomeDecal + obj.totalPrice,
                 incomeBangRon: item.kindRevenue.incomeBangRon,
                 incomeBangHieu: item.kindRevenue.incomeBangHieu,
-                incomeHopDen: item.kindRevenue.incomeHopDen,
-                incomeTanHon: item.kindRevenue.incomeTanHon,
                 incomeKhac: item.kindRevenue.incomeKhac,
+                decalOrder: item.kindRevenue.decalOrder + 1,
+                bangRonOrder: item.kindRevenue.bangRonOrder,
+                bangHieuOrder: item.kindRevenue.bangHieuOrder,
+                khacOrder: item.kindRevenue.khacOrder,
               },
             };
           });
@@ -269,12 +277,16 @@ export function HoaDon_Decal() {
       price: number = 0;
     let idCus = "";
     let status = "";
+    let monthDel = "";
+    let yearDel = "";
     list.map((item) => {
       if (item._id === idDeleting) {
         total = item.totalPrice;
         price = item.billPrice;
         idCus = item.idCustomer;
         status = item.state;
+        monthDel = item.createdAt.split("-")[1];
+        yearDel = item.createdAt.split("-")[0];
       }
     });
     let inputRevenue: RevenueInput = {
@@ -286,9 +298,11 @@ export function HoaDon_Decal() {
         incomeDecal: 0,
         incomeBangRon: 0,
         incomeBangHieu: 0,
-        incomeHopDen: 0,
-        incomeTanHon: 0,
         incomeKhac: 0,
+        decalOrder: 0,
+        bangRonOrder: 0,
+        bangHieuOrder: 0,
+        khacOrder: 0,
       },
     };
     let inputCustomer: CustomerApi.CustomerInput = {
@@ -322,13 +336,9 @@ export function HoaDon_Decal() {
 
     if (status === "Thanh toán") {
       await RevenueApi.fetchRevenues().then((data) => {
-        let currentTime = {
-          month: new Date().getMonth(),
-          year: new Date().getFullYear(),
-        };
         const findItem = data.filter(
           (item) =>
-            item.month === currentTime.month && item.year === currentTime.year
+            item.month === parseInt(monthDel) && item.year === parseInt(yearDel)
         );
         if (findItem.length > 0) {
           // eslint-disable-next-line array-callback-return
@@ -336,15 +346,17 @@ export function HoaDon_Decal() {
             inputRevenue = {
               totalIncome: item.totalIncome - total,
               totalOutcome: item.totalOutcome - price + total,
-              month: currentTime.month,
-              year: currentTime.year,
+              month: item.month,
+              year: item.year,
               kindRevenue: {
                 incomeDecal: item.kindRevenue.incomeDecal - total,
                 incomeBangRon: item.kindRevenue.incomeBangRon,
                 incomeBangHieu: item.kindRevenue.incomeBangHieu,
-                incomeHopDen: item.kindRevenue.incomeHopDen,
-                incomeTanHon: item.kindRevenue.incomeTanHon,
                 incomeKhac: item.kindRevenue.incomeKhac,
+                decalOrder: item.kindRevenue.decalOrder - 1,
+                bangRonOrder: item.kindRevenue.bangRonOrder,
+                bangHieuOrder: item.kindRevenue.bangHieuOrder,
+                khacOrder: item.kindRevenue.khacOrder,
               },
             };
           });

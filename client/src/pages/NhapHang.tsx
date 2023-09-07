@@ -4,7 +4,9 @@ import { RecordItemList } from "../components/NhapHangRecordItemList";
 import { ImportMaterialRecord } from "../models/importMaterialRecord";
 import { formatDate } from "../utils/formatDate";
 import * as ImportMaterialRecordApi from "../network/importMaterialRecord";
+import * as RevenueApi from "../network/revenue_api";
 import { Toast } from "bootstrap";
+import { RevenueInput } from "../network/revenue_api";
 
 // this page function is not separate into many file
 export function NhapHang() {
@@ -14,6 +16,7 @@ export function NhapHang() {
   const [price, setPrice] = useState(0);
   const [date, setDate] = useState("");
   const [selectedId, setSelectedId] = useState("");
+  const [oldPrice, setOldPrice] = useState(0);
 
   const loadRecord = async () => {
     try {
@@ -49,17 +52,86 @@ export function NhapHang() {
     try {
       if (!isEditting) {
         await ImportMaterialRecordApi.createImportMaterialRecord(input).then(
-          (data) => {
+          async (data1) => {
             setListRecord([
               ...listRecord,
               {
-                _id: data._id,
-                note: data.note,
-                price: data.price,
-                createdAt: data.createdAt,
-                updatedAt: data.updatedAt,
+                _id: data1._id,
+                note: data1.note,
+                price: data1.price,
+                createdAt: data1.createdAt,
+                updatedAt: data1.updatedAt,
               },
             ]);
+            let inputRevenue: RevenueInput = {
+              totalIncome: 0,
+              totalOutcome: 0,
+              month: 0,
+              year: 0,
+              kindRevenue: {
+                incomeDecal: 0,
+                incomeBangRon: 0,
+                incomeBangHieu: 0,
+                incomeKhac: 0,
+                decalOrder: 0,
+                bangRonOrder: 0,
+                bangHieuOrder: 0,
+                khacOrder: 0,
+              },
+            };
+            await RevenueApi.fetchRevenues().then(async (data) => {
+              let currentTime = {
+                month: data1.createdAt.split("-")[1],
+                year: data1.createdAt.split("-")[0],
+              };
+              const findItem = data.filter(
+                (item) =>
+                  item.month === parseInt(currentTime.month) &&
+                  item.year === parseInt(currentTime.year)
+              );
+              if (findItem.length === 0) {
+                inputRevenue = {
+                  totalIncome: 0,
+                  totalOutcome: price,
+                  month: parseInt(currentTime.month),
+                  year: parseInt(currentTime.year),
+                  kindRevenue: {
+                    incomeDecal: 0,
+                    incomeBangRon: 0,
+                    incomeBangHieu: 0,
+                    incomeKhac: 0,
+                    decalOrder: 0,
+                    bangRonOrder: 0,
+                    bangHieuOrder: 0,
+                    khacOrder: 0,
+                  },
+                };
+              } else {
+                findItem.map((item) => {
+                  inputRevenue = {
+                    totalIncome: item.totalIncome,
+                    totalOutcome: item.totalOutcome + price,
+                    month: item.month,
+                    year: item.year,
+                    kindRevenue: {
+                      incomeDecal: item.kindRevenue.incomeDecal,
+                      incomeBangRon: item.kindRevenue.incomeBangRon,
+                      incomeBangHieu: item.kindRevenue.incomeBangHieu,
+                      incomeKhac: item.kindRevenue.incomeKhac,
+                      decalOrder: item.kindRevenue.decalOrder,
+                      bangRonOrder: item.kindRevenue.bangRonOrder,
+                      bangHieuOrder: item.kindRevenue.bangHieuOrder,
+                      khacOrder: item.kindRevenue.khacOrder,
+                    },
+                  };
+                });
+              }
+              await RevenueApi.updateRevenue(
+                parseInt(currentTime.month),
+                parseInt(currentTime.year),
+                inputRevenue
+              );
+            });
           }
         );
         unSelect();
@@ -67,7 +139,77 @@ export function NhapHang() {
         await ImportMaterialRecordApi.updateImportMaterialRecord(
           selectedId,
           input
-        );
+        ).then(async (data1) => {
+          let inputRevenue: RevenueInput = {
+            totalIncome: 0,
+            totalOutcome: 0,
+            month: 0,
+            year: 0,
+            kindRevenue: {
+              incomeDecal: 0,
+              incomeBangRon: 0,
+              incomeBangHieu: 0,
+              incomeKhac: 0,
+              decalOrder: 0,
+              bangRonOrder: 0,
+              bangHieuOrder: 0,
+              khacOrder: 0,
+            },
+          };
+          await RevenueApi.fetchRevenues().then(async (data) => {
+            let currentTime = {
+              month: data1.createdAt.split("-")[1],
+              year: data1.createdAt.split("-")[0],
+            };
+            const findItem = data.filter(
+              (item) =>
+                item.month === parseInt(currentTime.month) &&
+                item.year === parseInt(currentTime.year)
+            );
+            if (findItem.length === 0) {
+              inputRevenue = {
+                totalIncome: 0,
+                totalOutcome: price,
+                month: parseInt(currentTime.month),
+                year: parseInt(currentTime.year),
+                kindRevenue: {
+                  incomeDecal: 0,
+                  incomeBangRon: 0,
+                  incomeBangHieu: 0,
+                  incomeKhac: 0,
+                  decalOrder: 0,
+                  bangRonOrder: 0,
+                  bangHieuOrder: 0,
+                  khacOrder: 0,
+                },
+              };
+            } else {
+              findItem.map((item) => {
+                inputRevenue = {
+                  totalIncome: item.totalIncome,
+                  totalOutcome: item.totalOutcome + price - oldPrice,
+                  month: item.month,
+                  year: item.year,
+                  kindRevenue: {
+                    incomeDecal: item.kindRevenue.incomeDecal,
+                    incomeBangRon: item.kindRevenue.incomeBangRon,
+                    incomeBangHieu: item.kindRevenue.incomeBangHieu,
+                    incomeKhac: item.kindRevenue.incomeKhac,
+                    decalOrder: item.kindRevenue.decalOrder,
+                    bangRonOrder: item.kindRevenue.bangRonOrder,
+                    bangHieuOrder: item.kindRevenue.bangHieuOrder,
+                    khacOrder: item.kindRevenue.khacOrder,
+                  },
+                };
+              });
+            }
+            await RevenueApi.updateRevenue(
+              parseInt(currentTime.month),
+              parseInt(currentTime.year),
+              inputRevenue
+            );
+          });
+        });
         setListRecord(
           listRecord.map((item) =>
             item._id === selectedId
@@ -113,6 +255,7 @@ export function NhapHang() {
     setIsEditing(true);
     setNote(item.note);
     setPrice(item.price);
+    setOldPrice(item.price);
     setDate(item.createdAt);
     setSelectedId(item._id);
   };
@@ -121,13 +264,75 @@ export function NhapHang() {
     setIsEditing(false);
     setNote("");
     setPrice(0);
+    setOldPrice(0);
     setDate("");
     setSelectedId("");
   };
   const deleteRecord = async () => {
     try {
-      await ImportMaterialRecordApi.deleteImportMaterialRecord(selectedId);
-      setListRecord(listRecord.filter((item) => item._id !== selectedId));
+      await ImportMaterialRecordApi.deleteImportMaterialRecord(selectedId).then(
+        async (data) => {
+          let inputRevenue: RevenueInput = {
+            totalIncome: 0,
+            totalOutcome: 0,
+            month: 0,
+            year: 0,
+            kindRevenue: {
+              incomeDecal: 0,
+              incomeBangRon: 0,
+              incomeBangHieu: 0,
+              incomeKhac: 0,
+              decalOrder: 0,
+              bangRonOrder: 0,
+              bangHieuOrder: 0,
+              khacOrder: 0,
+            },
+          };
+          await RevenueApi.fetchRevenues().then(async (data) => {
+            let currentTime = {
+              month: "",
+              year: "",
+            };
+            listRecord.map((listItem) => {
+              if (listItem._id === selectedId) {
+                currentTime.month = listItem.createdAt.split("-")[1];
+                currentTime.year = listItem.createdAt.split("-")[0];
+              }
+            });
+            const findItem = data.filter(
+              (item) =>
+                item.month === parseInt(currentTime.month) &&
+                item.year === parseInt(currentTime.year)
+            );
+            if (findItem.length > 0) {
+              findItem.map((item) => {
+                inputRevenue = {
+                  totalIncome: item.totalIncome,
+                  totalOutcome: item.totalOutcome - price,
+                  month: item.month,
+                  year: item.year,
+                  kindRevenue: {
+                    incomeDecal: item.kindRevenue.incomeDecal,
+                    incomeBangRon: item.kindRevenue.incomeBangRon,
+                    incomeBangHieu: item.kindRevenue.incomeBangHieu,
+                    incomeKhac: item.kindRevenue.incomeKhac,
+                    decalOrder: item.kindRevenue.decalOrder,
+                    bangRonOrder: item.kindRevenue.bangRonOrder,
+                    bangHieuOrder: item.kindRevenue.bangHieuOrder,
+                    khacOrder: item.kindRevenue.khacOrder,
+                  },
+                };
+              });
+            }
+            await RevenueApi.updateRevenue(
+              parseInt(currentTime.month),
+              parseInt(currentTime.year),
+              inputRevenue
+            );
+          });
+          setListRecord(listRecord.filter((item) => item._id !== selectedId));
+        }
+      );
       unSelect();
       const toastLiveExample = document.getElementById("liveToastSuccess");
       if (toastLiveExample) {
@@ -334,7 +539,7 @@ export function NhapHang() {
                     <div style={{ width: "40%" }}>
                       <button
                         type="button"
-                        className="btn btn-warning mt-2"
+                        className="btn btn-cancel mt-2"
                         style={{ width: "100%" }}
                         onClick={unSelect}
                       >

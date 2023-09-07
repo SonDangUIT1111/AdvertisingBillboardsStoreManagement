@@ -53,6 +53,7 @@ export function SuaHoaDon_Decal() {
   let [oldTotal, setOldTotal] = useState(0);
   const [amount, setAmount] = useState(1);
   const [state, setState] = useState("");
+  const [createdAt, setCreatedAt] = useState("");
   const [choseWhat, setChoseWhat] = useState("");
 
   async function loadCustomer() {
@@ -116,6 +117,7 @@ export function SuaHoaDon_Decal() {
             setOldTotal(item.totalPrice);
             setAmount(item.amount);
             setState(item.state);
+            setCreatedAt(item.createdAt);
           }
         });
         document.getElementById("closeModal")?.click();
@@ -196,14 +198,10 @@ export function SuaHoaDon_Decal() {
     inputRevenue: RevenueInput,
     inputCustomer: CustomerApi.CustomerInput
   ) {
-    const currentTime = {
-      month: new Date().getMonth(),
-      year: new Date().getFullYear(),
-    };
     if (isUpdateRevenue) {
       await RevenueApi.updateRevenue(
-        currentTime.month,
-        currentTime.year,
+        inputRevenue.month,
+        inputRevenue.year,
         inputRevenue
       );
     }
@@ -262,9 +260,11 @@ export function SuaHoaDon_Decal() {
           incomeDecal: 0,
           incomeBangRon: 0,
           incomeBangHieu: 0,
-          incomeHopDen: 0,
-          incomeTanHon: 0,
           incomeKhac: 0,
+          decalOrder: 0,
+          bangRonOrder: 0,
+          bangHieuOrder: 0,
+          khacOrder: 0,
         },
       };
       let inputCustomer: CustomerApi.CustomerInput = {
@@ -289,26 +289,29 @@ export function SuaHoaDon_Decal() {
 
       await RevenueApi.fetchRevenues().then((data) => {
         let currentTime = {
-          month: new Date().getMonth(),
-          year: new Date().getFullYear(),
+          month: createdAt.split("-")[1],
+          year: createdAt.split("-")[0],
         };
         const findItem = data.filter(
           (item) =>
-            item.month === currentTime.month && item.year === currentTime.year
+            item.month === parseInt(currentTime.month) &&
+            item.year === parseInt(currentTime.year)
         );
         if (findItem.length === 0) {
           inputRevenue = {
             totalIncome: total,
             totalOutcome: price - total,
-            month: currentTime.month,
-            year: currentTime.year,
+            month: parseInt(currentTime.month),
+            year: parseInt(currentTime.year),
             kindRevenue: {
               incomeDecal: total,
               incomeBangRon: 0,
               incomeBangHieu: 0,
-              incomeHopDen: 0,
-              incomeTanHon: 0,
               incomeKhac: 0,
+              decalOrder: 1,
+              bangRonOrder: 0,
+              bangHieuOrder: 0,
+              khacOrder: 0,
             },
           };
         } else {
@@ -316,15 +319,17 @@ export function SuaHoaDon_Decal() {
             inputRevenue = {
               totalIncome: item.totalIncome + total,
               totalOutcome: item.totalOutcome + price - total,
-              month: currentTime.month,
-              year: currentTime.year,
+              month: item.month,
+              year: item.year,
               kindRevenue: {
                 incomeDecal: item.kindRevenue.incomeDecal + total,
                 incomeBangRon: item.kindRevenue.incomeBangRon,
                 incomeBangHieu: item.kindRevenue.incomeBangHieu,
-                incomeHopDen: item.kindRevenue.incomeHopDen,
-                incomeTanHon: item.kindRevenue.incomeTanHon,
                 incomeKhac: item.kindRevenue.incomeKhac,
+                decalOrder: item.kindRevenue.decalOrder + 1,
+                bangRonOrder: item.kindRevenue.bangRonOrder,
+                bangHieuOrder: item.kindRevenue.bangHieuOrder,
+                khacOrder: item.kindRevenue.khacOrder,
               },
             };
           });

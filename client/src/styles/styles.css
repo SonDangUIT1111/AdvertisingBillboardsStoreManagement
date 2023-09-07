@@ -60,10 +60,10 @@
     transition: 0.2s !important;
 }
 
-.btn-warning {
+.btn-cancel {
     color: #000 !important;
-    background-color: #ffe0af !important;
-    border-color: #ffe0af !important;
+    background-color: #EAD2A8 !important;
+    border-color: #EAD2A8 !important;
     transition: 0.2s !important;
     font-weight: 500 !important;
 }
@@ -86,7 +86,7 @@
     background-color: #dc3545 !important;
 }
 
-.btn-primary:hover,.btn-success:hover,.btn-danger:hover,.btn-info:hover,.btn-warning:hover {
+.btn-primary:hover,.btn-success:hover,.btn-danger:hover,.btn-info:hover,.btn-cancel:hover {
     transform: scale(1.03);
 }
 
