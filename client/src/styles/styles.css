@@ -311,4 +311,81 @@
     margin-top: 8px;
   }
 
+  .box-thong-ke {
+    margin: 10px;
+    height: 120px;
+    border-radius: 5px;
+    transition: 0.2s;
+  }
+
+  @media (max-width: 740px) {
+    .box-thong-ke {
+        margin: 10px;
+        height: 160px;
+        border-radius: 5px;
+        transition: 0.2s;
+    }
+  }
+
+  .box-thong-ke:hover {
+    transform: scale(1.01);
+  }
+
+  .linear-orange {
+    background-image: linear-gradient(to right, rgb(254, 148, 102), rgb(255, 182, 150));;
+  }
+  .linear-green {
+    background-image: linear-gradient(to right, rgb(6, 197, 133), rgb(19, 241, 164));;
+  }
+  .linear-pink {
+    background-image: linear-gradient(to right, rgb(253, 95, 114), rgb(252, 143, 156));;
+  }
+  .linear-blue {
+    background-image: linear-gradient(to right, rgb(2, 174, 175), rgb(6, 217, 225));;
+  }
+
+  .line-white {
+    height: 0px;
+    width: 140%;
+    margin-left: -20px;
+    border: #fff 1px solid;
+  }
+
+  .title-box {
+    color: #fff;
+    font-size: 24px;
+    margin-top: 10px;
+    margin-left: 5px;
+
+  }
+
+  .title-type {
+    color: #fff;
+    font-size: 14px;
+    margin-top: -2px;
+    margin-left: 5px;
+    font-family: 'Rubik', sans-serif;
+  }
+
+  .content-type {
+    color: #fff;
+    font-size: 14px;
+    margin-top: 14px;
+    margin-left: 5px;
+    font-family: 'Rubik', sans-serif;
+  }
+
+  .image-box {
+    width: 20%;
+    height: 16%;
+  }
+
+  .chart-container {
+    border: #e5e5e5 1px solid !important;
+  }
+
+  .btn-light {
+    background-color: #eeeeee !important;
+  }
+
 

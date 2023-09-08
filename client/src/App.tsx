@@ -18,6 +18,7 @@ import { HoaDon_Khac } from "./pages/Khac/HoaDon_Khac";
 import { ThemHoaDonMoi_Khac } from "./pages/Khac/ThemHoaDonMoi_Khac";
 import { SuaHoaDon_Khac } from "./pages/Khac/SuaHoaDon_Khac";
 import { KhachHang } from "./pages/KhachHang";
+import { ThongKe } from "./pages/ThongKe";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/hoadon" element={<HoaDon />} />
           <Route path="/nhaphang" element={<NhapHang />} />
           <Route path="/khachhang" element={<KhachHang />} />
+          <Route path="/thongke" element={<ThongKe />} />
           <Route path="/hoadon/decal" element={<HoaDon_Decal />} />
           <Route
             path="/hoadon/decal/themhoadon"
