@@ -408,6 +408,7 @@ export function ThongKe() {
         style={{
           height: "80px",
           backgroundColor: "#fff",
+          border: "#ccc 2px solid",
         }}
       >
         <h6 className="mt-2 me-2 ms-2" style={{ width: "4%" }}>

@@ -23,6 +23,9 @@ export function NavBar() {
           <Nav.Link as={NavLink} to={"/khachhang"}>
             Khách hàng
           </Nav.Link>
+          <Nav.Link as={NavLink} to={"/banggia"}>
+            Bảng giá
+          </Nav.Link>
           <Nav.Link as={NavLink} to={"/thongke"}>
             Thống kê
           </Nav.Link>
