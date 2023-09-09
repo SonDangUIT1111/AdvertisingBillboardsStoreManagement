@@ -12,6 +12,7 @@ import { DecalBill } from "../../models/decalBill";
 import { useForm } from "react-hook-form";
 import { Toast } from "bootstrap";
 import { Customer as CustomerModel } from "../../models/customer";
+import { PasswordInput } from "../../components/PasswordInput";
 
 export function ThemHoaDonMoi_BangRon() {
   let [cost, setCost] = useState(1);
@@ -257,6 +258,7 @@ export function ThemHoaDonMoi_BangRon() {
 
   return (
     <>
+      <PasswordInput />
       <div
         aria-live="polite"
         aria-atomic="true"

@@ -11,6 +11,7 @@ import { BangHieuBill } from "../../models/bangHieuBill";
 import { useForm } from "react-hook-form";
 import { Toast } from "bootstrap";
 import { Customer as CustomerModel } from "../../models/customer";
+import { PasswordInput } from "../../components/PasswordInput";
 
 export function ThemHoaDonMoi_BangHieu() {
   let [cost, setCost] = useState(1);
@@ -293,6 +294,7 @@ export function ThemHoaDonMoi_BangHieu() {
 
   return (
     <>
+      <PasswordInput />
       <div
         aria-live="polite"
         aria-atomic="true"

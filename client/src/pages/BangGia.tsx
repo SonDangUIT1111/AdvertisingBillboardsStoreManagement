@@ -6,6 +6,7 @@ import { formatDate } from "../utils/formatDate";
 import * as ServicePriceApi from "../network/servicePrice_api";
 import { Toast } from "bootstrap";
 import { formatCurrency } from "../utils/formatCurrency";
+import { PasswordInput } from "../components/PasswordInput";
 
 // this page function is not separate into many file
 export function BangGia() {
@@ -91,6 +92,7 @@ export function BangGia() {
 
   return (
     <>
+      <PasswordInput />
       <button
         type="button"
         id="trigger"

@@ -12,6 +12,7 @@ import { RevenueInput } from "../../network/revenue_api";
 import { BangHieuBillJoinCustomer } from "../../models/bangHieuBillJoinCustomer";
 import { OtherBillJoinCustomer } from "../../models/otherBillJoinCustomer";
 import { OtherBillInput } from "../../network/otherBill_api";
+import { PasswordInput } from "../../components/PasswordInput";
 
 export function HoaDon_BangRon() {
   let [idDeleting, setIdDeleting] = useState("");
@@ -394,6 +395,7 @@ export function HoaDon_BangRon() {
 
   return (
     <>
+      <PasswordInput />
       <button
         type="button"
         id="trigger"

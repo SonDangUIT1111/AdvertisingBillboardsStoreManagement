@@ -10,6 +10,7 @@ import { Toast } from "bootstrap";
 import { Customer as CustomerModel } from "../../models/customer";
 import { OtherBillInput } from "../../network/otherBill_api";
 import { Information_Khac } from "../../components/drag_and_drop_component/Information_Other";
+import { PasswordInput } from "../../components/PasswordInput";
 
 export function ThemHoaDonMoi_Khac() {
   let [cost, setCost] = useState(1);
@@ -216,6 +217,7 @@ export function ThemHoaDonMoi_Khac() {
 
   return (
     <>
+      <PasswordInput />
       <div
         aria-live="polite"
         aria-atomic="true"

@@ -13,6 +13,7 @@ import { Customer as CustomerModel } from "../../models/customer";
 import { BangHieuBillJoinCustomer } from "../../models/bangHieuBillJoinCustomer";
 import { useParams } from "react-router-dom";
 import { RevenueInput } from "../../network/revenue_api";
+import { PasswordInput } from "../../components/PasswordInput";
 
 export function SuaHoaDon_BangHieu() {
   let { idBill } = useParams();
@@ -418,6 +419,7 @@ export function SuaHoaDon_BangHieu() {
 
   return (
     <>
+      <PasswordInput />
       <button
         type="button"
         id="trigger"

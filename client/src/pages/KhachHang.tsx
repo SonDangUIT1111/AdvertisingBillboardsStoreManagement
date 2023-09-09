@@ -6,6 +6,7 @@ import { formatDate } from "../utils/formatDate";
 import * as CustomerApi from "../network/customer_api";
 import { Toast } from "bootstrap";
 import { formatCurrency } from "../utils/formatCurrency";
+import { PasswordInput } from "../components/PasswordInput";
 
 // this page function is not separate into many file
 export function KhachHang() {
@@ -122,6 +123,7 @@ export function KhachHang() {
 
   return (
     <>
+      <PasswordInput />
       <button
         type="button"
         id="trigger"

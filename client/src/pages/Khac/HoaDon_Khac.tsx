@@ -10,6 +10,7 @@ import * as RevenueApi from "../../network/revenue_api";
 import "../../styles/styles.css";
 import { Customer } from "../../models/customer";
 import { RevenueInput } from "../../network/revenue_api";
+import { PasswordInput } from "../../components/PasswordInput";
 
 export function HoaDon_Khac() {
   let [idDeleting, setIdDeleting] = useState("");
@@ -372,6 +373,7 @@ export function HoaDon_Khac() {
 
   return (
     <>
+      <PasswordInput />
       <button
         type="button"
         id="trigger"

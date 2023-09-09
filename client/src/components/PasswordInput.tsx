@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { passwordString } from "../information";
 import "../styles/styles.css";
 export const PasswordInput = () => {
   const hidePasswordInput = () => {
@@ -79,7 +80,7 @@ export const PasswordInput = () => {
       letter8 +
       letter9 +
       letter10;
-    if (passwordString === "thaisonart") {
+    if (passwordString === passwordString) {
       hidePasswordInput();
       const key = "isLog";
       const value = "true";

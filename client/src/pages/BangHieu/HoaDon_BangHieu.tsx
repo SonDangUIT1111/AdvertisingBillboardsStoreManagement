@@ -11,6 +11,7 @@ import { Customer } from "../../models/customer";
 import { RevenueInput } from "../../network/revenue_api";
 import { OtherBillJoinCustomer } from "../../models/otherBillJoinCustomer";
 import { OtherBillInput } from "../../network/otherBill_api";
+import { PasswordInput } from "../../components/PasswordInput";
 
 export function HoaDon_BangHieu() {
   let [idDeleting, setIdDeleting] = useState("");
@@ -406,6 +407,7 @@ export function HoaDon_BangHieu() {
 
   return (
     <>
+      <PasswordInput />
       <button
         type="button"
         id="trigger"

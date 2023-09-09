@@ -13,6 +13,7 @@ import { Customer as CustomerModel } from "../../models/customer";
 import { OtherBillJoinCustomer } from "../../models/otherBillJoinCustomer";
 import { useParams } from "react-router-dom";
 import { RevenueInput } from "../../network/revenue_api";
+import { PasswordInput } from "../../components/PasswordInput";
 
 export function SuaHoaDon_Khac() {
   let { idBill } = useParams();
@@ -333,6 +334,7 @@ export function SuaHoaDon_Khac() {
 
   return (
     <>
+      <PasswordInput />
       <button
         type="button"
         id="trigger"

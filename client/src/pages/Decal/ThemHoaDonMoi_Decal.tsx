@@ -14,6 +14,7 @@ import { Toast } from "bootstrap";
 import { Customer as CustomerModel } from "../../models/customer";
 import { BangHieuBillInput } from "../../network/bangHieuBill_api";
 import { OtherBillInput } from "../../network/otherBill_api";
+import { PasswordInput } from "../../components/PasswordInput";
 
 export type HoaDonDecal_BangRonProps = {
   id: string;
@@ -292,6 +293,7 @@ export function ThemHoaDonMoi_Decal() {
 
   return (
     <>
+      <PasswordInput />
       <div
         aria-live="polite"
         aria-atomic="true"

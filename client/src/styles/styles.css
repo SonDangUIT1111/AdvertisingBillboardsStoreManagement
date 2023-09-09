@@ -250,13 +250,14 @@
 .input-password-css {
     width: 80px;
     height: 80px;
-    padding-bottom: 30px;
-    border-radius: 10px;
+    padding-left: 2px;
+    padding-bottom: 32px;
+    border-radius: 60px;
     margin: 10px;
-    border: #000 3px solid !important;
+    border: #cdcdcd 1px solid !important;
     font-size: 180px;
     line-height: 40px;
-    color: #2FB872;
+    color: #fee8c2;
 }
 
 .wrong-password-text {

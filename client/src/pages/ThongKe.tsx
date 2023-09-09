@@ -12,6 +12,7 @@ import { LineChart } from "../components/chart/LineChart";
 import { Revenue } from "../models/revenue";
 import * as RevenueApi from "../network/revenue_api";
 import { formatCurrency } from "../utils/formatCurrency";
+import { PasswordInput } from "../components/PasswordInput";
 
 Chart.register(CategoryScale);
 export function ThongKe() {
@@ -346,6 +347,7 @@ export function ThongKe() {
 
   return (
     <>
+      <PasswordInput />
       <div className="row">
         <div className="col box-thong-ke linear-orange">
           <h4 className="title-box">{formatCurrency(incomeOfEachType[0])}</h4>

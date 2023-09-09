@@ -14,6 +14,7 @@ import { DecalBillJoinCustomer } from "../../models/decallBillJoinCustomer";
 import { useParams } from "react-router-dom";
 import { RevenueInput } from "../../network/revenue_api";
 import { toContainElement } from "@testing-library/jest-dom/matchers";
+import { PasswordInput } from "../../components/PasswordInput";
 
 export type BillDecal_BangRonEditProps = {
   idBill: string;
@@ -388,6 +389,7 @@ export function SuaHoaDon_Decal() {
 
   return (
     <>
+      <PasswordInput />
       <button
         type="button"
         id="trigger"

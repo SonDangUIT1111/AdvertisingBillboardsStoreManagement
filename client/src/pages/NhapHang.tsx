@@ -7,6 +7,7 @@ import * as ImportMaterialRecordApi from "../network/importMaterialRecord";
 import * as RevenueApi from "../network/revenue_api";
 import { Toast } from "bootstrap";
 import { RevenueInput } from "../network/revenue_api";
+import { PasswordInput } from "../components/PasswordInput";
 
 // this page function is not separate into many file
 export function NhapHang() {
@@ -350,6 +351,7 @@ export function NhapHang() {
   };
   return (
     <>
+      <PasswordInput />
       <button
         type="button"
         id="trigger"
