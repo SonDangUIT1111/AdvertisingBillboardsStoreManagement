@@ -37,6 +37,7 @@ export function ThemHoaDonMoi_BangRon() {
 
   async function loadServicePrice() {
     try {
+      document.getElementById("trigger")?.click();
       const results = await ServicePriceApi.fetchServicePrices().then(
         (data) => {
           data.map((item) => {
@@ -65,8 +66,11 @@ export function ThemHoaDonMoi_BangRon() {
   }
 
   useEffect(() => {
-    loadServicePrice();
-    loadCustomer();
+    loadServicePrice().then((data) => {
+      loadCustomer().then((data) => {
+        document.getElementById("closeModal")?.click();
+      });
+    });
   }, []);
 
   async function onSubmit(input: BangRonBillApi.BangRonBillInput) {
@@ -259,6 +263,41 @@ export function ThemHoaDonMoi_BangRon() {
   return (
     <>
       <PasswordInput />
+      <button
+        type="button"
+        id="trigger"
+        className="trigger"
+        data-bs-toggle="modal"
+        data-bs-target="#loadingModal"
+      ></button>
+      <div
+        className="modal fade"
+        id="loadingModal"
+        aria-labelledby="exampleModalLabel2"
+        aria-hidden="false"
+      >
+        <div className="modal-dialog ">
+          <div className="modal-content bg-green">
+            <div className="modal-body">
+              <div
+                className="spinner-border"
+                role="status"
+                style={{ height: "20px", width: "20px", marginRight: "10px" }}
+              >
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              Đang tải dữ liệu ...
+            </div>
+            <button
+              type="button"
+              id="closeModal"
+              className="trigger"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+        </div>
+      </div>
       <div
         aria-live="polite"
         aria-atomic="true"

@@ -121,7 +121,6 @@ export function SuaHoaDon_Decal() {
             setCreatedAt(item.createdAt);
           }
         });
-        document.getElementById("closeModal")?.click();
       });
     } catch (error) {
       console.error(error);
@@ -141,6 +140,7 @@ export function SuaHoaDon_Decal() {
             updatedAt: "",
           });
         });
+        document.getElementById("closeModal")?.click();
       });
     } catch (error) {
       console.error(error);
@@ -149,8 +149,9 @@ export function SuaHoaDon_Decal() {
   }
 
   useEffect(() => {
-    loadServicePrice();
-    loadCustomer();
+    loadCustomer().then((data) => {
+      loadServicePrice();
+    });
   }, []);
 
   async function onSubmit(input: DecalBillInput) {
@@ -406,7 +407,16 @@ export function SuaHoaDon_Decal() {
       >
         <div className="modal-dialog ">
           <div className="modal-content bg-green">
-            <div className="modal-body">Đang tải dữ liệu ...</div>
+            <div className="modal-body">
+              <div
+                className="spinner-border"
+                role="status"
+                style={{ height: "20px", width: "20px", marginRight: "10px" }}
+              >
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              Đang tải dữ liệu ...
+            </div>
             <button
               type="button"
               id="closeModal"

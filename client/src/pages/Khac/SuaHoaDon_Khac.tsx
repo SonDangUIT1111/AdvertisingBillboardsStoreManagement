@@ -89,7 +89,6 @@ export function SuaHoaDon_Khac() {
             setCreatedAt(item.createdAt);
           }
         });
-        document.getElementById("closeModal")?.click();
       });
     } catch (error) {
       console.error(error);
@@ -109,6 +108,7 @@ export function SuaHoaDon_Khac() {
             updatedAt: "",
           });
         });
+        document.getElementById("closeModal")?.click();
       });
     } catch (error) {
       console.error(error);
@@ -117,8 +117,9 @@ export function SuaHoaDon_Khac() {
   }
 
   useEffect(() => {
-    loadServicePrice();
-    loadCustomer();
+    loadCustomer().then((data) => {
+      loadServicePrice();
+    });
   }, []);
 
   async function onSubmit(input: OtherBillInput) {
@@ -351,7 +352,16 @@ export function SuaHoaDon_Khac() {
       >
         <div className="modal-dialog ">
           <div className="modal-content bg-green">
-            <div className="modal-body">Đang tải dữ liệu ...</div>
+            <div className="modal-body">
+              <div
+                className="spinner-border"
+                role="status"
+                style={{ height: "20px", width: "20px", marginRight: "10px" }}
+              >
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              Đang tải dữ liệu ...
+            </div>
             <button
               type="button"
               id="closeModal"

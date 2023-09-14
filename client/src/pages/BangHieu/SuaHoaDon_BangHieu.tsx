@@ -123,7 +123,6 @@ export function SuaHoaDon_BangHieu() {
             setCreateAt(item.createdAt);
           }
         });
-        document.getElementById("closeModal")?.click();
       });
     } catch (error) {
       console.error(error);
@@ -143,6 +142,7 @@ export function SuaHoaDon_BangHieu() {
             updatedAt: "",
           });
         });
+        document.getElementById("closeModal")?.click();
       });
     } catch (error) {
       console.error(error);
@@ -151,8 +151,9 @@ export function SuaHoaDon_BangHieu() {
   }
 
   useEffect(() => {
-    loadServicePrice();
-    loadCustomer();
+    loadCustomer().then((dât) => {
+      loadServicePrice();
+    });
   }, []);
 
   async function onSubmit(input: BangHieuBillInput) {
@@ -436,7 +437,16 @@ export function SuaHoaDon_BangHieu() {
       >
         <div className="modal-dialog ">
           <div className="modal-content bg-green">
-            <div className="modal-body">Đang tải dữ liệu ...</div>
+            <div className="modal-body">
+              <div
+                className="spinner-border"
+                role="status"
+                style={{ height: "20px", width: "20px", marginRight: "10px" }}
+              >
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              Đang tải dữ liệu ...
+            </div>
             <button
               type="button"
               id="closeModal"

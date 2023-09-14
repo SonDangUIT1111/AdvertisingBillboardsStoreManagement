@@ -85,7 +85,7 @@ export const PasswordInput = () => {
       const key = "isLog";
       const value = "true";
       localStorage.setItem(key, value);
-      const expiration = new Date().getTime() + 6000; // Expires in 1 hour
+      const expiration = new Date().getTime() + 60000; // Expires in 1 hour
       const data = { value, expiration };
       localStorage.setItem(key, JSON.stringify(data));
     } else {
