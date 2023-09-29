@@ -12,11 +12,12 @@ import { PasswordInput } from "../components/PasswordInput";
 export function KhachHang() {
   const [isEditting, setIsEditing] = useState(false);
   const [listRecord, setListRecord] = useState<Customer[]>([]);
-  const [phoneNumber, setPhoneNumber] = useState("");
+  let [phoneNumber, setPhoneNumber] = useState("");
   const [name, setName] = useState("");
   const [total, setTotal] = useState(0);
   const [payed, setPayed] = useState(0);
   const [debt, setDebt] = useState(0);
+  let [oldPhone, setOldPhone] = useState("");
   const [selectedId, setSelectedId] = useState("");
 
   const loadRecord = async () => {
@@ -49,6 +50,10 @@ export function KhachHang() {
   const saveRecord = async (input: CustomerApi.CustomerInput) => {
     try {
       if (!isEditting) {
+        if (!checkInfoValidationAdd()) {
+          document.getElementById("triggerAlert")?.click();
+          return;
+        }
         await CustomerApi.createCustomer(input).then((data) => {
           setListRecord([
             ...listRecord,
@@ -64,6 +69,10 @@ export function KhachHang() {
         });
         unSelect();
       } else {
+        if (!checkInfoValidationEdit()) {
+          document.getElementById("triggerAlert")?.click();
+          return;
+        }
         await CustomerApi.updateCustomer(selectedId, input);
         setListRecord(
           listRecord.map((item) =>
@@ -89,6 +98,24 @@ export function KhachHang() {
     }
   };
 
+  const checkInfoValidationAdd = () => {
+    let result = true;
+    listRecord.map((item) => {
+      if (item.phoneNumber === phoneNumber) result = false;
+    });
+    return result;
+  };
+
+  const checkInfoValidationEdit = () => {
+    let result = true;
+    listRecord.map((item) => {
+      if (item.phoneNumber !== oldPhone) {
+        if (item.phoneNumber === phoneNumber) result = false;
+      }
+    });
+    return result;
+  };
+
   const submitInfo = (event: React.FormEvent) => {
     event.preventDefault();
     let input: CustomerApi.CustomerInput = {
@@ -105,6 +132,7 @@ export function KhachHang() {
     setIsEditing(true);
     setName(item.name);
     setPhoneNumber(item.phoneNumber);
+    setOldPhone(item.name);
     setTotal(item.total);
     setPayed(item.payed);
     setDebt(item.debt);
@@ -124,6 +152,42 @@ export function KhachHang() {
   return (
     <>
       <PasswordInput />
+      <button
+        type="button"
+        id="triggerAlert"
+        className="trigger"
+        data-bs-toggle="modal"
+        data-bs-target="#alertModal"
+      ></button>
+      <div
+        className="modal fade"
+        id="alertModal"
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">
+                Thông báo
+              </h5>
+            </div>
+            <div className="modal-body">
+              Số điện thoại đã trùng hoặc không hợp lệ !
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-success"
+                data-bs-dismiss="modal"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       <button
         type="button"
         id="trigger"
@@ -236,7 +300,10 @@ export function KhachHang() {
                   value={phoneNumber}
                   className="form-control"
                   aria-label="With textarea"
-                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  onChange={(e) => {
+                    phoneNumber = e.target.value;
+                    setPhoneNumber(e.target.value);
+                  }}
                 ></input>
               </div>
               <div

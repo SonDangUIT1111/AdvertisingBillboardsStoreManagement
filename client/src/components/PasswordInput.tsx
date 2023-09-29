@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { passwordString } from "../information";
+import { passwordStr } from "../information";
 import "../styles/styles.css";
 export const PasswordInput = () => {
   const hidePasswordInput = () => {
@@ -28,7 +28,7 @@ export const PasswordInput = () => {
   let letter8 = "";
   let letter9 = "";
   let letter10 = "";
-  let focusNumber = 1;
+  let [focusNumber, setFocusNumber] = useState(1);
   let trig = false;
   useEffect(() => {
     document.addEventListener("keydown", downPress);
@@ -51,7 +51,7 @@ export const PasswordInput = () => {
   }, []);
 
   const downPress = (event: KeyboardEvent) => {
-    if (trig) {
+    if (trig === true) {
       document.getElementById("wrong-txt")?.classList.add("trigger");
       trig = false;
     }
@@ -80,7 +80,7 @@ export const PasswordInput = () => {
       letter8 +
       letter9 +
       letter10;
-    if (passwordString === passwordString) {
+    if (passwordString === passwordStr) {
       hidePasswordInput();
       const key = "isLog";
       const value = "true";
@@ -118,7 +118,7 @@ export const PasswordInput = () => {
         <div className="modal-css-container js-modal-css-container">
           <div className="modal-css-close js-modal-css-close"></div>
           <header className="modal-css-header">Nhập mật khẩu</header>
-          <div className="modal-css-body p-3">
+          <div className="modal-css-body p-3" style={{ height: "300px" }}>
             <input
               type="password"
               id="ip1"
@@ -130,7 +130,7 @@ export const PasswordInput = () => {
               onChange={(e) => {
                 letter1 = e.target.value;
                 if (e.target.value !== "") {
-                  toTheNext(focusNumber + 1);
+                  toTheNext(2);
                 }
               }}
             />
@@ -145,7 +145,7 @@ export const PasswordInput = () => {
               onChange={(e) => {
                 letter2 = e.target.value;
                 if (e.target.value !== "") {
-                  toTheNext(focusNumber + 1);
+                  toTheNext(3);
                 }
               }}
             />
@@ -160,7 +160,7 @@ export const PasswordInput = () => {
               onChange={(e) => {
                 letter3 = e.target.value;
                 if (e.target.value !== "") {
-                  toTheNext(focusNumber + 1);
+                  toTheNext(4);
                 }
               }}
             />
@@ -175,7 +175,7 @@ export const PasswordInput = () => {
               onChange={(e) => {
                 letter4 = e.target.value;
                 if (e.target.value !== "") {
-                  toTheNext(focusNumber + 1);
+                  toTheNext(5);
                 }
               }}
             />
@@ -190,7 +190,7 @@ export const PasswordInput = () => {
               onChange={(e) => {
                 letter5 = e.target.value;
                 if (e.target.value !== "") {
-                  toTheNext(focusNumber + 1);
+                  toTheNext(6);
                 }
               }}
             />
@@ -205,7 +205,7 @@ export const PasswordInput = () => {
               onChange={(e) => {
                 letter6 = e.target.value;
                 if (e.target.value !== "") {
-                  toTheNext(focusNumber + 1);
+                  toTheNext(7);
                 }
               }}
             />
@@ -220,7 +220,7 @@ export const PasswordInput = () => {
               onChange={(e) => {
                 letter7 = e.target.value;
                 if (e.target.value !== "") {
-                  toTheNext(focusNumber + 1);
+                  toTheNext(8);
                 }
               }}
             />
@@ -235,7 +235,7 @@ export const PasswordInput = () => {
               onChange={(e) => {
                 letter8 = e.target.value;
                 if (e.target.value !== "") {
-                  toTheNext(focusNumber + 1);
+                  toTheNext(9);
                 }
               }}
             />
@@ -250,7 +250,7 @@ export const PasswordInput = () => {
               onChange={(e) => {
                 letter9 = e.target.value;
                 if (e.target.value !== "") {
-                  toTheNext(focusNumber + 1);
+                  toTheNext(10);
                 }
               }}
             />

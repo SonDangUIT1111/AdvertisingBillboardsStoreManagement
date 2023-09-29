@@ -6,6 +6,10 @@ import "../styles/styles.css";
 import { formatCurrency } from "../utils/formatCurrency";
 import { formatDate } from "../utils/formatDate";
 export function HoaDonItemList(props: HoaDonDecal_BangRonProps) {
+  let phone = "";
+  if (typeof props.phoneNumber === "string") {
+    phone = props.phoneNumber;
+  }
   const bill: DecalBillInput = {
     idCustomer: props.idCustomer,
     note: props.note,
@@ -79,11 +83,16 @@ export function HoaDonItemList(props: HoaDonDecal_BangRonProps) {
               className="btn btn-outline-primary m-1"
               onClick={(e) => {
                 if (props.typeBill === 1 || props.typeBill === 2) {
-                  props.setState(bill, props.id, "Hoàn thành");
+                  props.setState(bill, props.id, "Hoàn thành", phone);
                 } else if (props.typeBill === 3) {
-                  props.setStateBangHieu(billBangHieu, props.id, "Hoàn thành");
+                  props.setStateBangHieu(
+                    billBangHieu,
+                    props.id,
+                    "Hoàn thành",
+                    phone
+                  );
                 } else {
-                  props.setStateOther(billOther, props.id, "Hoàn thành");
+                  props.setStateOther(billOther, props.id, "Hoàn thành", phone);
                 }
               }}
             >
@@ -100,11 +109,16 @@ export function HoaDonItemList(props: HoaDonDecal_BangRonProps) {
               className="btn btn-outline-success m-1"
               onClick={(e) => {
                 if (props.typeBill === 1 || props.typeBill === 2) {
-                  props.setState(bill, props.id, "Thanh toán");
+                  props.setState(bill, props.id, "Thanh toán", "");
                 } else if (props.typeBill === 3) {
-                  props.setStateBangHieu(billBangHieu, props.id, "Thanh toán");
+                  props.setStateBangHieu(
+                    billBangHieu,
+                    props.id,
+                    "Thanh toán",
+                    ""
+                  );
                 } else {
-                  props.setStateOther(billOther, props.id, "Thanh toán");
+                  props.setStateOther(billOther, props.id, "Thanh toán", "");
                 }
               }}
             >

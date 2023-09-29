@@ -38,13 +38,24 @@ export type HoaDonDecal_BangRonProps = {
   hasFooter: boolean;
   isDelivery: boolean;
   costIncurred: number;
-  setState: (obj: DecalBillInput, index: string, state: string) => void;
+  setState: (
+    obj: DecalBillInput,
+    index: string,
+    state: string,
+    toPhone: string
+  ) => void;
   setStateBangHieu: (
     obj: BangHieuBillInput,
     index: string,
-    state: string
+    state: string,
+    toPhone: string
   ) => void;
-  setStateOther: (obj: OtherBillInput, index: string, state: string) => void;
+  setStateOther: (
+    obj: OtherBillInput,
+    index: string,
+    state: string,
+    toPhone: string
+  ) => void;
   deleteBill: (id: string) => void;
   typeBill: number;
 };

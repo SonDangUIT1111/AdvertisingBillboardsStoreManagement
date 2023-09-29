@@ -124,7 +124,8 @@ export function HoaDon_BangRon() {
   const setState = async (
     obj: BangRonBillApi.BangRonBillInput,
     index: string,
-    stateString: string
+    stateString: string,
+    toPhone: string
   ) => {
     console.log(list);
     setList(

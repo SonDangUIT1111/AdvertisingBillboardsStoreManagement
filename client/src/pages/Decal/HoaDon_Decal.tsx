@@ -121,7 +121,8 @@ export function HoaDon_Decal() {
   const setState = async (
     obj: DecalBillApi.DecalBillInput,
     index: string,
-    stateString: string
+    stateString: string,
+    toPhone: string
   ) => {
     setList(
       list.map((item) =>

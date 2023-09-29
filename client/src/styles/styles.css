@@ -186,7 +186,7 @@
  }
 
  .trigger {
-    visibility:collapse;
+    visibility: hidden;
  }
 
  /* Password input */

@@ -115,7 +115,8 @@ export function HoaDon_Khac() {
   const setState = async (
     obj: OtherBillApi.OtherBillInput,
     index: string,
-    stateString: string
+    stateString: string,
+    toPhone: string
   ) => {
     console.log(list);
     setList(

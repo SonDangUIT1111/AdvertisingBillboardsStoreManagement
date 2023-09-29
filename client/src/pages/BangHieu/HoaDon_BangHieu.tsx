@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { HoaDonItemList } from "../../components/HoaDonItemList";
 import { HoaDonTitle } from "../../components/HoaDonTitle";
 import { SearchBar } from "../../components/SearchBar";
@@ -9,8 +9,6 @@ import * as RevenueApi from "../../network/revenue_api";
 import "../../styles/styles.css";
 import { Customer } from "../../models/customer";
 import { RevenueInput } from "../../network/revenue_api";
-import { OtherBillJoinCustomer } from "../../models/otherBillJoinCustomer";
-import { OtherBillInput } from "../../network/otherBill_api";
 import { PasswordInput } from "../../components/PasswordInput";
 
 export function HoaDon_BangHieu() {
@@ -129,7 +127,8 @@ export function HoaDon_BangHieu() {
   const setState = async (
     obj: BangHieuBillApi.BangHieuBillInput,
     index: string,
-    stateString: string
+    stateString: string,
+    toPhone: string
   ) => {
     console.log(list);
     setList(
