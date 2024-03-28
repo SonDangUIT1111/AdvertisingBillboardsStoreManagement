@@ -13,17 +13,17 @@
 
 There are many kind of order but 3 are main and some other. We can add, edit, change state of order and it will automatically calculate the revenue.
 
-![alt text](https://github.com/SonDangUIT1111/Project1/blob/main/ReadmeImg/pic1.png)
-![alt text](https://github.com/SonDangUIT1111/Project1/blob/main/ReadmeImg/pic2.png)
-![alt text](https://github.com/SonDangUIT1111/Project1/blob/main/ReadmeImg/pic3.png)
+![alt text](https://github.com/SonDangUIT1111/AdvertisingBillboardsStoreManagement/blob/main/ReadmeImg/pic1.png)
+![alt text](https://github.com/SonDangUIT1111/AdvertisingBillboardsStoreManagement/blob/main/ReadmeImg/pic2.png)
+![alt text](https://github.com/SonDangUIT1111/AdvertisingBillboardsStoreManagement/blob/main/ReadmeImg/pic3.png)
 
 In addition, we can manage other things like customer list, material list and service list, there is a password div block user to interact, a small protection.
 
-![alt text](https://github.com/SonDangUIT1111/Project1/blob/main/ReadmeImg/pic4.png)
+![alt text](https://github.com/SonDangUIT1111/AdvertisingBillboardsStoreManagement/blob/main/ReadmeImg/pic4.png)
 
 Finally, the revenue calculated from all the order and material list.
 
-![alt text](https://github.com/SonDangUIT1111/Project1/blob/main/ReadmeImg/pic5.png)
+![alt text](https://github.com/SonDangUIT1111/AdvertisingBillboardsStoreManagement/blob/main/ReadmeImg/pic5.png)
 
 ## ☘ Thank you for visit my project
 
