@@ -17,6 +17,18 @@ app.use(morgan("dev"));
 
 app.use(express.json());
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+
+  next();
+});
+
 app.use("/api/servicePrices", servicePriceRoutes);
 
 app.use("/api/decalBills", decalBillsRoutes);
@@ -38,12 +50,6 @@ app.use((req, res, next) => {
 });
 
 app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
-  res.header("Access-Control-Allow-Origin", "*"); // Replace with your actual client domain
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-
   console.error(error);
   let errorMessage = "An unknown error occured";
   let statusCode = 500;

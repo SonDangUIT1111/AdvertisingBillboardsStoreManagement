@@ -18,6 +18,7 @@ export async function fetchImportMaterialRecords(): Promise<
     "https://advertising-billboards-store-management-7jg89yi8h.vercel.app/api/importMaterialRecords",
     {
       method: "GET",
+      mode: "no-cors",
     }
   );
   return response.json();
@@ -31,6 +32,7 @@ export async function fetchImportMaterialRecord(
       recordId,
     {
       method: "GET",
+      mode: "no-cors",
     }
   );
   return response.json();
@@ -51,6 +53,7 @@ export async function createImportMaterialRecord(
       headers: {
         "Content-Type": "application/json",
       },
+      mode: "no-cors",
       body: JSON.stringify(record),
     }
   );
@@ -69,6 +72,7 @@ export async function updateImportMaterialRecord(
       headers: {
         "Content-Type": "application/json",
       },
+      mode: "no-cors",
       body: JSON.stringify(record),
     }
   );
@@ -79,6 +83,6 @@ export async function deleteImportMaterialRecord(recordId: string) {
   await fetchData(
     "https://advertising-billboards-store-management-7jg89yi8h.vercel.app/api/importMaterialRecords/" +
       recordId,
-    { method: "DELETE" }
+    { method: "DELETE", mode: "no-cors" }
   );
 }
