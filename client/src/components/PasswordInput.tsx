@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { passwordStr } from "../information";
 import "../styles/styles.css";
+import env from "../utils/validateEnv";
+
+const passwordStr = env.REACT_APP_PASSWORD_STRING;
 export const PasswordInput = () => {
   const hidePasswordInput = () => {
     document.removeEventListener("keydown", downPress);
