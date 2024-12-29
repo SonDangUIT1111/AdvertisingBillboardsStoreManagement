@@ -10,24 +10,55 @@ import revenueRoutes from "./routes/revenue";
 import importMaterialRecordRoutes from "./routes/importMaterialRecord";
 import morgan from "morgan";
 import createHttpError, { isHttpError } from "http-errors";
+import cors from "cors";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import session from "express-session";
 
 const app = express();
+declare module "express-session" {
+  interface SessionData {
+    user: string;
+  }
+}
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
 
-app.use(morgan("dev"));
+// disable cors policy
+const allowedOrigins = ["*"];
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) {
+        return callback(null, true);
+      }
 
-app.use(express.json());
+      if (allowedOrigins.includes(origin)) {
+        const msg =
+          "The CORS policy for this site does not allow access from the specified Origin.";
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+  })
+);
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(
+  session({
+    secret: "subscribe",
+    resave: true,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 60 * 60 * 24,
+    },
+  })
+);
 
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-
-  next();
-});
+app.use(cookieParser());
 
 app.use("/api/servicePrices", servicePriceRoutes);
 
